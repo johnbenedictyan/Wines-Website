@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
 
-class contact_form(forms.Form):
+class ContactForm(forms.Form):
     first_name = forms.CharField(
         blank=False,
         max_length = 255
