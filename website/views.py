@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.contrib import messages
 
 # Create your views here.
 def main_page(request):
@@ -18,4 +19,16 @@ def contact_us(request):
                         }
         )
     else:
+        return render(request,
+                        'contact.html',
+                        {
+                            
+                        }
+        )
         
+def csrf_failure(request, reason=""):
+    messages.error(
+                request,
+                "This form has expired. Please try again."
+            )
+    return redirect("/")
