@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# Overrides the default django error for an invalid CSRF token with a custom view function.
+#A custom view function for an invalid CSRF token.
 CSRF_FAILURE_VIEW = 'website.views.csrf_failure'
 
 # Changes the messages tag so that are displayed in Bootstrap
@@ -45,7 +45,9 @@ SECRET_KEY = 'c)zch_zo7chrm@wpk0)f4q8_rvx0$34l=-bs2@pk#vp30$)$_1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['da5617fb5ae443e79240258551287458.vfs.cloud9.ap-southeast-1.amazonaws.com']
+ALLOWED_HOSTS = [
+    'da5617fb5ae443e79240258551287458.vfs.cloud9.ap-southeast-1.amazonaws.com'
+    ]
 
 
 # Application definition

@@ -7,8 +7,13 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
 
 class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(required=True, widget=forms.PasswordInput)
+    username = forms.CharField(
+                                required=True
+                                )
+    password = forms.CharField(
+                                required=True,
+                                widget=forms.PasswordInput
+                                )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,7 +68,9 @@ class LoginForm(forms.Form):
     def clean_password(self):
         input_username = self.cleaned_data.get('username')
         input_password = self.cleaned_data.get('password')
-        if not auth.authenticate(username=input_username,password=input_password):
+        if auth.authenticate(username=input_username,password=input_password):
+            pass
+        else:
             raise forms.ValidationError("Incorrect Password.")
         return input_password
         
@@ -76,7 +83,15 @@ class RegisterForm(UserCreationForm):
     
     class Meta:
         model = UserAccount
-        fields = ('username','first_name','last_name','email','password1','password2','profile_picture')
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
+            'password2',
+            'profile_picture'
+            )
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
