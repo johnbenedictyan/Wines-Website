@@ -6,7 +6,32 @@ from .forms import RegisterForm,LoginForm
 from django.contrib import auth, messages
 from project4 import settings
 
-
+@login_required
+def account_details(request):
+    current_user = UserAccount.objects.all().get(pk=request.user.id)
+    if request.method=="GET":
+        account_details_form = RegisterForm(instance=current_user)
+        return render(request,"account.html",{
+            "current_user":current_user,
+            "account_details_form":account_details_form
+        })
+    else:
+        dirty_account_details_form = RegisterForm(
+                                                request.POST,
+                                                instance=current_user
+                                                )
+        if dirty_account_details_form.is_valid():
+            dirty_account_details_form.save()
+            messages.success(
+                            request,
+                            "Your user details has been successfully updated!"
+                            )
+            return redirect(settings.HOME_URL)
+        else:
+            return render(request,"listing-editor.html",{
+            "account_details_form":dirty_account_details_form
+        })
+    
 def registration(request):
     if request.method == 'GET':
         registration_form = RegisterForm()
