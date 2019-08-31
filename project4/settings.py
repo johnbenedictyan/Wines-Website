@@ -22,6 +22,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Overrides the default django error for an invalid CSRF token with a custom view function.
 CSRF_FAILURE_VIEW = 'website.views.csrf_failure'
 
+# Changes the messages tag so that are displayed in Bootstrap
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c)zch_zo7chrm@wpk0)f4q8_rvx0$34l=-bs2@pk#vp30$)$_1'
 
