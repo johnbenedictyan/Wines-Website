@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% load crispy_forms_tags %} {% block main_content_section %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button> {{ message }}
+            </div>
+            {% endfor %} {% if login_form.errors %} {% for field in login_form %} {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endfor %} {% for error in login_form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %} {% crispy sign_in_form %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
