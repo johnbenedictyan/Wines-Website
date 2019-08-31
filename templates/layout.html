@@ -111,17 +111,49 @@
 
     </div>
     
+    {% block main_content_section %}
+    {% endblock %}
     
     {% block products_section %}
     {% endblock %}
     
     {% block hero_image_section %}
     {% endblock %}
-    
-    {% block testimonials_section %}
-    {% endblock %}
 
     {% block blogs_section %}
+    {% endblock %}
+    
+    {% block cart_overview_section %}
+    {% endblock %}
+    
+    {% block cart_action_section %}
+    {% endblock %}
+    
+    {% block checkout_section %}
+    {% endblock %}
+    
+    {% block product_name_section %}
+    {% endblock %}
+        
+    {% block product_details_section %}
+    {% endblock %}
+    
+    {% block similar_products_banner_section %}
+    {% endblock %}
+    
+    {% block similar_products_carousel_section %}
+    {% endblock %}
+
+    {% block about_us_banner_section %}
+    {% endblock %}
+    
+    {% block about_us_card_section %}
+    {% endblock %}
+    
+    {% block about_us_features_section %}
+    {% endblock %}
+    
+    {% block testimonials_section %}
     {% endblock %}
     
     <div class="footer">
@@ -180,7 +212,7 @@
 
 
 
-  <script src="js/main.js"></script>
+  <script src="{% static 'js/main.js' %}"></script>
 
 </body>
 
