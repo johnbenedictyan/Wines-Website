@@ -123,3 +123,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+UPLOADCARE = {
+    'pub_key': os.environ.get("UPLOADCARE_PUBLIC_KEY"),
+    'secret': os.environ.get("UPLOADCARE_SECRET_KEY"),
+    'widget_version': '2.8.1',
+    'widget_build': 'min',  ## without jQuery
+}
