@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +31,13 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# This line changes the default message storage to be a session based one.
+# This allows messages to be rendered through a redirect.
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# This allows the cookies to persist sitewide.
+SESSION_COOKIE_SECURE = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c)zch_zo7chrm@wpk0)f4q8_rvx0$34l=-bs2@pk#vp30$)$_1'
