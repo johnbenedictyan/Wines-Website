@@ -156,3 +156,5 @@ UPLOADCARE = {
     'widget_version': '2.8.1',
     'widget_build': 'min',  ## without jQuery
 }
+
+AUTH_USER_MODEL = 'users.UserAccount'
