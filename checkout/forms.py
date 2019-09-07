@@ -9,71 +9,95 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Appended
 class DetailForm(forms.Form):
     country = CountryField(label="Country",
                            blank=False).formfield()
-    first_name = forms.CharField(label="First Name",
-                                 required=True)
-    last_name = forms.CharField(label="Last Name",
-                                required=True)
-    address_1 = forms.CharField(label="Address",
-                                widget=forms.TextInput(
-                                    attrs={
-                                        'placeholder': 'Street address'
-                                    }
-                                ),
-                                required=True)
-    address_2 = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'placeholder': """Apartment, suite,
-                                                        unit etc. (optional)"""
-        }
-    ),
+    first_name = forms.CharField(
+        label="First Name",
+        required=True
+    )
+    last_name = forms.CharField(
+        label="Last Name",
+        required=True
+    )
+    address_1 = forms.CharField(
+        label="Address",
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Street address'
+            }
+        ),
+        required=True)
+    address_2 = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Apartment, suite, unit etc. (optional)'
+            }
+        ),
         required=False)
-    state_or_country = forms.CharField(label="State / Country",
-                                       required=True)
-    postal_code_or_zip = forms.CharField(label="Postal Code / Zip",
-                                         required=True)
-    email = forms.CharField(label="Email Address",
-                            required=True)
-    phone = forms.CharField(label="Phone Number",
-                            required=True)
+    state_or_country = forms.CharField(
+        label="State / Country",
+        required=True
+    )
+    postal_code_or_zip = forms.CharField(
+        label="Postal Code / Zip",
+        required=True
+    )
+    email = forms.CharField(
+        label="Email Address",
+        required=True
+    )
+    phone = forms.CharField(
+        label="Phone Number",
+        required=True
+    )
 
-    account_password = forms.CharField(label="Account Password",
-                                       required=False)
+    account_password = forms.CharField(
+        label="Account Password",
+        required=False
+    )
 
-    alt_country = CountryField(label="Country",
-                               blank=True).formfield()
-    alt_address_1 = forms.CharField(label="Address",
-                                    widget=forms.TextInput(
-                                        attrs={
-                                            'placeholder': 'Street address'
-                                        }
-                                    ),
-                                    required=False)
-    alt_address_2 = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'placeholder': """
-                                                              Apartment, suite,
-                                                            unit etc. (optional)
-                                                           """
-        }
-    ),
-        required=False)
-    alt_state_or_country = forms.CharField(label="State / Country",
-                                           required=False)
-    alt_postal_code_or_zip = forms.CharField(label="Postal Code / Zip",
-                                             required=False)
+    alt_country = CountryField(
+        label="Country",
+        blank=True).formfield()
+    alt_address_1 = forms.CharField(
+        label="Address",
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Street address'
+            }
+        ),
+        required=False
+    )
+    alt_address_2 = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Apartment, suite unit etc. (optional)'
+            }
+        ),
+        required=False
+    )
+    alt_state_or_country = forms.CharField(
+        label="State / Country",
+        required=False
+    )
+    alt_postal_code_or_zip = forms.CharField(
+        label="Postal Code / Zip",
+        required=False
+    )
 
     coupon_code = forms.CharField(
         label="Enter your coupon code if you have one",
-        required=False)
+        required=False
+    )
 
-    order_notes = forms.CharField(label="Order Notes",
-                                  widget=forms.Textarea(
-                                      attrs={
-                                          "cols": "30",
-                                          "rows": "5"
-                                      }
-                                  ),
-                                  required=False)
+    order_notes = forms.CharField(
+        label="Order Notes",
+        widget=forms.Textarea(
+            attrs={
+                "cols": "30",
+                "rows": "5"
+            }
+        ),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -288,17 +312,27 @@ class DetailForm(forms.Form):
 class PaymentForm(forms.Form):
     MONTH_CHOICES = [(i, i) for i in range(1, 12)]
     YEAR_CHOICES = [(i, i) for i in range(2019, 2039)]
-    credit_card_number = forms.CharField(label='Credit Card Number',
-                                         required=False)
-    cvv = forms.CharField(label='Security Code (CVV)',
-                          required=False)
-    expiry_month = forms.ChoiceField(label='Month',
-                                     choices=MONTH_CHOICES,
-                                     required=False)
-    expiry_year = forms.ChoiceField(label='Year',
-                                    choices=YEAR_CHOICES,
-                                    required=False)
-    stripe_id = forms.CharField(widget=forms.HiddenInput)
+    credit_card_number = forms.CharField(
+        label='Credit Card Number',
+        required=False
+    )
+    cvv = forms.CharField(
+        label='Security Code (CVV)',
+        required=False
+    )
+    expiry_month = forms.ChoiceField(
+        label='Month',
+        choices=MONTH_CHOICES,
+        required=False
+    )
+    expiry_year = forms.ChoiceField(
+        label='Year',
+        choices=YEAR_CHOICES,
+        required=False
+    )
+    stripe_id = forms.CharField(
+        widget=forms.HiddenInput
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
