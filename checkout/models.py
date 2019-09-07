@@ -1,7 +1,7 @@
 from django.db import models
 from products.models import product as product 
 # Create your models here.
-class order():
+class Order(models.Model):
     ordered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name='orders')
     stripe_token = models.CharField(max_length=1000, blank=False)
     date_of_purchase = models.DateTimeField(blank=False)
