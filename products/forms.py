@@ -6,7 +6,7 @@ from .models import Product
 
 
 class ProductForm(forms.ModelForm):
-    listing_photo = ImageField(widget=FileWidget(attrs={
+    product_picture = ImageField(widget=FileWidget(attrs={
         'data-public-key': 'c1c0ea35a4b3421770fa',
         'data-images-only': 'True',
         'data-preview-step': 'True',
