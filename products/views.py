@@ -31,8 +31,39 @@ def inventory(request):
         {
             "all_products":all_products
         })
-        
+
 @login_required
+def product_update(request):
+    selected_product = None
+    if request.method == "GET":
+        product_form = ProductForm(instance=selected_product)
+        return render(
+            request,
+            "product-form.html",
+            {
+                "product_form":product_form
+            })
+    else:
+        dirty_product_form = ProductForm(
+            request.POST,
+            instance=selected_product
+            )
+        if dirty_product_form.is_valid():
+            dirty_product_form.save()
+            return redirect("Inventory")
+        else:
+            messages.error(
+                request,
+                "We were unable to update the details of thie product."
+                )
+            return render(
+                request,
+                "product-form.html",
+                {
+                    "product_form":dirty_product_form
+                })
+                
+
 def product_creator(request):
     if request.method == "GET":
         product_form = ProductForm()
