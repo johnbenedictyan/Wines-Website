@@ -23,7 +23,7 @@ from website.urls import urlpatterns as website_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^checkout/', include(checkout_urls)),
-    re_path(r'^products/', include(products_urls)),
+    re_path(r'^shop/', include(products_urls)),
     re_path(r'^users/', include(users_urls)),
     re_path(r'^', include(website_urls)),
 ]
