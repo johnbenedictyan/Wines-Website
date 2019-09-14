@@ -77,6 +77,13 @@
                 <li><a href="{% url 'shop' %}" class="nav-link text-left">Wines</a></li>
                 <li><a href="{% url 'shop' %}" class="nav-link text-left">Shop</a></li>
                 <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Contact</a></li>
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Account Registration</a></li>
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Log In</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Log Out</a></li>
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Create Product</a></li>
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Admin Console</a></li>
+                {% endif %}
               </ul>                                                                                                                                                                                                                                                                                         
             </nav>
 
