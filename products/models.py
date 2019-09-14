@@ -3,7 +3,7 @@ from pyuploadcare.dj.models import ImageField
 # Create your models here.
 
 
-class Product():
+class Product(models.Model):
     FRANCE = "FR"
     ITALY = "IT"
     USA = "US"
@@ -37,17 +37,17 @@ class Product():
     ]
 
     AROMA_CHOICES = [
-        "Fruits",
-        "Herbs",
-        "Flowers",
-        "Earth",
-        "Grass",
-        "Tobacco",
-        "Butterscotch",
-        "Toast",
-        "Vanilla",
-        "Mocha",
-        "Chocolate"
+        ("Fruits","Fruits"),
+        ("Herbs","Herbs"),
+        ("Flowers","Flowers"),
+        ("Earth","Earth"),
+        ("Grass","Grass"),
+        ("Tobacco","Tobacco"),
+        ("Butterscotch","Butterscotch"),
+        ("Toast","Toast"),
+        ("Vanilla","Vanilla"),
+        ("Mocha","Mocha"),
+        ("Chocolate","Chocolate")
     ]
 
     name = models.CharField(
