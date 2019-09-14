@@ -150,6 +150,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS=[
+    os.path.join(
+        BASE_DIR,
+        "static"
+        )
+]
+
+STATIC_ROOT = os.path.join(
+    BASE_DIR,
+    'staticfiles'
+    )
+
 UPLOADCARE = {
     'pub_key': os.environ.get("UPLOADCARE_PUBLIC_KEY"),
     'secret': os.environ.get("UPLOADCARE_SECRET_KEY"),
