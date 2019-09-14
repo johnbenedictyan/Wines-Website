@@ -28,10 +28,14 @@ def account_details(request):
                             )
             return redirect(settings.HOME_URL)
         else:
-            return render(request,"listing-editor.html",{
-            "account_details_form":dirty_account_details_form
-        })
-    
+            return render(
+                request,
+                "listing-editor.html",
+                {
+                    "account_details_form":dirty_account_details_form
+                    }
+                )
+        
 def registration(request):
     if request.method == 'GET':
         registration_form = RegisterForm()
