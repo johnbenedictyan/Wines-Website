@@ -72,11 +72,11 @@
           <div class="mx-auto">
             <nav class="site-navigation position-relative text-left" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mx-auto d-none pl-0 d-lg-block border-none">
-                <li class="active"><a href="index.html" class="nav-link text-left">Home</a></li>
-                <li><a href="about.html" class="nav-link text-left">About</a></li>
-                <li><a href="shop.html" class="nav-link text-left">Wines</a></li>
-                <li><a href="shop.html" class="nav-link text-left">Shop</a></li>
-                <li><a href="contact.html" class="nav-link text-left">Contact</a></li>
+                <li class="active"><a href="{% url 'main_page' %}" class="nav-link text-left">Home</a></li>
+                <li><a href="{% url 'about_us' %}" class="nav-link text-left">About</a></li>
+                <li><a href="{% url 'shop' %}" class="nav-link text-left">Wines</a></li>
+                <li><a href="{% url 'shop' %}" class="nav-link text-left">Shop</a></li>
+                <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Contact</a></li>
               </ul>                                                                                                                                                                                                                                                                                         
             </nav>
 
