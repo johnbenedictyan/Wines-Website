@@ -3,6 +3,8 @@ from products.models import Product as product
 from project4.settings import AUTH_USER_MODEL
 # Create your models here.
 
+class Customer_Details(models.Model):
+    
 class Order(models.Model):
     ordered_by = models.ForeignKey(
         AUTH_USER_MODEL,
