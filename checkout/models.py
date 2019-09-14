@@ -1,8 +1,7 @@
 from django.db import models
 from products.models import Product as product
-from project4.settings import AUTH_USER_MODEL as AUTH_USER_MODEL
+from project4.settings import AUTH_USER_MODEL
 # Create your models here.
-
 
 class Order(models.Model):
     ordered_by = models.ForeignKey(
@@ -21,9 +20,9 @@ class Order(models.Model):
         blank=False,
         default=False
     )
-    product = models.ManyToManyField(
+    product_ordered = models.ManyToManyField(
         product,
-        related_name="order"
+        related_name="orders"
     )
 
     def __str__(self):
