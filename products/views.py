@@ -90,3 +90,6 @@ def product_creator(request):
                     "product_form":dirty_product_form
                 })
             
+def delete_product(request):
+    selected_product = None
+    return redirect()
