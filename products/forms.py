@@ -30,28 +30,48 @@ class ProductForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column(
-                    'name',
+                    'product_picture',
                     css_class='form-group col-md-6 mb-0'
                 ),
                 Column(
-                    'price',
+                    Row(
+                        Column(
+                            'name',
+                            css_class="form-group col mb-0"
+                            ),
+                        css_class="form-row"),
+                    Row(
+                        Column(
+                            'price',
+                            css_class="form-group col mb-0"
+                            ),
+                        css_class="form-row"
+                        ),
                     css_class='form-group col-md-6 mb-0'
                 ),
                 css_class='form-row'
             ),
             Row(
-                'description',
+                Column(
+                    'description',
+                    css_class="col"
+                ),
                 css_class='form-row'
             ),
             Row(
-                Column('region', css_class='form-group'),
-                Column('aroma', css_class='form-group'),
-                Column('body', css_class='form-group'),
+                Column(
+                    'region',
+                    css_class='form-group col-md-4 mb-0'
+                    ),
+                Column(
+                    'aroma',
+                    css_class='form-group col-md-4 mb-0'
+                    ),
+                Column(
+                    'body',
+                    css_class='form-group col-md-4 mb-0'
+                    ),
                 css_class='form-row'
             ),
-            Row(
-                'product_picture',
-                css_class='form-row'
-            ),
-            Submit('submit', 'Create Listing', css_class="btn essence-btn")
+            Submit('submit', 'Create Listing', css_class="btn")
         )
