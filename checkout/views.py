@@ -6,7 +6,7 @@ from .forms import CustomerDetailForm
 # Create your views here.
 def checkout(request):
     selected_order = None
-    custom_detail_form = DetailForm()
+    custom_detail_form = CustomerDetailForm()
     if request.method == "GET":
         return render(
             request,
@@ -15,7 +15,7 @@ def checkout(request):
                 "selected_order":selected_order
             })
     else:
-        dirty_custom_detail_form = DetailForm(request.POST)
+        dirty_custom_detail_form = CustomerDetailForm(request.POST)
         if dirty_custom_detail_form.is_valid():
             dirty_custom_detail_form.save(commit=False)
             return redirect(None)
