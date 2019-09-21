@@ -1,104 +1,46 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-from django_countries.fields import CountryField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, AppendedText, Button
+from .models import Customer_Details
+from django_countries.widgets import CountrySelectWidget
 
-
-class DetailForm(forms.Form):
-    country = CountryField(label="Country",
-                           blank=False).formfield()
-    first_name = forms.CharField(
-        label="First Name",
-        required=True
-    )
-    last_name = forms.CharField(
-        label="Last Name",
-        required=True
-    )
-    address_1 = forms.CharField(
-        label="Address",
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Street address'
-            }
-        ),
-        required=True)
-    address_2 = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Apartment, suite, unit etc. (optional)'
-            }
-        ),
-        required=False)
-    state_or_country = forms.CharField(
-        label="State / Country",
-        required=True
-    )
-    postal_code_or_zip = forms.CharField(
-        label="Postal Code / Zip",
-        required=True
-    )
-    email = forms.CharField(
-        label="Email Address",
-        required=True
-    )
-    phone = forms.CharField(
-        label="Phone Number",
-        required=True
-    )
-
-    account_password = forms.CharField(
-        label="Account Password",
-        required=False
-    )
-
-    alt_country = CountryField(
-        label="Country",
-        blank=True).formfield()
-    alt_address_1 = forms.CharField(
-        label="Address",
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Street address'
-            }
-        ),
-        required=False
-    )
-    alt_address_2 = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Apartment, suite unit etc. (optional)'
-            }
-        ),
-        required=False
-    )
-    alt_state_or_country = forms.CharField(
-        label="State / Country",
-        required=False
-    )
-    alt_postal_code_or_zip = forms.CharField(
-        label="Postal Code / Zip",
-        required=False
-    )
-
-    coupon_code = forms.CharField(
-        label="Enter your coupon code if you have one",
-        required=False
-    )
-
-    order_notes = forms.CharField(
-        label="Order Notes",
-        widget=forms.Textarea(
-            attrs={
-                "cols": "30",
-                "rows": "5"
-            }
-        ),
-        required=False
-    )
-
+class CustomerDetailForm(forms.ModelForm):
+    
+    class Meta:
+        model = Customer_Details
+        fields = '__all__'
+        widgets = {
+            'country': CountrySelectWidget(),
+            'address_1': forms.TextInput(
+                attrs={
+                    'placeholder': 'Street address'
+                }
+            ),
+            'address_2': forms.TextInput(
+                attrs={
+                    'placeholder': 'Apartment, suite, unit etc. (optional)'
+                }
+            ),
+            'alt_address_1': forms.TextInput(
+                attrs={
+                    'placeholder': 'Street address'
+                }
+            ),
+            'alt_address_2': forms.TextInput(
+                attrs={
+                    'placeholder': 'Apartment, suite, unit etc. (optional)'
+                }
+            ),
+            'order_notes': forms.Textarea(
+                attrs={
+                    "cols": "30",
+                    "rows": "5"
+                }
+            )
+        }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
