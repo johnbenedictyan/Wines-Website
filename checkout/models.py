@@ -6,22 +6,23 @@ from django_countries.fields import CountryField
 
 class Customer_Details(models.Model):
     country = CountryField(
-        label="Country",
+        verbose_name="Country",
+        blank_label="Select Country",
         blank=False
     )
     
     first_name = models.CharField(
-        label="First Name",
+        verbose_name="First Name",
         blank=False
     )
     
     last_name = models.CharField(
-        label="Last Name",
+        verbose_name="Last Name",
         blank=False
     )
     
     address_1 = models.CharField(
-        label="Address",
+        verbose_name="Address",
         blank=False
     )
         
@@ -30,58 +31,58 @@ class Customer_Details(models.Model):
     )
         
     state_or_country = models.CharField(
-        label="State / Country",
+        verbose_name="State / Country",
         blank=False
     )
     
     postal_code_or_zip = models.CharField(
-        label="Postal Code / Zip",
+        verbose_name="Postal Code / Zip",
         blank=False
     )
     
     email = models.CharField(
-        label="Email Address",
+        verbose_name="Email Address",
         blank=False
     )
     
     phone = models.CharField(
-        label="Phone Number",
+        verbose_name="Phone Number",
         blank=False
     )
 
     account_password = models.CharField(
-        label="Account Password",
+        verbose_name="Account Password",
         blank=True
     )
 
     alt_country = CountryField(
-        label="Country",
+        verbose_name="Country",
         blank=True
     )
         
     alt_address_1 = models.CharField(
-        label="Address",
+        verbose_name="Address",
         blank=True
     )
     alt_address_2 = models.CharField(
         blank=True
     )
     alt_state_or_country = models.CharField(
-        label="State / Country",
+        verbose_name="State / Country",
         blank=True
     )
     alt_postal_code_or_zip = models.CharField(
-        label="Postal Code / Zip",
+        verbose_name="Postal Code / Zip",
         blank=True
     )
 
     coupon_code = models.CharField(
-        label="Enter your coupon code if you have one",
+        verbose_name="Enter your coupon code if you have one",
         blank=True
     )
 
     order_notes = models.CharField(
-        label="Order Notes",
+        verbose_name="Order Notes",
         blank=True
     )
     
