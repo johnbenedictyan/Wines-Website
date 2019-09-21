@@ -21,19 +21,6 @@ class LoginForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column(
-                    Div(
-                        HTML(
-                            """
-                            <h3>
-                                Sign In
-                            </h3>
-                            """
-                        )
-                    )
-                )
-            ),
-            Row(
-                Column(
                     'username', 
                     css_class='form-group col-12'
                 ),
@@ -97,19 +84,6 @@ class RegisterForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Row(
-                Column(
-                    Div(
-                        HTML(
-                            """
-                            <h3>
-                                Register for an Account
-                            </h3>
-                            """
-                        )
-                    )
-                )
-            ),
             Row(
                 Column(
                     'profile_picture', 
