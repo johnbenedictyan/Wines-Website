@@ -8,7 +8,7 @@ class Product(models.Model):
     ITALY = "IT"
     USA = "US"
     SPAIN = "ES"
-    PORTUGUAL = "PT"
+    PORTUGAL = "PT"
     ARGENTINA = "AR"
     AUSTRALIA = "AU"
     NEW_ZEALAND = "NZ"
@@ -23,7 +23,7 @@ class Product(models.Model):
         (ITALY, "Italy"),
         (USA, "USA"),
         (SPAIN, "Spain"),
-        (PORTUGUAL, "Portugal"),
+        (PORTUGAL, "Portugal"),
         (ARGENTINA, "Argentina"),
         (AUSTRALIA, "Australia"),
         (NEW_ZEALAND, "New Zealand"),
