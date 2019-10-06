@@ -1,8 +1,6 @@
-{% extends "layout.html" %}   
-{% load crispy_forms_tags %}
-{% block contact_us_banner_section %}
-    <div class="hero-2" style="background-image: url({% static 'images/hero_2.jpg %});">
- <div class="container">
+{% extends "layout.html" %} {% load crispy_forms_tags %} {% load static %} {% block banner_section %}
+<div class="hero-2" style="background-image: url({% static 'images/hero_2.jpg' %});">
+  <div class="container">
     <div class="row justify-content-center text-center align-items-center">
       <div class="col-md-8">
         <span class="sub-title">Get In Touch</span>
@@ -11,9 +9,7 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block form_section %}
+{% endblock %} {% block form_section %}
 <div class="site-section bg-light">
   <div class="container">
     <div class="row">
@@ -23,33 +19,33 @@
           <h2>Contact Us</h2>
         </div>
         <div class="row">
-            <div class="col">
-                {% for message in messages %}
-                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <div class="col">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button> {{ message }}
-                </div>
-                {% endfor %} {% if contact_form.errors %} {% for field in contact_form %} {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %} {% endfor %} {% for error in contact_form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %} {% endif %}
             </div>
+            {% endfor %} {% if contact_form.errors %} {% for field in contact_form %} {% for error in field.errors %}
+            <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endfor %} {% for error in contact_form.non_field_errors %}
+            <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %} {% endif %}
+          </div>
         </div>
 
         <form method="post">
           {% crispy contact_form %}
         </form>
       </div>
-      
+
     </div>
 
-    
+
   </div>
 </div>
 {% endblock %}
