@@ -1,138 +1,130 @@
-{% extends "layout.html" %}
-{% block about_us_banner_section %}
-    <div class="hero-2" style="background-image: url('images/hero_2.jpg');">
-     <div class="container">
-        <div class="row justify-content-center text-center align-items-center">
-          <div class="col-md-8">
-            <span class="sub-title">Welcome</span>
-            <h2>About Us</h2>
-          </div>
-        </div>
+{% extends "layout.html" %} {% load static %} {% block about_us_banner_section %}
+<div class="hero-2" style="background-image: url({% static 'images/hero_2.jpg' %});">
+  <div class="container">
+    <div class="row justify-content-center text-center align-items-center">
+      <div class="col-md-8">
+        <span class="sub-title">Welcome</span>
+        <h2>About Us</h2>
       </div>
     </div>
-{% endblock %}
+  </div>
+</div>
+{% endblock %} {% block about_us_card_section %}
+<div class="site-section py-5 custom-border-bottom" data-aos="fade">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-6">
+        <div class="block-16">
+          <figure>
+            <img src="{% static '' %}images/hero_1.jpg" alt="Image placeholder" class="img-fluid">
 
-{% block about_us_card_section %}
-    <div class="site-section py-5 custom-border-bottom" data-aos="fade">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-6">
-            <div class="block-16">
-              <figure>
-                <img src="images/hero_1.jpg" alt="Image placeholder" class="img-fluid">
-    
-              </figure>
-            </div>
-          </div>
-          <div class="col-md-1"></div>
-          <div class="col-md-5">
-    
-    
-            <div class="site-section-heading pt-3 mb-4">
-              <h2 class="text-black font-heading-serif">How We Started</h2>
-            </div>
-            <p>A passion for wine turned into a thriving online business.</p>
-            <p>Brewed and Bottled in SIngapore.</p>
-    
-          </div>
+          </figure>
         </div>
       </div>
-    </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-5">
 
-    <div class="site-section py-5 bg-light custom-border-bottom" data-aos="fade">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 order-md-2">
-            <div class="block-16">
-              <figure>
-                <img src="images/hero_2.jpg" alt="Image placeholder" class="img-fluid ">
-                <a href="https://vimeo.com/channels/staffpicks/93951774" class="play-button popup-vimeo" data-fancybox><span
+
+        <div class="site-section-heading pt-3 mb-4">
+          <h2 class="text-black font-heading-serif">How We Started</h2>
+        </div>
+        <p>A passion for wine turned into a thriving online business.</p>
+        <p>Brewed and Bottled in SIngapore.</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section py-5 bg-light custom-border-bottom" data-aos="fade">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 order-md-2">
+        <div class="block-16">
+          <figure>
+            <img src="{% static 'images/hero_2.jpg' %}" alt="Image placeholder" class="img-fluid ">
+            <a href="https://vimeo.com/channels/staffpicks/93951774" class="play-button popup-vimeo" data-fancybox><span
                     class="icon-play"></span></a>
-    
-              </figure>
-            </div>
-          </div>
-          <div class="col-md-5 mr-auto">
-    
-    
-            <div class="site-section-heading pt-3 mb-4">
-              <h2 class="text-black font-heading-serif">Wines For You All</h2>
-            </div>
-            <p>We believe that everybody should have the best wines for every ocassion.</p>
-            <p>We offer high quality bottles priced for the masses!</p>
-            
-            
-    
-          </div>
+
+          </figure>
+        </div>
+      </div>
+      <div class="col-md-5 mr-auto">
+
+
+        <div class="site-section-heading pt-3 mb-4">
+          <h2 class="text-black font-heading-serif">Wines For You All</h2>
+        </div>
+        <p>We believe that everybody should have the best wines for every ocassion.</p>
+        <p>We offer high quality bottles priced for the masses!</p>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block about_us_features_section %}
+<div class="site-section site-section-sm site-blocks-1 border-0" data-aos="fade">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-truck text-primary"></span>
+        </div>
+        <div class="text">
+          <h2 class="font-heading-serif">Quality Bottles</h2>
+          <p>Our collection boast high quality wines hand-picked from across the globe.From the vineyards of France all the way to South America, a mixture of old and new world bottles.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-refresh2 text-primary"></span>
+        </div>
+        <div class="text">
+          <h2 class="font-heading-serif">Free Returns</h2>
+          <p>If you change your mind, you can ship an unopened bottle back for free.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-help text-primary"></span>
+        </div>
+        <div class="text">
+          <h2 class="font-heading-serif">Customer Support</h2>
+          <p>Our world class customer support team is always ready to help with your questions and worries. Feel free to contact us!</p>
         </div>
       </div>
     </div>
-{% endblock %}
+  </div>
+</div>
+{% endblock %} {% block testimonials_section %}
+<div class="site-section bg-light">
+  <div class="container">
+    <div class="owl-carousel owl-slide-3 owl-slide">
 
-{% block about_us_features_section %}
-    <div class="site-section site-section-sm site-blocks-1 border-0" data-aos="fade">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
-            <div class="icon mr-4 align-self-start">
-              <span class="icon-truck text-primary"></span>
-            </div>
-            <div class="text">
-              <h2 class="font-heading-serif">Quality Bottles</h2>
-              <p>Our collection boast high quality wines hand-picked from across the globe.From the vineyards of France all the way to South America, a mixture of old and new world bottles.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon mr-4 align-self-start">
-              <span class="icon-refresh2 text-primary"></span>
-            </div>
-            <div class="text">
-              <h2 class="font-heading-serif">Free Returns</h2>
-              <p>If you change your mind, you can ship an unopened bottle back for free.</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon mr-4 align-self-start">
-              <span class="icon-help text-primary"></span>
-            </div>
-            <div class="text">
-              <h2 class="font-heading-serif">Customer Support</h2>
-              <p>Our world class customer support team is always ready to help with your questions and worries. Feel free to contact us!</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <blockquote class="testimony">
+        <img src="{% static 'images/person_1.jpg' %}" alt="Image">
+        <p>&ldquo;The best wines I have ever tasted!&rdquo;</p>
+        <p class="small text-primary">&mdash; Collin Miller</p>
+      </blockquote>
+      <blockquote class="testimony">
+        <img src="{% static 'images/person_2.jpg' %}" alt="Image">
+        <p>&ldquo;Nothing short of spectacular!&rdquo;</p>
+        <p class="small text-primary">&mdash; Harley Perkins</p>
+      </blockquote>
+      <blockquote class="testimony">
+        <img src="{% static 'images/person_3.jpg' %}" alt="Image">
+        <p>&ldquo;Wines has the biggest selection of wines I have ever seen on any online wine store.&rdquo;</p>
+        <p class="small text-primary">&mdash; Levi Morris</p>
+      </blockquote>
+      <blockquote class="testimony">
+        <img src="{% static 'images/person_1.jpg' %}" alt="Image">
+        <p>&ldquo;Great wines for the taste buds and great prices for the wallet.&rdquo;</p>
+        <p class="small text-primary">&mdash; Allie Smith</p>
+      </blockquote>
+
     </div>
+  </div>
+</div>
 {% endblock %}
-
-{% block testimonials_section %}
-    <div class="site-section bg-light">
-      <div class="container">
-        <div class="owl-carousel owl-slide-3 owl-slide">
-        
-          <blockquote class="testimony">
-              <img src="{% static 'images/person_1.jpg' %}" alt="Image">
-              <p>&ldquo;The best wines I have ever tasted!&rdquo;</p>
-              <p class="small text-primary">&mdash; Collin Miller</p>
-          </blockquote>
-          <blockquote class="testimony">
-              <img src="{% static 'images/person_2.jpg' %}" alt="Image">
-              <p>&ldquoNothing short of spectacular!&rdquo;</p>
-              <p class="small text-primary">&mdash; Harley Perkins</p>
-          </blockquote>
-          <blockquote class="testimony">cde fg
-              <img src="{% static 'images/person_3.jpg' %}" alt="Image">
-              <p>&ldquo;Wines has the biggest selection of wines I have ever seen on any online wine store.&rdquo;</p>
-              <p class="small text-primary">&mdash; Levi Morris</p>
-          </blockquote>
-          <blockquote class="testimony">
-              <img src="{% static 'images/person_1.jpg' %}" alt="Image">
-              <p>&ldquo;Great wines for the taste buds and great prices for the wallet.&rdquo;</p>
-              <p class="small text-primary">&mdash; Allie Smith</p>
-          </blockquote>
-
-        </div>
-      </div>
-    </div>
-{% endblock %}
-    
