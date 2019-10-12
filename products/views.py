@@ -12,6 +12,15 @@ def shop(request):
         {
             "all_products":all_products
         })
+
+def wine_collection(request):
+    best_sellers = None
+    return render (
+        request,
+        "wine-collection.html",
+        {
+            "best_sellers":best_sellers
+        })
         
 def individual_product(request):
     single_product = None
