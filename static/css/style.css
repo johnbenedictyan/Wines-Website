@@ -1355,6 +1355,10 @@ h1, h2, h3, h4, h5,
     height: 50vh;
     min-height: 500px;
     z-index: 2; }
+  @media (max-width: 576px) {
+    .hero-2 > .container .row {
+    height: auto;}
+    }
   .hero-2:before {
     content: "";
     position: absolute;
