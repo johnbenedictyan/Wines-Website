@@ -1572,3 +1572,8 @@ h1, h2, h3, h4, h5,
 .wine_v_1{
   background-color: rgba(255,255,255,0.75);
 }
+
+.price {
+  font-size: x-large;
+  color: rgba(0,0,0,0.75);
+}
