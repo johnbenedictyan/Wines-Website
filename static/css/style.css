@@ -1591,9 +1591,11 @@ h1, h2, h3, h4, h5,
 .uploadcare--widget__button:focus,
 .uploadcare--widget__button:active,
 .uploadcare--button_primary,
+.uploadcare--button,
 .uploadcare--button:focus, 
 .uploadcare--button:hover,
-.uploadcare--camera__button
+.uploadcare--camera__button,
+.uploadcare--button_primary:active
 {
   border-color: #930077;
 }
@@ -1601,19 +1603,20 @@ h1, h2, h3, h4, h5,
 .uploadcare--widget__button,
 .uploadcare--widget__button:focus,
 .uploadcare--widget__button:active,
-.uploadcare--button_primary
+.uploadcare--button_primary,
+.uploadcare--button_primary:focus,
+.uploadcare--button_primary:active
 {
   background-color: #930077;
 }
 
-.uploadcare--button:focus, 
 .uploadcare--button:hover,
 .uploadcare--camera__button,
 .uploadcare--button_muted:focus,
 .uploadcare--button_muted:hover,
+.uploadcare--menu__item_current,
 .uploadcare--menu__item:focus, 
-.uploadcare--menu__item:hover,
-.uploadcare--menu__item_current 
+.uploadcare--menu__item:hover
 {
   color: #930077;
 }
@@ -1631,6 +1634,8 @@ h1, h2, h3, h4, h5,
   border-color: #60004e;
 }
 
-.uploadcare--file-source_all{
+.uploadcare--file-source_all,
+.uploadcare--preview__back
+{
   color: #353535;
 }
