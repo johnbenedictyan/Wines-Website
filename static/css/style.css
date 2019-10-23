@@ -1580,54 +1580,57 @@ h1, h2, h3, h4, h5,
 
 .uploadcare--widget__button,
 .uploadcare--widget__button:focus,
-.uploadcare--widget__button:active
+.uploadcare--widget__button:active,
+.uploadcare--button_primary,
+.uploadcare--button.uploadcare--button_primary:hover
 {
-    color: #fff;
-    background-color: #930077;
-    border-color: #930077;
+  color: #fff;
 }
 
-.uploadcare--widget__button:hover {
-    background-color: #6d0058;
-    border-color: #60004e;
-}
-
-.uploadcare--button_primary {
-    color: #fff;
-    background-color: #930077;
-    border-color: #930077;
-}
-.uploadcare--button_primary:hover  {
-    background-color: #6d0058;
-    border-color: #60004e;
-}
-
-.uploadcare--button:focus, .uploadcare--button:hover{
+.uploadcare--widget__button,
+.uploadcare--widget__button:focus,
+.uploadcare--widget__button:active,
+.uploadcare--button_primary,
+.uploadcare--button:focus, 
+.uploadcare--button:hover,
+.uploadcare--camera__button
+{
   border-color: #930077;
+}
+
+.uploadcare--widget__button,
+.uploadcare--widget__button:focus,
+.uploadcare--widget__button:active,
+.uploadcare--button_primary
+{
+  background-color: #930077;
+}
+
+.uploadcare--button:focus, 
+.uploadcare--button:hover,
+.uploadcare--camera__button,
+.uploadcare--button_muted:focus,
+.uploadcare--button_muted:hover,
+.uploadcare--menu__item:focus, 
+.uploadcare--menu__item:hover,
+.uploadcare--menu__item_current 
+{
   color: #930077;
 }
 
-.uploadcare--button.uploadcare--button_primary:hover {
-  color:#fff;
-}
-
-.uploadcare--button_muted:focus, .uploadcare--button_muted:hover {
+.uploadcare--button_muted:focus,
+.uploadcare--button_muted:hover 
+{
   outline: transparent;
-  color: #930077;
+}
+
+.uploadcare--widget__button:hover,
+.uploadcare--button_primary:hover
+{
+  background-color: #6d0058;
+  border-color: #60004e;
 }
 
 .uploadcare--file-source_all{
   color: #353535;
-}
-
-.uploadcare--menu__item:focus, .uploadcare--menu__item:hover {
-  color: #930077;
-}
-
-.uploadcare--menu__item_current{
-  color: #930077;
-}
-.uploadcare--camera__button {
-  color: #930077;
-  border-color: #930077;
 }
