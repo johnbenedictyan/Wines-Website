@@ -1577,3 +1577,14 @@ h1, h2, h3, h4, h5,
   font-size: x-large;
   color: rgba(0,0,0,0.75);
 }
+
+.uploadcare--widget__button {
+    color: #fff;
+    background-color: #930077;
+    border-color: #930077;
+}
+
+.uploadcare--widget__button:hover {
+    background-color: #6d0058;
+    border-color: #60004e;
+}
