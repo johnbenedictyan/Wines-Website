@@ -178,3 +178,7 @@ UPLOADCARE = {
 }
 
 AUTH_USER_MODEL = 'users.UserAccount'
+
+LOGIN_URL = '/users/log-in/'
+LOGOUT_URL = '/users/log-out/'
+HOME_URL = '/'
