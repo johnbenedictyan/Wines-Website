@@ -37,7 +37,7 @@ class LoginForm(forms.Form):
                 Column(
                     Submit(
                         'submit', 
-                        'Sign In', 
+                        'Log In', 
                         css_class="btn btn-primary w-50"
                     ),
                     css_class='form-group col-12 text-center'
