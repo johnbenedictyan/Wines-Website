@@ -22,6 +22,9 @@ class UserAccount(AbstractUser):
     profile_picture = ImageField(
         blank=False
     )
+    seller = models.BooleanField(
+        default=False
+    )
 
     def __str__(self):
         return self.username
