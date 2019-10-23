@@ -77,12 +77,26 @@
                 <li><a href="{% url 'wine_collection' %}" class="nav-link text-left">Wines</a></li>
                 <li><a href="{% url 'shop' %}" class="nav-link text-left">Shop</a></li>
                 <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Contact</a></li>
+                <li><a href="#" class="nav-link text-left">Cart</a></li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="buyerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{request.user.username}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if perms.products.can_create_product %}
+                    <a class="dropdown-item" href="{% url 'inventory' %}">Your Products</a>
+                    {% endif %}
+                    {% if request.user.is_staff %}
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Console</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="#">Your Orders</a>
+                    <a class="dropdown-item" href="{% url 'log_out' %}">Log Out</a>
+                  </div>
+                </li>
+                {% else %}
                 <li><a href="{% url 'registration' %}" class="nav-link text-left">Account Registration</a></li>
                 <li><a href="{% url 'log_in' %}" class="nav-link text-left">Log In</a></li>
-                {% if request.user.is_authenticated %}
-                <li><a href="{% url 'log_out' %}" class="nav-link text-left">Log Out</a></li>
-                <li><a href="{% url 'product_creator' %}" class="nav-link text-left">Create Product</a></li>
-                <li><a href="{% url 'admin_console' %}" class="nav-link text-left">Admin Console</a></li>
                 {% endif %}
               </ul>                                                                                                                                                                                                                                                                                         
             </nav>
