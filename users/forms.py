@@ -2,6 +2,7 @@ from django import forms
 from .models import UserAccount
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import auth
+from django.contrib.auth.models import Group
 from pyuploadcare.dj.forms import FileWidget, ImageField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
@@ -67,6 +68,16 @@ class RegisterForm(UserCreationForm):
         'data-images-only':'True',
         'data-preview-step':'True',
     }))
+    TRUE_FALSE_CHOICES = (
+        (False, 'Buyer'),
+        (True, 'Seller')
+    )
+    seller = forms.ChoiceField(
+        choices = TRUE_FALSE_CHOICES,
+        label="Account Type",
+        widget=forms.Select(),
+        required=True
+        )
     
     class Meta:
         model = UserAccount
@@ -77,7 +88,8 @@ class RegisterForm(UserCreationForm):
             'email',
             'password1',
             'password2',
-            'profile_picture'
+            'profile_picture',
+            'seller'
             )
         
     def __init__(self, *args, **kwargs):
@@ -98,7 +110,11 @@ class RegisterForm(UserCreationForm):
             Row(
                 Column(
                     'email', 
-                    css_class='form-group col-12'
+                    css_class='form-group col-md-6'
+                ),
+                Column(
+                    'seller', 
+                    css_class='form-group col-md-6'
                 ),
                 css_class='form-row'
             ),
@@ -148,7 +164,18 @@ class RegisterForm(UserCreationForm):
         UserAccount.email = self.cleaned_data["email"]
         UserAccount.first_name = self.cleaned_data["first_name"]
         UserAccount.last_name = self.cleaned_data["last_name"]
- 
+        
         if commit:
             UserAccount.save()
+            # This checks if the user has opted for a seller account
+            # If so, the account will be added to the seller group 
+            # and be given additional permissions.
+            if UserAccount.seller == True:
+                if not UserAccount.groups.filter(name='sellers').exists():
+                    seller_group = Group.objects.get(name='sellers') 
+                    seller_group.user_set.add(UserAccount)
+        
             return UserAccount
+            
+            
+           
