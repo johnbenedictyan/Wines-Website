@@ -1620,4 +1620,14 @@ h1, h2, h3, h4, h5,
   color: #353535;
 }
 
+.uploadcare--menu__item:focus, .uploadcare--menu__item:hover {
+  color: #930077;
+}
 
+.uploadcare--menu__item_current{
+  color: #930077;
+}
+.uploadcare--camera__button {
+  color: #930077;
+  border-color: #930077;
+}
