@@ -67,6 +67,8 @@ class RegisterForm(UserCreationForm):
         'data-public-key':'47e54d77c7a9f66c3f0c',
         'data-images-only':'True',
         'data-preview-step':'True',
+        'data-image-shrink': '500x500',
+        'data-crop': '500x500 upscale',
     }))
     TRUE_FALSE_CHOICES = (
         (False, 'Buyer'),

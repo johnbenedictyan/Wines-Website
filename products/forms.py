@@ -7,9 +7,11 @@ from .models import Product
 
 class ProductForm(forms.ModelForm):
     product_picture = ImageField(widget=FileWidget(attrs={
-        'data-public-key': 'c1c0ea35a4b3421770fa',
+        'data-public-key': '47e54d77c7a9f66c3f0c',
         'data-images-only': 'True',
         'data-preview-step': 'True',
+        'data-image-shrink': '500x500',
+        'data-crop': '1:1',
     }))
 
     class Meta:
