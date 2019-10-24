@@ -87,17 +87,17 @@ class Product(models.Model):
     )
     region = models.CharField(
         blank=False,
-        max_length=1,
+        max_length=25,
         choices=REGION_CHOICES,
     )
     nodes = models.CharField(
         blank=False,
-        max_length=1,
+        max_length=25,
         choices=NODE_CHOICES,
     )
     body = models.CharField(
         blank=False,
-        max_length=1,
+        max_length=25,
         choices=BODY_CHOICES,
     )
 
