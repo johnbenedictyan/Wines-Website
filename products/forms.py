@@ -6,13 +6,26 @@ from .models import Product
 
 
 class ProductForm(forms.ModelForm):
-    product_picture = ImageField(widget=FileWidget(attrs={
-        'data-public-key': '47e54d77c7a9f66c3f0c',
-        'data-images-only': 'True',
-        'data-preview-step': 'True',
-        'data-image-shrink': '500x500',
-        'data-crop': '1:1',
-    }))
+    product_picture = ImageField(
+        widget=FileWidget(
+            attrs={
+                'data-public-key': '47e54d77c7a9f66c3f0c',
+                'data-images-only': 'True',
+                'data-preview-step': 'True',
+                'data-image-shrink': '500x500',
+                'data-crop': '1:1',
+                }
+            )
+        )
+    
+    seller_id = forms.CharField(
+        widget=forms.HiddenInput(
+            attrs={
+                'readonly':'readonly'
+                }
+            )
+        )
+
 
     class Meta:
         model = Product
@@ -23,7 +36,8 @@ class ProductForm(forms.ModelForm):
             'product_picture',
             'region',
             'nodes',
-            'body'
+            'body',
+            'seller_id'
         )
 
     def __init__(self, *args, **kwargs):
@@ -62,6 +76,13 @@ class ProductForm(forms.ModelForm):
             ),
             Row(
                 Column(
+                    'seller_id',
+                    css_class="col"
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
                     'region',
                     css_class='form-group col-md-4 mb-0'
                     ),
@@ -77,3 +98,4 @@ class ProductForm(forms.ModelForm):
             ),
             Submit('submit', 'Create Listing', css_class="btn")
         )
+        

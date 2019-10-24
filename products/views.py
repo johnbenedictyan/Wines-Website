@@ -76,6 +76,9 @@ def product_update(request):
 def product_creator(request):
     if request.method == "GET":
         product_form = ProductForm()
+        # This line sets the initial value of the seller id to the current
+        # user's id
+        product_form.fields["seller_id"].initial = request.user.id
         return render(
             request,
             "product-form.html",
