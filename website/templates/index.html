@@ -1,4 +1,30 @@
-{% extends "layout.html" %} {% load static %} {% block carousel_section %}
+{% extends "layout.html" %} {% load static %} {% block messages_section %} {% for message in messages %}
+
+<div class="container" style="z-index:100000;">
+    <div class="position-absolute w-100 d-flex flex-column p-4">
+        <div class="toast ml-auto show" role="alert">
+            <div class="toast-header">
+                <img src="..." class="rounded mr-2" alt="...">
+                <strong class="mr-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="toast-body">
+                {{ message }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--This is the script which calls the toasts-->
+<script>
+    // $(document).ready(function() {
+    //     $(".toast").toast('show');
+    // });
+</script>
+{% endblock %} {% block carousel_section %}
 <div class="owl-carousel hero-slide owl-style">
     <div class="intro-section container" style="background-image: url({% static 'images/hero_1.jpg' %});">
         <div class="row justify-content-center text-center align-items-center">
