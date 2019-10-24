@@ -1,8 +1,15 @@
 from django.db import models
 from pyuploadcare.dj.models import ImageField
+import datetime
 # Create your models here.
 
+#Useful Utility Functions for year field
+def year_choices():
+        return [(r,r) for r in range(1984, datetime.date.today().year)]
 
+def current_year():
+    return datetime.date.today().year
+        
 class Product(models.Model):
     FRANCE = "FR"
     ITALY = "IT"
@@ -70,6 +77,11 @@ class Product(models.Model):
     name = models.CharField(
         blank=False,
         max_length=255
+    )
+    year = models.IntegerField(
+        blank=False,
+        choices=year_choices(),
+        default=current_year()
     )
     description = models.TextField(
         blank=False
