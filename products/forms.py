@@ -66,11 +66,11 @@ class ProductForm(forms.ModelForm):
                     css_class='form-group col-md-4 mb-0'
                     ),
                 Column(
-                    'aroma',
+                    'body',
                     css_class='form-group col-md-4 mb-0'
                     ),
                 Column(
-                    'body',
+                    'nodes',
                     css_class='form-group col-md-4 mb-0'
                     ),
                 css_class='form-row'
