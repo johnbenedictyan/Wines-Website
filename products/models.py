@@ -17,8 +17,23 @@ class Product(models.Model):
     LIGHT_BODIED = "LB"
     MEDIUM_BODIED = "MB"
     FULL_BODIED = "FB"
-
+    
+    FRUITS = "Fruits"
+    HERBS = "Herbs"
+    FLOWERS = "Flowers"
+    EARTH = "Earth"
+    GRASS = "Grass"
+    TOBACCO = "Tobacco"
+    BUTTERSCOTCH = "Butterscotch"
+    TOAST = "Toast"
+    VANILLA = "Vanilla"
+    MOCHA = "Mocha"
+    CHOCOLATE = "Chocolate"
+        
+    ANY = "NP"
+    
     REGION_CHOICES = [
+        (ANY, "Any"),
         (FRANCE, "France"),
         (ITALY, "Italy"),
         (USA, "USA"),
@@ -31,23 +46,25 @@ class Product(models.Model):
     ]
 
     BODY_CHOICES = [
+        (ANY, "Any"),
         (LIGHT_BODIED, "Light-Bodied"),
         (MEDIUM_BODIED, "Medium-Bodied"),
         (FULL_BODIED, "Full-Bodied")
     ]
 
-    AROMA_CHOICES = [
-        ("Fruits","Fruits"),
-        ("Herbs","Herbs"),
-        ("Flowers","Flowers"),
-        ("Earth","Earth"),
-        ("Grass","Grass"),
-        ("Tobacco","Tobacco"),
-        ("Butterscotch","Butterscotch"),
-        ("Toast","Toast"),
-        ("Vanilla","Vanilla"),
-        ("Mocha","Mocha"),
-        ("Chocolate","Chocolate")
+    NODE_CHOICES = [
+        (ANY, "Any"),
+        (FRUITS,"Fruits"),
+        (HERBS,"Herbs"),
+        (FLOWERS,"Flowers"),
+        (EARTH,"Earth"),
+        (GRASS,"Grass"),
+        (TOBACCO,"Tobacco"),
+        (BUTTERSCOTCH,"Butterscotch"),
+        (TOAST,"Toast"),
+        (VANILLA,"Vanilla"),
+        (MOCHA,"Mocha"),
+        (CHOCOLATE,"Chocolate")
     ]
 
     name = models.CharField(
@@ -73,15 +90,15 @@ class Product(models.Model):
         max_length=1,
         choices=REGION_CHOICES,
     )
-    aroma = models.CharField(
+    nodes = models.CharField(
         blank=False,
         max_length=1,
-        choices=BODY_CHOICES,
+        choices=NODE_CHOICES,
     )
     body = models.CharField(
         blank=False,
         max_length=1,
-        choices=AROMA_CHOICES,
+        choices=BODY_CHOICES,
     )
 
     def __str__(self):
