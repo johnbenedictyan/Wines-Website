@@ -37,7 +37,6 @@ def inventory(request):
     current_user = request.user
     all_products = Product.objects.filter(seller_id=current_user.id)
     number_of_products_found = all_products.count()
-    print(all_products)
     return render(
         request,
         "inventory.html",
@@ -45,39 +44,7 @@ def inventory(request):
             "all_products":all_products,
             "number_of_products_found":number_of_products_found
         })
-
-@login_required
-def product_update(request):
-    selected_product = None
-    if request.method == "GET":
-        product_form = ProductForm(instance=selected_product)
-        return render(
-            request,
-            "product-form.html",
-            {
-                "product_form":product_form
-            })
-    else:
-        dirty_product_form = ProductForm(
-            request.POST,
-            instance=selected_product
-            )
-        if dirty_product_form.is_valid():
-            dirty_product_form.save()
-            return redirect("Inventory")
-        else:
-            messages.error(
-                request,
-                "We were unable to update the details of thie product."
-                )
-            return render(
-                request,
-                "product-form.html",
-                {
-                    "product_form":dirty_product_form
-                })
-                
-
+        
 def product_creator(request):
     if request.method == "GET":
         product_form = ProductForm()
@@ -107,6 +74,37 @@ def product_creator(request):
                     "product_form":dirty_product_form
                 })
             
-def delete_product(request):
+@login_required
+def product_update(request,product_number):
     selected_product = None
-    return redirect()
+    if request.method == "GET":
+        product_form = ProductForm(instance=selected_product)
+        return render(
+            request,
+            "product-form.html",
+            {
+                "product_form":product_form
+            })
+    else:
+        dirty_product_form = ProductForm(
+            request.POST,
+            instance=selected_product
+            )
+        if dirty_product_form.is_valid():
+            dirty_product_form.save()
+            return redirect("Inventory")
+        else:
+            messages.error(
+                request,
+                "We were unable to update the details of thie product."
+                )
+            return render(
+                request,
+                "product-form.html",
+                {
+                    "product_form":dirty_product_form
+                })
+                
+def delete_product(request,product_number):
+    selected_product = None
+    return redirect(None)
