@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ProductForm
@@ -23,8 +23,8 @@ def wine_collection(request):
             "best_sellers":best_sellers
         })
         
-def individual_product(request):
-    single_product = None
+def individual_product(request,product_number):
+    single_product = get_object_or_404(Product,pk=product_number)
     return render(
         request,
         "shop-single.html",
