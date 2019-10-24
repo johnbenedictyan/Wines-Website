@@ -37,7 +37,8 @@ class ProductForm(forms.ModelForm):
             'region',
             'nodes',
             'body',
-            'seller_id'
+            'seller_id',
+            'quantity_in_stock'
         )
 
     def __init__(self, *args, **kwargs):
@@ -64,6 +65,13 @@ class ProductForm(forms.ModelForm):
                         css_class="form-row"
                         ),
                     css_class='form-group col-md-6 mb-0'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    'quantity_in_stock',
+                    css_class="col"
                 ),
                 css_class='form-row'
             ),
