@@ -24,13 +24,21 @@ def wine_collection(request):
         })
         
 def individual_product(request,product_number):
-    single_product = get_object_or_404(Product,pk=product_number)
-    return render(
-        request,
-        "shop-single.html",
-        {
-            "single_product":single_product
-        })
+    try:
+        single_product = Product.objects.get(pk=product_number)
+    except Product.DoesNotExist:
+        messages.error(
+                request,
+                "This product does not exist."
+                )
+        return redirect(shop)
+    else:
+        return render(
+            request,
+            "shop-single.html",
+            {
+                "single_product":single_product
+            })
 
 @login_required
 def inventory(request):
@@ -76,36 +84,56 @@ def product_creator(request):
             
 @login_required
 def product_update(request,product_number):
-    selected_product = Product.objects.get(pk=product_number)
-    if request.method == "GET":
-        product_form = ProductForm(instance=selected_product)
-        return render(
-            request,
-            "product-form.html",
-            {
-                "product_form":product_form
-            })
-    else:
-        dirty_product_form = ProductForm(
-            request.POST,
-            instance=selected_product
-            )
-        if dirty_product_form.is_valid():
-            dirty_product_form.save()
-            return redirect(inventory)
-        else:
-            messages.error(
+    try:
+        selected_product = Product.objects.get(pk=product_number)
+    except Product.DoesNotExist:
+        messages.error(
                 request,
-                "We were unable to update the details of thie product."
+                "This product does not exist."
                 )
+        return redirect(inventory)
+    else:
+        if request.method == "GET":
+            product_form = ProductForm(instance=selected_product)
             return render(
                 request,
                 "product-form.html",
                 {
-                    "product_form":dirty_product_form
+                    "product_form":product_form
                 })
+        else:
+            dirty_product_form = ProductForm(
+                request.POST,
+                instance=selected_product
+                )
+            if dirty_product_form.is_valid():
+                dirty_product_form.save()
+                return redirect(inventory)
+            else:
+                messages.error(
+                    request,
+                    "We were unable to update the details of this product."
+                    )
+                return render(
+                    request,
+                    "product-form.html",
+                    {
+                        "product_form":dirty_product_form
+                    })
                 
 def delete_product(request,product_number):
-    Product.objects.filter(pk=product_number).delete()
-    messages.success(request, "The listing has been successfully deleted!")
-    return redirect(inventory)
+    try:
+        Product.objects.filter(pk=product_number).delete()
+    except Product.DoesNotExist:
+        messages.error(
+                request,
+                "This product does not exist."
+                )
+    else:
+        messages.success(
+            request,
+            "The listing has been successfully deleted!"
+            )
+    finally:
+        return redirect(inventory)
+    
