@@ -86,7 +86,7 @@ def product_creator(request):
         dirty_product_form = ProductForm(request.POST)
         if dirty_product_form.is_valid():
             dirty_product_form.save()
-            return redirect(None)
+            return redirect(inventory)
         else:
             messages.error(
                 request,
