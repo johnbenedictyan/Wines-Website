@@ -106,7 +106,7 @@ def log_in(request):
                 request, 
                 "Invalid log_in"
             )
-            return redirect(settings.log_in_URL)
+            return redirect(settings.LOGIN_URL)
         return
 
 @login_required
