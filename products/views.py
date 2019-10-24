@@ -76,7 +76,7 @@ def product_creator(request):
             
 @login_required
 def product_update(request,product_number):
-    selected_product = None
+    selected_product = Product.objects.get(pk=product_number)
     if request.method == "GET":
         product_form = ProductForm(instance=selected_product)
         return render(
@@ -92,7 +92,7 @@ def product_update(request,product_number):
             )
         if dirty_product_form.is_valid():
             dirty_product_form.save()
-            return redirect("Inventory")
+            return redirect(inventory)
         else:
             messages.error(
                 request,
