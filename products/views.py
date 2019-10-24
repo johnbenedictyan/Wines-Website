@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ProductForm
+from .models import Product
 
 # Create your views here.
 def shop(request):
@@ -33,12 +34,16 @@ def individual_product(request):
 
 @login_required
 def inventory(request):
-    all_products = None
+    current_user = request.user
+    all_products = Product.objects.filter(seller_id=current_user.id)
+    number_of_products_found = all_products.count()
+    print(all_products)
     return render(
         request,
         "inventory.html",
         {
-            "all_products":all_products
+            "all_products":all_products,
+            "number_of_products_found":number_of_products_found
         })
 
 @login_required
