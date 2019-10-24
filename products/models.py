@@ -100,6 +100,10 @@ class Product(models.Model):
         max_length=25,
         choices=BODY_CHOICES,
     )
+    seller_id = models.IntegerField(
+        blank=False,
+        default=1
+    )
 
     def __str__(self):
         return self.name
