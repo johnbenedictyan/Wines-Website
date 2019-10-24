@@ -6,7 +6,7 @@ from .models import Product
 
 # Create your views here.
 def shop(request):
-    all_products = None
+    all_products = Product.objects.all()
     return render(
         request,
         "shop.html",
