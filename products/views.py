@@ -106,5 +106,6 @@ def product_update(request,product_number):
                 })
                 
 def delete_product(request,product_number):
-    selected_product = None
-    return redirect(None)
+    Product.objects.filter(pk=product_number).delete()
+    messages.success(request, "The listing has been successfully deleted!")
+    return redirect(inventory)
