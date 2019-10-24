@@ -22,7 +22,7 @@ class ProductForm(forms.ModelForm):
             'price',
             'product_picture',
             'region',
-            'aroma',
+            'nodes',
             'body'
         )
 
