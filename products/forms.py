@@ -104,6 +104,6 @@ class ProductForm(forms.ModelForm):
                     ),
                 css_class='form-row'
             ),
-            Submit('submit', 'Create Listing', css_class="btn")
+            Submit('submit', 'Save Listing', css_class="btn")
         )
         
