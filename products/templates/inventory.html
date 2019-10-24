@@ -23,56 +23,70 @@
             </div>
         </div>
         <div class="row">
-            <div class="card-deck">
-                {% for product in all_products %}
+            {% for product in all_products %}
+            <div class="col-4">
                 <div class="card">
                     <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">{{product.name}}</h5>
-                        <p class="card-text">{{product.description}}</p>
-                        <p class="card-text">{{product.price}}</p>
-                        <p class="card-text">{{product.quantity_in_stock}}</p>
-                        <p class="card-text">{{product.region}}</p>
-                        <p class="card-text">{{product.nodes}}</p>
-                        <p class="card-text">{{product.body}}</p>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title text-center">{{product.name|title}}</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">Price</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center"><span class="badge badge-primary">{{product.price}}</span></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">Quantity</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center"><span class="badge badge-primary">{{product.quantity_in_stock}}</span></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">Region</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center"><span class="badge badge-primary">{{product.region}}</span></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">Nodes</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center"><span class="badge badge-primary">{{product.nodes}}</span></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">Body</h5>
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center"><span class="badge badge-primary">{{product.body}}</span></h5>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
+                        <div class="row">
+                            <div class="col text-left">
+                                <a class="btn btn-primary w-75" href="{% url 'product_update' product.id %}">Edit<a>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn btn-primary w-75" href="{% url 'delete_product' product.id %}">Delete<a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            {% endfor %}
         </div>
     </div>
 </div>
