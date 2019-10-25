@@ -61,10 +61,16 @@ class cart:
         else:
             self.cart_items.pop(found_product_position)
             return True
+            
+    def export_data(self):
+        return self.cart_items
+        
+    def import_data(self,cart_items):
+        self.cart_items = cart_items
 
 def view_cart(request):
-    user_cart = request.session.get('user_cart', cart())
-    
+    user_cart = request.session.get('user_cart', cart().export_data())
+    print(user_cart)
     return render(
         request,
         "cart.html",
@@ -73,6 +79,22 @@ def view_cart(request):
         })
         
 def add_to_cart(request,product_number,quantity):
+    # This checks to see if there is cart data stored in the session.
+    # If there is, the user cart will be formed using the import data function
+    # of the cart.
+    # If there is no existing cart data, a new cart object will be created.
+    
+    if request.session.get('user_cart'):
+        cart_data = request.session.get('user_cart')
+        user_cart = cart().import_data(cart_data)
+    else:
+        user_cart = cart()
+    
+    # This checks the selected product exists within the product table inside
+    # of the database.
+    # If it does, then an auxiliary cart item will be created to be consumed
+    # by the add_items_to_cart function of the cart object.
+    # If the product does not exist, an error will be raised.
     try:
         selected_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
@@ -84,6 +106,10 @@ def add_to_cart(request,product_number,quantity):
         img_url = selected_product.product_picture.cdn_url
         product_name = selected_product.name
         price = selected_product.price
+        
+        # The temporary cart_item variable stores all of the information which
+        # will be displayed in the cart page.
+        
         cart_item = {
                     "img_url":img_url,
                     "product_number":product_number,
@@ -91,14 +117,13 @@ def add_to_cart(request,product_number,quantity):
                     "price":price,
                     "quantity":quantity
                 }
-                
-    user_cart = request.session.get('user_cart', cart())
+    
     if user_cart.add_item_to_cart(cart_item):
         messages.success(
                 request,
                 "Item added to cart."
                 )
-        request.session['user_cart']=user_cart
+        request.session['user_cart']=user_cart.export_data()
     else:
         messages.error(
                 request,
@@ -107,14 +132,19 @@ def add_to_cart(request,product_number,quantity):
     return redirect(view_cart)
 
 def edit_cart(request,product_number,new_quantity):
-    user_cart = request.session.get('user_cart')
-    if user_cart:
+    # This is an identical check to the one above inside of the add items
+    # to cart function
+    
+    if request.session.get('user_cart'):
+        cart_data = request.session.get('user_cart')
+        user_cart = cart().import_data(cart_data)
+        
         if user_cart.edit_item_quantity(product_number,new_quantity):
              messages.success(
                  request,
                  "Item quantity has been edited."
                  )
-             request.session['user_cart']=user_cart
+             request.session['user_cart']=user_cart.export_data()
         else:
             messages.error(
                 request,
