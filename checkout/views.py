@@ -69,7 +69,14 @@ def view_cart(request):
             "user_cart":user_cart
         })
         
-def add_to_cart(request,product_number):
+def add_to_cart(request,product_picture_cdn,product_number,price,quantity):
+    cart_item = {
+                "product_picture_cdn":product_picture_cdn,
+                "product_number":product_number,
+                "price":price,
+                "quantity":quantity
+            }
+    user_cart = request.session.get('user_cart', cart())
     return None
 
 def change_cart(request,product_number,new_number):
