@@ -31,17 +31,17 @@ class cart:
         self.cart_items = []
     
     def add_item_to_cart(self,cart_item):
-        cart_item.total_price = cart_item.price * cart_item.quantity
+        cart_item['total_price'] = cart_item['price'] * cart_item['quantity']
         self.cart_items.append(cart_item)
         return True
     
     def edit_item_quantity(self,product_number,new_quantity):
         found = False
         for idx,item in enumerate(self.cart_items):
-            if item.product_number == product_number:
-                item.quantity = new_quantity
+            if item['product_number'] == product_number:
+                item['quantity'] = new_quantity
                 found = True
-                found_product_number = item.product_number
+                found_product_number = item['product_number']
                 
         if found is False:
             return None
@@ -51,7 +51,7 @@ class cart:
     def delete_item_quantity(self,product_number):
         found = False
         for idx,item in enumerate(self.cart_items):
-            if item.product_number == product_number:
+            if item['product_number'] == product_number:
                 found = True
                 found_product_position = idx
                 
