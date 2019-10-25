@@ -33,6 +33,7 @@ class cart:
     def add_item_to_cart(self,cart_item):
         cart_item.total_price = cart_item.price * cart_item.quantity
         self.cart_items.append(cart_item)
+        return True
     
     def edit_item_quantity(self,product_number,new_quantity):
         found = False
@@ -79,7 +80,17 @@ def add_to_cart(request,product_picture_cdn,product_number,price,quantity):
                 "quantity":quantity
             }
     user_cart = request.session.get('user_cart', cart())
-    return None
+    if user_cart.add_item_to_cart(cart_item):
+        messages.success(
+                request,
+                "Item added to cart."
+                )
+    else:
+        messages.error(
+                request,
+                "We are unable to add this item to your cart."
+                )
+    return redirect(view_cart)
 
 def change_cart(request,product_number,new_number):
     return None
