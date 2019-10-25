@@ -61,8 +61,7 @@ class cart:
         else:
             self.cart_items.pop(found_product_position)
             return True
-    
-    
+
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart())
     
@@ -82,11 +81,14 @@ def add_to_cart(request,product_number,quantity):
                 "This product does not exist."
                 )
     else:
+        img_url = selected_product.product_picture.cdn_url
+        product_name = selected_product.name
+        price = selected_product.price
         cart_item = {
-                    "img_url":selected_product["product_picture"]["cdn_url"],
+                    "img_url":img_url,
                     "product_number":product_number,
-                    "product_name":selected_product["name"],
-                    "price":selected_product["price"],
+                    "product_name":product_name,
+                    "price":price,
                     "quantity":quantity
                 }
                 
