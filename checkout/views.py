@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomerDetailForm
+from products.models import Product
 
 # Create your views here.
 def checkout(request):
@@ -72,13 +73,22 @@ def view_cart(request):
             "user_cart":user_cart
         })
         
-def add_to_cart(request,product_picture_cdn,product_number,price,quantity):
-    cart_item = {
-                "product_picture_cdn":product_picture_cdn,
-                "product_number":product_number,
-                "price":price,
-                "quantity":quantity
-            }
+def add_to_cart(request,product_number,quantity):
+    try:
+        selected_product = Product.objects.get(pk=product_number)
+    except Product.DoesNotExist:
+        messages.error(
+                request,
+                "This product does not exist."
+                )
+    else:
+        cart_item = {
+                    "img_url":selected_product["product_picture"]["cdn_url"],
+                    "product_number":product_number,
+                    "price":selected_product["price"],
+                    "quantity":quantity
+                }
+                
     user_cart = request.session.get('user_cart', cart())
     if user_cart.add_item_to_cart(cart_item):
         messages.success(
