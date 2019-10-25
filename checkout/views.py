@@ -92,6 +92,31 @@ def add_to_cart(request,product_picture_cdn,product_number,price,quantity):
                 )
     return redirect(view_cart)
 
-def change_cart(request,product_number,new_number):
-    return None
+def edit_cart(request,product_number,new_quantity):
+    user_cart = request.session.get('user_cart')
+    if user_cart:
+        if user_cart.edit_item_quantity(product_number,new_quantity):
+             messages.success(
+                 request,
+                 "Item quantity has been edited."
+                 )
+        else:
+            messages.error(
+                request,
+                "We are unable to edit this item in your cart."
+                )
+    else:
+        messages.error(
+            request,
+            "This cart does not exist."
+            )
     
+    return redirect(view_cart)
+    
+def delete_cart(request):
+    request.session['user_cart'] = cart()
+    messages.success(
+        request,
+        "Cart has been successfully cleared."
+        )
+    return redirect(view_cart)
