@@ -96,6 +96,7 @@ def add_to_cart(request,product_number,quantity):
                 request,
                 "Item added to cart."
                 )
+        request.session['user_cart']=user_cart
     else:
         messages.error(
                 request,
@@ -111,6 +112,7 @@ def edit_cart(request,product_number,new_quantity):
                  request,
                  "Item quantity has been edited."
                  )
+             request.session['user_cart']=user_cart
         else:
             messages.error(
                 request,
