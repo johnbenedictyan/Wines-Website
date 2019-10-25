@@ -125,3 +125,4 @@ class Order(models.Model):
 
     def __str__(self):
         return "Order - " + str(self.id)
+        
