@@ -65,7 +65,7 @@ class cart:
     
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart())
-    print(user_cart)
+    
     return render(
         request,
         "cart.html",
@@ -85,6 +85,7 @@ def add_to_cart(request,product_number,quantity):
         cart_item = {
                     "img_url":selected_product["product_picture"]["cdn_url"],
                     "product_number":product_number,
+                    "product_name":selected_product["name"],
                     "price":selected_product["price"],
                     "quantity":quantity
                 }
