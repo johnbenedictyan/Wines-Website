@@ -80,16 +80,18 @@ def view_cart(request):
         
 def add_to_cart(request,product_number,quantity):
     # This checks to see if there is cart data stored in the session.
+    # It first creates a new cart object.
     # If there is, the user cart will be formed using the import data function
     # of the cart.
-    # If there is no existing cart data, a new cart object will be created.
+    
+    user_cart = cart()
     
     if request.session.get('user_cart'):
-        cart_data = request.session.get('user_cart')
-        user_cart = cart().import_data(cart_data)
-    else:
-        user_cart = cart()
+        user_cart.import_data(
+            request.session.get('user_cart')
+            )
     
+    print(user_cart)
     # This checks the selected product exists within the product table inside
     # of the database.
     # If it does, then an auxiliary cart item will be created to be consumed
