@@ -30,6 +30,7 @@ def checkout(request):
 class cart:
     def __init__(self):
         self.cart_items = []
+        self.cart_total = 0
     
     def add_item_to_cart(self,cart_item):
         cart_item['total_price'] = cart_item['price'] * cart_item['quantity']
@@ -61,12 +62,26 @@ class cart:
         else:
             self.cart_items.pop(found_product_position)
             return True
-            
+    
+    def calculate_cart_total(self):
+        cart_total = 0
+        for i in self.cart_items:
+            cart_total+=i["total_price"]
+        self.cart_total = cart_total
+        
     def export_data(self):
-        return self.cart_items
+        self.calculate_cart_total()
+        # This is the export variable that stores all of the relevant
+        # information that the cart page would need.
+        export_dict = {
+            "cart_items":self.cart_items,
+            "cart_total":self.cart_total
+        }
+        return export_dict
         
     def import_data(self,cart_items):
         self.cart_items = cart_items
+        
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
