@@ -22,7 +22,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for item in user_cart %}
+                  {% for item in user_cart.cart_items %}
                   <tr>
                     <td class="product-thumbnail">
                       <img src="{{item.img_url}}" alt="Image" class="img-fluid">
@@ -69,7 +69,7 @@
                 <button class="btn btn-primary btn-md btn-block">Update Cart</button>
               </div>
               <div class="col-md-6">
-                <button class="btn btn-outline-primary btn-md btn-block">Continue Shopping</button>
+                <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-md btn-block">Continue Shopping</a>
               </div>
             </div>
             <div class="row">
@@ -98,7 +98,7 @@
                     <span class="text-black">Subtotal</span>
                   </div>
                   <div class="col-md-6 text-right">
-                    <strong class="text-black">$230.00</strong>
+                    <strong class="text-black">${{user_cart.cart_total}}</strong>
                   </div>
                 </div>
                 <div class="row mb-5">
