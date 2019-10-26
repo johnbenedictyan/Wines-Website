@@ -139,7 +139,8 @@ def edit_cart(request,product_number,new_quantity):
     
     if request.session.get('user_cart'):
         cart_data = request.session.get('user_cart')
-        user_cart = cart().import_data(cart_data)
+        user_cart = cart()
+        user_cart.import_data(cart_data)
         
         if user_cart.edit_item_quantity(product_number,new_quantity):
              messages.success(
