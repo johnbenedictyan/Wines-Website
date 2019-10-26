@@ -79,13 +79,13 @@ class cart:
         }
         return export_dict
         
-    def import_data(self,cart_items):
-        self.cart_items = cart_items
+    def import_data(self,cart_data):
+        self.cart_items = cart_data["cart_items"]
+        self.cart_total = cart_data["cart_total"]
         
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
-    print(user_cart)
     return render(
         request,
         "cart.html",
@@ -106,7 +106,6 @@ def add_to_cart(request,product_number,quantity):
             request.session.get('user_cart')
             )
     
-    print(user_cart)
     # This checks the selected product exists within the product table inside
     # of the database.
     # If it does, then an auxiliary cart item will be created to be consumed
