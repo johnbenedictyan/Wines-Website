@@ -45,7 +45,7 @@
     
                     </td>
                     <td>${{item.total_price}}</td>
-                    <td><a href="#" class="btn btn-primary height-auto btn-sm">X</a></td>
+                    <td><a href="{% url 'delete_from_cart' item.product_number %}" class="btn btn-primary height-auto btn-sm">X</a></td>
                   </tr>
                   {% endfor %}
     
