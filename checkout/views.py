@@ -49,7 +49,7 @@ class cart:
         else:
             return found_product_number
     
-    def delete_item_quantity(self,product_number):
+    def delete_item_from_cart(self,product_number):
         found = False
         for idx,item in enumerate(self.cart_items):
             if item['product_number'] == product_number:
@@ -158,13 +158,28 @@ def edit_cart(request,product_number,new_quantity):
             request,
             "This cart does not exist."
             )
-    
     return redirect(view_cart)
     
-def delete_cart(request):
-    request.session['user_cart'] = cart()
-    messages.success(
-        request,
-        "Cart has been successfully cleared."
-        )
+def delete_from_cart(request,product_number):
+    if request.session.get('user_cart'):
+        cart_data = request.session.get('user_cart')
+        user_cart = cart()
+        user_cart.import_data(cart_data)
+        
+        if user_cart.delete_item_from_cart(product_number):
+            messages.success(
+                 request,
+                 "Item has been successfully deleted."
+                 )
+            request.session['user_cart']=user_cart.export_data()
+        else:
+            messages.error(
+                request,
+                "We are unable to delete this item from your cart."
+                )
+    else:
+        messages.error(
+            request,
+            "This cart does not exist."
+            )
     return redirect(view_cart)
