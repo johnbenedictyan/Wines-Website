@@ -2,9 +2,10 @@ from django.db import models
 from products.models import Product as product
 from project4.settings import AUTH_USER_MODEL
 from django_countries.fields import CountryField
+from datetime import timedelta,datetime
 # Create your models here.
 
-class Customer_Details(models.Model):
+class Customer_Detail(models.Model):
     country = CountryField(
         verbose_name="Country",
         blank_label="Select Country",
@@ -125,4 +126,17 @@ class Order(models.Model):
 
     def __str__(self):
         return "Order - " + str(self.id)
-        
+
+class Coupon(models.Model):
+    coupon_code = models.CharField(
+        blank=False,
+        max_length=255
+    )
+    date_time_created = models.TimeField(
+        blank=False,
+        auto_now_add=True
+    )
+    date_time_expiry = models.TimeField(
+        blank=False,
+        default=datetime.now()+timedelta(days=365)
+    )
