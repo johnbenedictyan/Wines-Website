@@ -3,6 +3,7 @@ from products.models import Product as product
 from project4.settings import AUTH_USER_MODEL
 from django_countries.fields import CountryField
 from datetime import timedelta,datetime
+from django.utils import timezone
 # Create your models here.
 
 class Customer_Detail(models.Model):
@@ -134,7 +135,7 @@ class Coupon(models.Model):
     )
     date_time_created = models.DateTimeField(
         blank=False,
-        default=datetime.now()
+        default=timezone.now()
     )
     date_time_expiry = models.DateTimeField(
         blank=False,
