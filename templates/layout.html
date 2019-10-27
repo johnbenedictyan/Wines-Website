@@ -77,7 +77,7 @@
                 <li><a href="{% url 'wine_collection' %}" class="nav-link text-left">Wines</a></li>
                 <li><a href="{% url 'shop' %}" class="nav-link text-left">Shop</a></li>
                 <li><a href="{% url 'contact_us' %}" class="nav-link text-left">Contact</a></li>
-                <li><a href="#" class="nav-link text-left">Cart</a></li>
+                <li><a href="{% url 'view_cart' %}" class="nav-link text-left">Cart</a></li>
                 {% if request.user.is_authenticated %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="buyerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -161,8 +161,6 @@
     {% block form_section %}
     {% endblock %}
     
-    {% block js_scripts_section %}
-    {% endblock %}
     <div class="footer">
       <div class="container">
         
@@ -220,7 +218,8 @@
 
 
   <script src="{% static 'js/main.js' %}"></script>
-
+  {% block js_scripts_section %}
+  {% endblock %}
 </body>
 
 </html>
