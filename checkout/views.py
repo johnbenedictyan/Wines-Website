@@ -13,7 +13,7 @@ def checkout(request):
             request,
             "checkout.html",
             {
-                "selected_order":selected_order
+                "custom_detail_form":custom_detail_form
             })
     else:
         dirty_custom_detail_form = CustomerDetailForm(request.POST)
