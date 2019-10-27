@@ -147,7 +147,17 @@ def add_to_cart(request,product_number,quantity):
                 )
     return redirect(view_cart)
 
-def edit_cart(request,product_number,new_quantity):
+def edit_cart(request):
+    product_number = request.POST.getlist("product-number")
+    item_quantity = request.POST.getlist("item-quantity")
+    edit_cart_data = []
+    for c, v in enumerate(product_number):
+        cart_item = {
+            'product_number':v,
+            'item_quantity':item_quantity[c]
+        }
+        edit_cart_data.append(cart_item)
+        
     # This is an identical check to the one above inside of the add items
     # to cart function
     
@@ -155,17 +165,23 @@ def edit_cart(request,product_number,new_quantity):
         cart_data = request.session.get('user_cart')
         user_cart = cart()
         user_cart.import_data(cart_data)
-        
-        if user_cart.edit_item_quantity(product_number,new_quantity):
+        editing_counter = 0
+        for i in edit_cart_data:
+            if user_cart.edit_item_quantity(
+                int(i["product_number"]),
+                int(i["item_quantity"])
+                ):
+                    editing_counter+=1
+        if editing_counter == len(edit_cart_data):
              messages.success(
                  request,
-                 "Item quantity has been edited."
+                 "Item quantities has been edited."
                  )
              request.session['user_cart']=user_cart.export_data()
         else:
             messages.error(
                 request,
-                "We are unable to edit this item in your cart."
+                "There has been an error in editing cart quantities."
                 )
     else:
         messages.error(
@@ -196,4 +212,8 @@ def delete_from_cart(request,product_number):
             request,
             "This cart does not exist."
             )
+    return redirect(view_cart)
+    
+def clear_cart(request):
+    request.session['user_cart'] = cart().export_data()
     return redirect(view_cart)
