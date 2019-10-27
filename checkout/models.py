@@ -129,6 +129,11 @@ class Order(models.Model):
         return "Order - " + str(self.id)
 
 class Coupon(models.Model):
+    COUPON_CODE_CHOICES = [
+        ('10PERCENT', '10% Off'),
+        ('20PERCENT', '20% Off'),
+        ('50PERCENT', '50% Off'),
+    ]
     coupon_code = models.CharField(
         blank=False,
         max_length=255
@@ -140,4 +145,9 @@ class Coupon(models.Model):
     date_time_expiry = models.DateTimeField(
         blank=False,
         default=datetime.now()+timedelta(days=365)
+    )
+    discount = models.CharField(
+        max_length=9,
+        choices=COUPON_CODE_CHOICES,
+        default='10PERCENT'
     )
