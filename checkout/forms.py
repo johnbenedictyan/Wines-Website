@@ -216,7 +216,7 @@ class CustomerDetailForm(forms.ModelForm):
                                             {% for item in user_cart.cart_items %}
                                             <tr>
                                                 <td>{{item.product_name|title}}<strong class="mx-2">x</strong>{{item.quantity}}</td>
-                                                <td>${{item.price}}</td>
+                                                <td>${{item.total_price}}</td>
                                               </tr>
                                             {% endfor %}
                                               <tr>

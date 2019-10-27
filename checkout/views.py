@@ -50,6 +50,7 @@ class cart:
         for idx,item in enumerate(self.cart_items):
             if item['product_number'] == product_number:
                 item['quantity'] = new_quantity
+                item['total_price'] = item['price'] * item['quantity']
                 found = True
                 found_product_number = item['product_number']
                 
