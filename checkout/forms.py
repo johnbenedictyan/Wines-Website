@@ -2,13 +2,13 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
 from crispy_forms.bootstrap import StrictButton,FieldWithButtons
-from .models import Customer_Details
+from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
 
 class CustomerDetailForm(forms.ModelForm):
     
     class Meta:
-        model = Customer_Details
+        model = Customer_Detail
         fields = '__all__'
         widgets = {
             'country': CountrySelectWidget(),
