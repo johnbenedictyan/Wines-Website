@@ -132,11 +132,11 @@ class Coupon(models.Model):
         blank=False,
         max_length=255
     )
-    date_time_created = models.TimeField(
+    date_time_created = models.DateTimeField(
         blank=False,
         auto_now_add=True
     )
-    date_time_expiry = models.TimeField(
+    date_time_expiry = models.DateTimeField(
         blank=False,
         default=datetime.now()+timedelta(days=365)
     )
