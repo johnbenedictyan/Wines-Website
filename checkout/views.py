@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomerDetailForm
 from products.models import Product
+from .models import Coupon
+from django.http import JsonResponse
 
 # Create your views here.
 def checkout(request):
@@ -22,6 +24,7 @@ def checkout(request):
                 request,
                 "This cart does not exist."
                 )
+            return redirect(view_cart)
         
     else:
         dirty_custom_detail_form = CustomerDetailForm(request.POST)
@@ -33,13 +36,40 @@ def checkout(request):
                 request,
                 "We are unable to accept your details."
                 )
-            
+
+def coupon_check(request):
+    coupon_code = request.GET.get('coupon_code', None)
+    if coupon_code is None:
+        data = {
+            'discount': None
+        }
+        
+    try:
+        selected_coupon = Coupon.objects.get(coupon_code=coupon_code)
+    except Coupon.DoesNotExist:
+        
+        data = {
+            'discount': None
+        }
+        messages.error(
+            request,
+            "We are unable to accept your coupon code."
+            )
+    else:
+        data = {
+            'discount': int(selected_coupon.discount[:2])
+        }
+    finally:    
+        return JsonResponse(data)
+    
 # Cart Class used by all of the cart view functions
 class cart:
     def __init__(self):
         self.cart_items = []
-        self.cart_total = 0
-    
+        self.cart_subtotal = 0
+        self.coupon_applied = 'no-coupon'
+        self.chargable_percentage = 1
+        
     def add_item_to_cart(self,cart_item):
         cart_item['total_price'] = cart_item['price'] * cart_item['quantity']
         self.cart_items.append(cart_item)
@@ -72,29 +102,51 @@ class cart:
             self.cart_items.pop(found_product_position)
             return True
     
-    def calculate_cart_total(self):
-        cart_total = 0
+    def calculate_cart_subtotal(self):
+        cart_subtotal = 0
         for i in self.cart_items:
-            cart_total+=i["total_price"]
-        self.cart_total = cart_total
+            cart_subtotal+=i["total_price"]
+        self.cart_subtotal = cart_subtotal
+    
+    def edit_cart_coupon_applied(self,coupon_applied,chargable_percentage):
+        # This will check if the new coupon extracted from the form data is 
+        # different from the coupon code in the cart object.
+        # If it is different then the changing of values will occur.
+        if coupon_applied != self.coupon_applied:
+            self.coupon_applied = coupon_applied
+            self.chargable_percentage = chargable_percentage
+            return True
+        
+    def calculate_cart_total(self):
+        chargable_percentage = float(self.chargable_percentage)
+        cart_subtotal = float(self.cart_subtotal)
+        self.cart_total = chargable_percentage * cart_subtotal
         
     def export_data(self):
+        self.calculate_cart_subtotal()
         self.calculate_cart_total()
         # This is the export variable that stores all of the relevant
         # information that the cart page would need.
         export_dict = {
             "cart_items":self.cart_items,
-            "cart_total":self.cart_total
+            "cart_subtotal":self.cart_subtotal,
+            "cart_total":self.cart_total,
+            "coupon_applied":self.coupon_applied,
+            "chargable_percentage":self.chargable_percentage
         }
         return export_dict
         
     def import_data(self,cart_data):
         self.cart_items = cart_data["cart_items"]
+        self.cart_subtotal = cart_data["cart_subtotal"]
         self.cart_total = cart_data["cart_total"]
-        
+        self.coupon_applied = cart_data["coupon_applied"]
+        self.chargable_percentage = cart_data["chargable_percentage"]
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
+    print(user_cart['chargable_percentage'])
+    print(user_cart['cart_total'])
     return render(
         request,
         "cart.html",
@@ -157,8 +209,12 @@ def add_to_cart(request,product_number,quantity):
     return redirect(view_cart)
 
 def edit_cart(request):
+    # This packages the product number and item quantity from their individual
+    # lists into an array of dictionaries which can then be ingested by the 
+    # edit item quantity function of the cart object.
     product_number = request.POST.getlist("product-number")
     item_quantity = request.POST.getlist("item-quantity")
+   
     edit_cart_data = []
     for c, v in enumerate(product_number):
         cart_item = {
@@ -167,6 +223,12 @@ def edit_cart(request):
         }
         edit_cart_data.append(cart_item)
         
+    # This section is responsible for gathering the information needed to
+    # update the cart total and coupon applied.
+    chargable_percentage = request.POST.get('chargable-percentage')
+    coupon_applied = request.POST.get('coupon-applied')
+    print("chargable_percentage: ",chargable_percentage)
+    print("coupon_applied: ",coupon_applied)
     # This is an identical check to the one above inside of the add items
     # to cart function
     
@@ -192,6 +254,15 @@ def edit_cart(request):
                 request,
                 "There has been an error in editing cart quantities."
                 )
+        if user_cart.edit_cart_coupon_applied(
+            coupon_applied,
+            chargable_percentage
+            ):
+            messages.success(
+                 request,
+                 "Coupon has been successfully applied."
+                 )
+            request.session['user_cart']=user_cart.export_data()
     else:
         messages.error(
             request,
