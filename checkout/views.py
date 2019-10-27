@@ -6,15 +6,23 @@ from products.models import Product
 
 # Create your views here.
 def checkout(request):
-    selected_order = None
     custom_detail_form = CustomerDetailForm()
     if request.method == "GET":
-        return render(
-            request,
-            "checkout.html",
-            {
-                "custom_detail_form":custom_detail_form
-            })
+        if request.session.get('user_cart'):
+            user_cart = request.session.get('user_cart')
+            return render(
+                request,
+                "checkout.html",
+                {
+                    "user_cart":user_cart,
+                    "custom_detail_form":custom_detail_form
+                })
+        else:
+            messages.error(
+                request,
+                "This cart does not exist."
+                )
+        
     else:
         dirty_custom_detail_form = CustomerDetailForm(request.POST)
         if dirty_custom_detail_form.is_valid():

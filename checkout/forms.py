@@ -213,19 +213,19 @@ class CustomerDetailForm(forms.ModelForm):
                                               <th>Total</th>
                                             </thead>
                                             <tbody>
-                                            {% for i in cart.products %}
+                                            {% for item in user_cart.cart_items %}
                                             <tr>
-                                                <td>{{i.name}}<strong class="mx-2">x</strong>{{i.quantity}}</td>
-                                                <td>${{i.price}}</td>
+                                                <td>{{item.product_name|title}}<strong class="mx-2">x</strong>{{item.quantity}}</td>
+                                                <td>${{item.price}}</td>
                                               </tr>
                                             {% endfor %}
                                               <tr>
                                                 <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                                                <td class="text-black">${{cart.subtotal}}</td>
+                                                <td class="text-black">${{user_cart.cart_total}}</td>
                                               </tr>
                                               <tr>
                                                 <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                                                <td class="text-black font-weight-bold"><strong>${{cart.order_total}}</strong></td>
+                                                <td class="text-black font-weight-bold"><strong>$0</strong></td>
                                               </tr>
                                             </tbody>
                                           </table>
