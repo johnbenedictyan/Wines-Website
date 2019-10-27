@@ -189,7 +189,7 @@ class CustomerDetailForm(forms.ModelForm):
                                       """
                             ),
                             Div(
-                                FieldWithButtons('coupon_code', StrictButton("Apply",css_class='btn btn-primary btn-sm rounded px-4',css_id='button-addon2')),
+                                FieldWithButtons('coupon_code', StrictButton("Apply",css_class='btn btn-primary btn-sm rounded px-4 cc-apply-button',css_id='button-addon2')),
                                 css_class="p-3 p-lg-5 border"
                             ),
                             css_class="col-md-12"
