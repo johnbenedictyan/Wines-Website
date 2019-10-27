@@ -1,9 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
-from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
-from crispy_forms.bootstrap import AppendedText
+from crispy_forms.bootstrap import StrictButton,FieldWithButtons
 from .models import Customer_Details
 from django_countries.widgets import CountrySelectWidget
 
@@ -49,8 +47,7 @@ class CustomerDetailForm(forms.ModelForm):
             Row(
                 Column(
                     HTML(
-                        "Billing Details",
-                        css_class="h3 mb-3 text-black font-heading-serif"
+                        """<h2 class="h3 mb-3 text-black font-heading-serif">Billing Details</h2>"""
                     ),
                     Div(
                         Div(
@@ -103,7 +100,11 @@ class CustomerDetailForm(forms.ModelForm):
                         ),
                         Div(
                             HTML(
-
+                                """
+                                <label for="c_create_account" class="text-black" data-toggle="collapse" href="#create_an_account"
+                                  role="button" aria-expanded="false" aria-controls="create_an_account"><input type="checkbox" value="1"
+                                    id="c_create_account"> Create an account?</label>
+                                """
                             ),
                             Div(
                                 Div(
@@ -128,14 +129,11 @@ class CustomerDetailForm(forms.ModelForm):
                         ),
                         Div(
                             HTML(
-                                """<label for="c_ship_different_address"
-                                    class="text-black" data-toggle="collapse"
-                                    href="#ship_different_address" role="button"
-                                    aria-expanded="false"
-                                    aria-controls="ship_different_address"
-                                    <input type="checkbox" value="1"
-                                    id="c_ship_different_address">
-                                    Ship To A Different Address?</label>
+                                """
+                                <label for="c_ship_different_address" class="text-black" data-toggle="collapse"
+                                  href="#ship_different_address" role="button" aria-expanded="false"
+                                  aria-controls="ship_different_address"><input type="checkbox" value="1" id="c_ship_different_address">
+                                  Ship To A Different Address?</label>
                                  """
                             ),
                             Div(
@@ -191,14 +189,7 @@ class CustomerDetailForm(forms.ModelForm):
                                       """
                             ),
                             Div(
-                                AppendedText("coupon_code",
-                                             Button(
-                                                 'name',
-                                                 'value',
-                                                 css_class="btn btn-primary btn-sm rounded px-4",
-                                                 css_id="coupon_code_apply_btn"
-                                             )
-                                             ),
+                                FieldWithButtons('coupon_code', StrictButton("Apply",css_class='btn btn-primary btn-sm rounded px-4',css_id='button-addon2')),
                                 css_class="p-3 p-lg-5 border"
                             ),
                             css_class="col-md-12"
@@ -239,6 +230,10 @@ class CustomerDetailForm(forms.ModelForm):
                                             </tbody>
                                           </table>
                                           """
+                                ),
+                                Div(
+                                    Submit('place-order','Place Order',css_class='btn btn-primary btn-lg btn-block'),
+                                    css_class="form-group"
                                 ),
                                 css_class="p-3 p-lg-5 border"
                             ),
