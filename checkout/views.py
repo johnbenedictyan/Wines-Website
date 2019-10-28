@@ -1,15 +1,20 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomerDetailForm
+from .forms import CustomerDetailForm,PaymentForm
 from products.models import Product
-from .models import Coupon
+from .models import Coupon,Order
 from django.http import JsonResponse
+from Product.views import shop
+import stripe
+import os
+
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 # Create your views here.
 def checkout(request):
-    custom_detail_form = CustomerDetailForm()
     if request.method == "GET":
+        custom_detail_form = CustomerDetailForm()
         if request.session.get('user_cart'):
             user_cart = request.session.get('user_cart')
             return render(
@@ -29,14 +34,39 @@ def checkout(request):
     else:
         dirty_custom_detail_form = CustomerDetailForm(request.POST)
         if dirty_custom_detail_form.is_valid():
-            dirty_custom_detail_form.save(commit=False)
-            return redirect(None)
+            dirty_custom_detail_form.save()
+            return redirect(payment)
         else:
             messages.error(
                 request,
                 "We are unable to accept your details."
                 )
 
+def payment(request):
+    cart_total = request.session.get('user_cart')['cart_total']
+    if request.method == "GET":
+        payment_form = PaymentForm()
+        return render(
+            request,
+            "payment.html",
+            {
+                'payment_form':payment_form
+            })
+    else:
+        dirty_payment_form = PaymentForm(request.POST)
+        if dirty_payment_form.is_valid():
+            charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
+            return redirect(shop)
+        else:
+            return render(
+            request,
+            "payment.html",
+            {
+                'payment_form':dirty_payment_form
+            })
+        return redirect(view_cart)
+    
+    
 def coupon_check(request):
     coupon_code = request.GET.get('coupon_code', None)
     if coupon_code is None:
@@ -145,8 +175,6 @@ class cart:
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
-    print(user_cart['chargable_percentage'])
-    print(user_cart['cart_total'])
     return render(
         request,
         "cart.html",
@@ -227,8 +255,6 @@ def edit_cart(request):
     # update the cart total and coupon applied.
     chargable_percentage = request.POST.get('chargable-percentage')
     coupon_applied = request.POST.get('coupon-applied')
-    print("chargable_percentage: ",chargable_percentage)
-    print("coupon_applied: ",coupon_applied)
     # This is an identical check to the one above inside of the add items
     # to cart function
     
