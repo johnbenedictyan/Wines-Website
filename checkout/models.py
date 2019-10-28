@@ -109,11 +109,11 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name='orders'
     )
-    stripe_token = models.CharField(
+    stripe_charge_token = models.CharField(
         max_length=1000,
         blank=False
     )
-    date_of_purchase = models.DateTimeField(
+    time_of_purchase = models.DateTimeField(
         blank=False
     )
     payment_recieved = models.BooleanField(
