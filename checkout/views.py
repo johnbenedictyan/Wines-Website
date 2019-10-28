@@ -44,35 +44,42 @@ def checkout(request):
                 )
 
 def payment(request):
-    cart_total = request.session.get('user_cart')['cart_total']
-    if request.method == "GET":
-        payment_form = PaymentForm()
-        return render(
-            request,
-            "payment.html",
-            {
-                'payment_form':payment_form
-            })
-    else:
-        dirty_payment_form = PaymentForm(request.POST)
-        if dirty_payment_form.is_valid():
-            charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
-            new_order = Order(
-                'ordered_by':request.user,
-                'stripe_charge_token':charge_id,
-                'time_of_purchase':datetime.now(),
-                'payment_recieved':True,
-                )
-            new_order.product_ordered.add()
-            return redirect(shop)
-        else:
+    if request.session.get('user_cart'):
+        cart_total = request.session.get('user_cart')['cart_total']
+        if request.method == "GET":
+            payment_form = PaymentForm()
             return render(
+                request,
+                "payment.html",
+                {
+                    'payment_form':payment_form
+                })
+        else:
+            dirty_payment_form = PaymentForm(request.POST)
+            if dirty_payment_form.is_valid():
+                charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
+                new_order = Order(
+                    'ordered_by':request.user,
+                    'stripe_charge_token':charge_id,
+                    'time_of_purchase':datetime.now(),
+                    'payment_recieved':True,
+                    )
+                    new_order.product_ordered.add()
+                return redirect(shop)
+            else:
+                return render(
+                request,
+                "payment.html",
+                {
+                    'payment_form':dirty_payment_form
+                })
+            return redirect(view_cart)
+    else:
+        messages.error(
             request,
-            "payment.html",
-            {
-                'payment_form':dirty_payment_form
-            })
-        return redirect(view_cart)
+            "This cart does not exist."
+            )
+        return redirect(view_cart)    
     
     
 def coupon_check(request):
