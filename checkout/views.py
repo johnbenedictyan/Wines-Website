@@ -5,7 +5,7 @@ from .forms import CustomerDetailForm,PaymentForm
 from products.models import Product
 from .models import Coupon,Order
 from django.http import JsonResponse
-from Product.views import shop
+from products.views import shop
 from datetime import datetime
 import stripe
 import os
@@ -59,12 +59,19 @@ def payment(request):
             if dirty_payment_form.is_valid():
                 charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
                 new_order = Order(
-                    'ordered_by':request.user,
-                    'stripe_charge_token':charge_id,
-                    'time_of_purchase':datetime.now(),
-                    'payment_recieved':True,
+                    ordered_by=request.user,
+                    stripe_charge_token=charge_id,
+                    time_of_purchase=datetime.now(),
+                    payment_recieved=True,
                     )
-                    new_order.product_ordered.add()
+                cart_items = request.session.get('user_cart')['cart_items']
+                for i in cart_items:
+                    selected_product_id = i['product_number']
+                    selected_product = Product.objects.get(
+                        pk=selected_product_id
+                        )
+                    new_order.product_ordered.add(selected_product)
+                new_order.save()
                 return redirect(shop)
             else:
                 return render(
