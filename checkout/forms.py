@@ -4,6 +4,10 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
 from crispy_forms.bootstrap import StrictButton,FieldWithButtons
 from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
+import stripe
+import os
+
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 class CustomerDetailForm(forms.ModelForm):
     
@@ -184,22 +188,6 @@ class CustomerDetailForm(forms.ModelForm):
                         Column(
                             HTML(
                                 """
-                                      <h2 class="h3 mb-3 text-black
-                                      font-heading-serif">Coupon Code</h2>
-                                      """
-                            ),
-                            Div(
-                                FieldWithButtons('coupon_code', StrictButton("Apply",css_class='btn btn-primary btn-sm rounded px-4 cc-apply-button',css_id='button-addon2')),
-                                css_class="p-3 p-lg-5 border"
-                            ),
-                            css_class="col-md-12"
-                        ),
-                        css_class="mb-5"
-                    ),
-                    Row(
-                        Column(
-                            HTML(
-                                """
                                   <h2 class="h3 mb-3 text-black
                                   font-heading-serif">Your Order</h2>
                                   """
@@ -221,11 +209,18 @@ class CustomerDetailForm(forms.ModelForm):
                                             {% endfor %}
                                               <tr>
                                                 <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                                                <td class="text-black">${{user_cart.cart_total}}</td>
+                                                <td class="text-black">${{user_cart.cart_subtotal}}</td>
                                               </tr>
+                                              {% if user_cart.coupon_applied != 'no-coupon' %}
+                                                <tr>
+                                                    <td class="text-black font-weight-bold"><strong>Coupon Applied</strong></td>
+                                                    <td class="text-black font-weight-bold"><strong>{{user_cart.coupon_applied}}</strong></td>
+                                                </tr>
+                                              {% endif %}
                                               <tr>
                                                 <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                                                <td class="text-black font-weight-bold"><strong>$0</strong></td>
+                                                <td class="text-black font-weight-bold"><strong>${{user_cart.cart_total}}</strong></td>
+                                                <input type="hidden" class="form-control" id="cart-total" name="cart-total" value="{{user_cart.cart_total}}">
                                               </tr>
                                             </tbody>
                                           </table>
@@ -246,7 +241,6 @@ class CustomerDetailForm(forms.ModelForm):
             )
         )
 
-
 class PaymentForm(forms.Form):
     MONTH_CHOICES = [(i, i) for i in range(1, 12)]
     YEAR_CHOICES = [(i, i) for i in range(2019, 2039)]
@@ -254,8 +248,8 @@ class PaymentForm(forms.Form):
         label='Credit Card Number',
         required=False
     )
-    cvv = forms.CharField(
-        label='Security Code (CVV)',
+    cvc = forms.CharField(
+        label='Security Code (cvc)',
         required=False
     )
     expiry_month = forms.ChoiceField(
@@ -268,16 +262,22 @@ class PaymentForm(forms.Form):
         choices=YEAR_CHOICES,
         required=False
     )
-    stripe_id = forms.CharField(
+    payable_amount = forms.CharField(
         widget=forms.HiddenInput
     )
-
+    stripe_charge_id = forms.CharField(
+        widget=forms.HiddenInput
+    )
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                "credit_card_number",
+                Column(
+                    "credit_card_number",
+                    css_class="col-12"
+                ),
                 css_class="form-group"
             ),
             Row(
@@ -290,7 +290,7 @@ class PaymentForm(forms.Form):
                     css_class="col-12 col-md"
                 ),
                 Column(
-                    "cvv",
+                    "cvc",
                     css_class="col-12 col-md"
                 ),
                 css_class="form-group"
@@ -298,5 +298,47 @@ class PaymentForm(forms.Form):
             Row(
                 "stripe_id",
                 css_class="form-group"
-            )
+            ),
+            Row(
+                Column(
+                    Submit(
+                        'place-order',
+                        'Place Order',
+                        css_class='btn btn-primary w-50 btn-block mx-auto'
+                        ),
+                    css_class="col"
+                ),
+                css_class="form-group"
+                ),
         )
+        
+    def clean_cart_token(self):
+        credit_card_number = self.cleaned_data.get('credit_card_number')
+        expiry_month = self.cleaned_data.get('expiry_month')
+        expiry_year = self.cleaned_data.get('expiry_year')
+        cvc = self.cleaned_data.get('cvc')
+        payable_amount = self.cleaned_data.get('payable_amount')
+        
+        card_token = stripe.Token.create(
+            card={
+                'number': credit_card_number,
+                'exp_month': int(expiry_month),
+                'exp_year': int(expiry_year),
+                'cvc': cvc,
+            },
+        )    
+        
+        try:
+            charge = stripe.Charge.create(
+                amount=float(payable_amount),
+                currency="usd",
+                source=card_token['id'],
+                description="Example charge"
+            )
+        except stripe.error.CardError:
+            raise forms.ValidationError("We cannot accept your card.")
+        else:
+            self.instance.stripe_charge_id = charge['id']
+        finally:
+            return charge
+            
