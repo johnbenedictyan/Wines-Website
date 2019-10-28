@@ -6,6 +6,7 @@ from products.models import Product
 from .models import Coupon,Order
 from django.http import JsonResponse
 from Product.views import shop
+from datetime import datetime
 import stripe
 import os
 
@@ -56,6 +57,13 @@ def payment(request):
         dirty_payment_form = PaymentForm(request.POST)
         if dirty_payment_form.is_valid():
             charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
+            new_order = Order(
+                'ordered_by':request.user,
+                'stripe_charge_token':charge_id,
+                'time_of_purchase':datetime.now(),
+                'payment_recieved':True,
+                )
+            new_order.product_ordered.add()
             return redirect(shop)
         else:
             return render(
