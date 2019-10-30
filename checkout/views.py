@@ -45,9 +45,13 @@ def checkout(request):
 
 def payment(request):
     if request.session.get('user_cart'):
-        cart_total = request.session.get('user_cart')['cart_total']
         if request.method == "GET":
-            payment_form = PaymentForm()
+            payable_amount = request.session.get('user_cart')['cart_total']
+            payment_form = PaymentForm(
+                initial={
+                    'payable_amount': payable_amount
+                    }
+                )
             return render(
                 request,
                 "payment.html",
@@ -62,8 +66,9 @@ def payment(request):
                     ordered_by=request.user,
                     stripe_charge_token=charge_id,
                     time_of_purchase=datetime.now(),
-                    payment_recieved=True,
+                    payment_recieved=True
                     )
+                new_order.save()
                 cart_items = request.session.get('user_cart')['cart_items']
                 for i in cart_items:
                     selected_product_id = i['product_number']
@@ -71,7 +76,9 @@ def payment(request):
                         pk=selected_product_id
                         )
                     new_order.product_ordered.add(selected_product)
+                    
                 new_order.save()
+                del request.session['user_cart']
                 return redirect(shop)
             else:
                 return render(
