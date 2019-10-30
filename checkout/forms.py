@@ -6,6 +6,7 @@ from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
 import stripe
 import os
+import math
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
@@ -262,11 +263,13 @@ class PaymentForm(forms.Form):
         choices=YEAR_CHOICES,
         required=False
     )
-    payable_amount = forms.CharField(
-        widget=forms.HiddenInput
-    )
     stripe_charge_id = forms.CharField(
-        widget=forms.HiddenInput
+        widget=forms.HiddenInput,
+        required=False
+    )
+    payable_amount = forms.CharField(
+        widget=forms.HiddenInput,
+        required=False
     )
     
     def __init__(self, *args, **kwargs):
@@ -296,7 +299,11 @@ class PaymentForm(forms.Form):
                 css_class="form-group"
             ),
             Row(
-                "stripe_id",
+                "stripe_charge_id",
+                css_class="form-group"
+            ),
+            Row(
+                "payable_amount",
                 css_class="form-group"
             ),
             Row(
@@ -312,7 +319,7 @@ class PaymentForm(forms.Form):
                 ),
         )
         
-    def clean_cart_token(self):
+    def clean(self):
         credit_card_number = self.cleaned_data.get('credit_card_number')
         expiry_month = self.cleaned_data.get('expiry_month')
         expiry_year = self.cleaned_data.get('expiry_year')
@@ -327,10 +334,10 @@ class PaymentForm(forms.Form):
                 'cvc': cvc,
             },
         )    
-        
+        payable_amount = int(math.ceil(float(payable_amount)))
         try:
             charge = stripe.Charge.create(
-                amount=float(payable_amount),
+                amount=payable_amount,
                 currency="usd",
                 source=card_token['id'],
                 description="Example charge"
