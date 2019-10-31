@@ -345,7 +345,4 @@ class PaymentForm(forms.Form):
         except stripe.error.CardError:
             raise forms.ValidationError("We cannot accept your card.")
         else:
-            self.instance.stripe_charge_id = charge['id']
-        finally:
-            return charge
-            
+            self.cleaned_data['stripe_charge_id'] = charge['id']
