@@ -324,7 +324,7 @@ class PaymentForm(forms.Form):
         
     def clean_cvc(self):
         data = self.cleaned_data.get('cvc')
-        if (len(data) != 3 or len(data) != 4) or not data.isdigit():
+        if (len(data) != 3 and len(data) != 4) or not data.isdigit():
             raise forms.ValidationError("Invalid CVC")
             
         return data
