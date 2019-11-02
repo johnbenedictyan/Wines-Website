@@ -103,8 +103,55 @@ def payment(request):
                         description="Example charge"
                     )
                 except stripe.error.CardError as e:
-                    body = e.json_body
-                    print(body)
+                    error_code = e.error.code
+                    if error_code == 'card_declined':
+                        dirty_payment_form.add_error(
+                            'credit_card_number',
+                            'Card Declined'
+                            )
+                    elif error_code == 'expired_card':
+                        dirty_payment_form.add_error(
+                            'credit_card_number',
+                            'This card is expired'
+                            )
+                    elif error_code == 'incorrect_cvc':
+                        dirty_payment_form.add_error(
+                            'cvc',
+                            'Incorrect CVC'
+                            )
+                    elif error_code == 'invalid_cvc':
+                        dirty_payment_form.add_error(
+                            'cvc',
+                            'Invalid CVC'
+                            )
+                    elif error_code == 'incorrect_number':
+                        dirty_payment_form.add_error(
+                            'credit_card_number',
+                            'Incorrect Credit Card Number'
+                            )
+                    elif error_code == 'invalid_number':
+                        dirty_payment_form.add_error(
+                            'credit_card_number',
+                            'Invalid Credit Card Number'
+                            )
+                    elif error_code == 'invalid_expiry_month':
+                        dirty_payment_form.add_error(
+                            'expiry_month',
+                            'Invalid Expiry Month'
+                            )
+                    elif error_code == 'invalid_expiry_year':
+                        dirty_payment_form.add_error(
+                            'expiry_year',
+                            'Invalid Expiry Year'
+                            )
+                            
+                    return render(
+                        request,
+                        "payment.html",
+                        {
+                            'payment_form':dirty_payment_form
+                        })
+                    
                 else:
                     new_order = Order(
                         ordered_by=request.user,
