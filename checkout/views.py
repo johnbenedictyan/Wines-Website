@@ -9,6 +9,7 @@ from products.views import shop
 from datetime import datetime
 import stripe
 import os
+import math
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
@@ -38,10 +39,13 @@ def checkout(request):
             dirty_custom_detail_form.save()
             return redirect(payment)
         else:
-            messages.error(
+            return render(
                 request,
-                "We are unable to accept your details."
-                )
+                "checkout.html",
+                {
+                    "user_cart":user_cart,
+                    "custom_detail_form":dirty_custom_detail_form
+                })
 
 def payment(request):
     if request.session.get('user_cart'):
@@ -61,25 +65,64 @@ def payment(request):
         else:
             dirty_payment_form = PaymentForm(request.POST)
             if dirty_payment_form.is_valid():
-                charge_id = dirty_payment_form.cleaned_data['stripe_charge_id']
-                new_order = Order(
-                    ordered_by=request.user,
-                    stripe_charge_token=charge_id,
-                    time_of_purchase=datetime.now(),
-                    payment_recieved=True
+                charge_id = dirty_payment_form.cleaned_data.get(
+                    'stripe_charge_id'
                     )
-                new_order.save()
-                cart_items = request.session.get('user_cart')['cart_items']
-                for i in cart_items:
-                    selected_product_id = i['product_number']
-                    selected_product = Product.objects.get(
-                        pk=selected_product_id
-                        )
-                    new_order.product_ordered.add(selected_product)
+                credit_card_number = dirty_payment_form.cleaned_data.get(
+                    'credit_card_number'
+                    )
+                expiry_month = dirty_payment_form.cleaned_data.get(
+                    'expiry_month'
+                    )
+                expiry_year = dirty_payment_form.cleaned_data.get(
+                    'expiry_year'
+                    )
+                cvc = dirty_payment_form.cleaned_data.get(
+                    'cvc'
+                    )
+                payable_amount = dirty_payment_form.cleaned_data.get(
+                    'payable_amount'
+                    )
                     
-                new_order.save()
-                del request.session['user_cart']
-                return redirect(shop)
+                card_token = stripe.Token.create(
+                    card={
+                        'number': credit_card_number,
+                        'exp_month': int(expiry_month),
+                        'exp_year': int(expiry_year),
+                        'cvc': cvc,
+                        },
+                    )
+                    
+                payable_amount = int(math.ceil(float(payable_amount)))
+                
+                try:
+                    charge = stripe.Charge.create(
+                        amount=payable_amount,
+                        currency="usd",
+                        source=card_token['id'],
+                        description="Example charge"
+                    )
+                except stripe.error.CardError as e:
+                    body = e.json_body
+                    print(body)
+                else:
+                    new_order = Order(
+                        ordered_by=request.user,
+                        stripe_charge_token=charge_id,
+                        time_of_purchase=datetime.now(),
+                        payment_recieved=True
+                        )
+                    new_order.save()
+                    cart_items = request.session.get('user_cart')['cart_items']
+                    for i in cart_items:
+                        selected_product_id = i['product_number']
+                        selected_product = Product.objects.get(
+                            pk=selected_product_id
+                            )
+                        new_order.product_ordered.add(selected_product)
+                    new_order.save()
+                    del request.session['user_cart']
+                    return redirect(shop)
             else:
                 return render(
                 request,
