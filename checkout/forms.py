@@ -5,11 +5,6 @@ from crispy_forms.bootstrap import StrictButton,FieldWithButtons
 from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
 from datetime import datetime
-import stripe
-import os
-import math
-
-stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 class CustomerDetailForm(forms.ModelForm):
     
