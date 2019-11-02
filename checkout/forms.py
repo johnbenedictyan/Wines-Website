@@ -4,6 +4,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
 from crispy_forms.bootstrap import StrictButton,FieldWithButtons
 from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
+from datetime import datetime
 import stripe
 import os
 import math
@@ -318,31 +319,33 @@ class PaymentForm(forms.Form):
                 css_class="form-group"
                 ),
         )
+    
+    def clean_credit_card_number(self):
+        data = self.cleaned_data.get('credit_card_number')
+        if (len(data) < 14 or len(data) > 16) or not data.isdigit():
+            raise forms.ValidationError("Invalid Credit Card Number")
         
+        return data
+        
+    def clean_cvc(self):
+        data = self.cleaned_data.get('cvc')
+        if (len(data) != 3 or len(data) != 4) or not data.isdigit():
+            raise forms.ValidationError("Invalid CVC")
+            
+        return data
+
     def clean(self):
-        credit_card_number = self.cleaned_data.get('credit_card_number')
-        expiry_month = self.cleaned_data.get('expiry_month')
-        expiry_year = self.cleaned_data.get('expiry_year')
-        cvc = self.cleaned_data.get('cvc')
-        payable_amount = self.cleaned_data.get('payable_amount')
+        cleaned_data = super().clean()
+        currentMonth = datetime.now().month
+        currentYear = datetime.now().year
+        expiry_month = int(self.cleaned_data.get('expiry_month'))
+        expiry_year = int(self.cleaned_data.get('expiry_year'))
         
-        card_token = stripe.Token.create(
-            card={
-                'number': credit_card_number,
-                'exp_month': int(expiry_month),
-                'exp_year': int(expiry_year),
-                'cvc': cvc,
-            },
-        )    
-        payable_amount = int(math.ceil(float(payable_amount)))
-        try:
-            charge = stripe.Charge.create(
-                amount=payable_amount,
-                currency="usd",
-                source=card_token['id'],
-                description="Example charge"
-            )
-        except stripe.error.CardError:
-            raise forms.ValidationError("We cannot accept your card.")
-        else:
-            self.cleaned_data['stripe_charge_id'] = charge['id']
+        if currentYear == expiry_year:
+            if currentMonth > expiry_month:
+                raise forms.ValidationError("Invalid Expiry Month")
+        elif currentYear > expiry_year:
+            raise forms.ValidationError("Invalid Expiry Year")
+        
+        return cleaned_data
+        
