@@ -338,9 +338,9 @@ class PaymentForm(forms.Form):
         
         if currentYear == expiry_year:
             if currentMonth > expiry_month:
-                raise forms.ValidationError("Invalid Expiry Month")
+                self.add_error('expiry_month', "Invalid Expiry Month")
         elif currentYear > expiry_year:
-            raise forms.ValidationError("Invalid Expiry Year")
+            self.add_error('expiry_year', "Invalid Expiry Year")
         
         return cleaned_data
         
