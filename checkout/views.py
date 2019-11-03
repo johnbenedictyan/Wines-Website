@@ -88,9 +88,6 @@ def payment(request):
         else:
             dirty_payment_form = PaymentForm(request.POST)
             if dirty_payment_form.is_valid():
-                charge_id = dirty_payment_form.cleaned_data.get(
-                    'stripe_charge_id'
-                    )
                 credit_card_number = dirty_payment_form.cleaned_data.get(
                     'credit_card_number'
                     )
@@ -174,21 +171,21 @@ def payment(request):
                         {
                             'payment_form':dirty_payment_form
                         })
-                    
                 else:
+                    charge_id = charge['id']
                     cart_items = request.session.get('user_cart')['cart_items']
                     user = request.user
                     order_creator(user,charge_id,cart_items)
                     del request.session['user_cart']
                     return redirect(shop)
+                    
             else:
                 return render(
-                request,
-                "payment.html",
-                {
-                    'payment_form':dirty_payment_form
-                })
-            return redirect(view_cart)
+                    request,
+                    "payment.html",
+                    {
+                        'payment_form':dirty_payment_form
+                    })
     else:
         messages.error(
             request,
