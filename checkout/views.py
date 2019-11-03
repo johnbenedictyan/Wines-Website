@@ -176,21 +176,9 @@ def payment(request):
                         })
                     
                 else:
-                    new_order = Order(
-                        ordered_by=request.user,
-                        stripe_charge_token=charge_id,
-                        time_of_purchase=datetime.now(),
-                        payment_recieved=True
-                        )
-                    new_order.save()
                     cart_items = request.session.get('user_cart')['cart_items']
-                    for i in cart_items:
-                        selected_product_id = i['product_number']
-                        selected_product = Product.objects.get(
-                            pk=selected_product_id
-                            )
-                        new_order.product_ordered.add(selected_product)
-                    new_order.save()
+                    user = request.user
+                    order_creator(user,charge_id,cart_items)
                     del request.session['user_cart']
                     return redirect(shop)
             else:
