@@ -13,7 +13,7 @@
       <div class="col-lg-2">&nbsp;</div>
       <div class="col-lg-8 section-title text-center mb-5">
         <input type="text" class="form-control w-50 d-inline-block" id="search_terms" aria-describedby="searchTerms" placeholder="Search">
-        <button type="button" class="btn btn-primary">Search</button>
+        <button type="button" class="btn btn-primary product-search-button">Search</button>
         <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filterTable" aria-expanded="false" aria-controls="filterTable">Filter</button>
       </div>
       <div class="col-lg-2">&nbsp;</div>
@@ -81,12 +81,12 @@
 
     <div class="row">
       {% for product in all_products %}
-      <div class="col-lg-4 mb-5 col-md-6">
+      <div class="col-lg-4 mb-5 col-md-6 product-wrapper">
 
         <div class="wine_v_1 text-center pb-4">
           <a href="{% url 'individual_product' product.id %}" class="thumbnail d-block mb-4"><img src="{{ product.product_picture.cdn_url }}" alt="Image" class="img-fluid"></a>
           <div>
-            <h3 class="heading mb-1"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
+            <h3 class="heading mb-1 product-name"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
             <h4 class="heading mb-1"><a href="{% url 'individual_product' product.id %}">{{product.year}}</a></h4>
             <span class="price">${{product.price}}</span>
           </div>
@@ -155,4 +155,28 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block js_scripts_section %}
+<script type="text/javascript">
+  function toTitleCase(str) {
+          return str.replace(
+              /\w\S*/g,
+              function(txt) {
+                  return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+              }
+          );
+      }
+  $(function(){
+    $(".product-search-button").click(function(){
+      let search_terms = toTitleCase($("#search_terms").val());
+      if(search_terms != ""){
+        $(".product-wrapper").hide();
+        $(`.product-name:contains(${search_terms})`).each(function(){
+          $(this).closest(".product-wrapper").show(400);
+        });
+      }
+    });
+    
+  });
+</script>
 {% endblock %}
