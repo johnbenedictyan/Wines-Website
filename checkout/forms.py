@@ -259,10 +259,6 @@ class PaymentForm(forms.Form):
         choices=YEAR_CHOICES,
         required=False
     )
-    stripe_charge_id = forms.CharField(
-        widget=forms.HiddenInput,
-        required=False
-    )
     payable_amount = forms.CharField(
         widget=forms.HiddenInput,
         required=False
@@ -292,10 +288,6 @@ class PaymentForm(forms.Form):
                     "cvc",
                     css_class="col-12 col-md"
                 ),
-                css_class="form-group"
-            ),
-            Row(
-                "stripe_charge_id",
                 css_class="form-group"
             ),
             Row(
