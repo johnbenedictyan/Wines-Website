@@ -349,16 +349,27 @@ def add_to_cart(request,product_number,quantity):
         product_name = selected_product.name
         price = selected_product.price
         
-        # The temporary cart_item variable stores all of the information which
-        # will be displayed in the cart page.
+        # This checks if the request quantity of wine exceeds the quantity
+        # in stock.
         
-        cart_item = {
-                    "img_url":img_url,
-                    "product_number":product_number,
-                    "product_name":product_name,
-                    "price":price,
-                    "quantity":quantity
-                }
+        quantity_in_stock = selected_product.quantity_in_stock
+        if quantity > quantity_in_stock:
+            messages.error(
+                request,
+                "The product quantity requested is too much."
+                )
+            return redirect(view_cart)
+            
+        else:
+            # The temporary cart_item variable stores all of the information which
+            # will be displayed in the cart page.
+            cart_item = {
+                        "img_url":img_url,
+                        "product_number":product_number,
+                        "product_name":product_name,
+                        "price":price,
+                        "quantity":quantity
+                    }
     
     if user_cart.add_item_to_cart(cart_item):
         messages.success(
