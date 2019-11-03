@@ -348,28 +348,16 @@ def add_to_cart(request,product_number,quantity):
         img_url = selected_product.product_picture.cdn_url
         product_name = selected_product.name
         price = selected_product.price
-        
-        # This checks if the request quantity of wine exceeds the quantity
-        # in stock.
-        
-        quantity_in_stock = selected_product.quantity_in_stock
-        if quantity > quantity_in_stock:
-            messages.error(
-                request,
-                "The product quantity requested is too much."
-                )
-            return redirect(view_cart)
             
-        else:
-            # The temporary cart_item variable stores all of the information which
-            # will be displayed in the cart page.
-            cart_item = {
-                        "img_url":img_url,
-                        "product_number":product_number,
-                        "product_name":product_name,
-                        "price":price,
-                        "quantity":quantity
-                    }
+        # The temporary cart_item variable stores all of the information which
+        # will be displayed in the cart page.
+        cart_item = {
+                    "img_url":img_url,
+                    "product_number":product_number,
+                    "product_name":product_name,
+                    "price":price,
+                    "quantity":quantity
+                }
     
     if user_cart.add_item_to_cart(cart_item):
         messages.success(
@@ -393,11 +381,23 @@ def edit_cart(request):
    
     edit_cart_data = []
     for c, v in enumerate(product_number):
-        cart_item = {
-            'product_number':v,
-            'item_quantity':item_quantity[c]
-        }
-        edit_cart_data.append(cart_item)
+        # This checks if the request quantity of wine exceeds the quantity
+        # in stock.
+        selected_product = Product.objects.get(pk=v)
+        if selected_product.quantity_in_stock > int(item_quantity[c]):
+            cart_item = {
+                'product_number':v,
+                'item_quantity':item_quantity[c]
+            }
+            edit_cart_data.append(cart_item)
+        else:
+            selected_product_name = selected_product.name
+            messages.error(
+                 request,
+                 "Quantity selected for '{}' is too high".format(
+                     selected_product_name
+                     )
+                 )
         
     # This section is responsible for gathering the information needed to
     # update the cart total and coupon applied.
