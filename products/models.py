@@ -36,11 +36,8 @@ class Product(models.Model):
     VANILLA = "Vanilla"
     MOCHA = "Mocha"
     CHOCOLATE = "Chocolate"
-        
-    ANY = "NP"
     
     REGION_CHOICES = [
-        (ANY, "Any"),
         (FRANCE, "France"),
         (ITALY, "Italy"),
         (USA, "USA"),
@@ -53,14 +50,12 @@ class Product(models.Model):
     ]
 
     BODY_CHOICES = [
-        (ANY, "Any"),
         (LIGHT_BODIED, "Light-Bodied"),
         (MEDIUM_BODIED, "Medium-Bodied"),
         (FULL_BODIED, "Full-Bodied")
     ]
 
     NODE_CHOICES = [
-        (ANY, "Any"),
         (FRUITS,"Fruits"),
         (HERBS,"Herbs"),
         (FLOWERS,"Flowers"),
