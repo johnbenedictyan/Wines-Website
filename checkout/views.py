@@ -34,8 +34,18 @@ def order_creator(user,charge_id,cart_items):
         return False
     else:
         return True
-    
-    
+
+# This is a helper function which reduces the quantity of the purchased items
+def quantity_reducer(cart_items):
+    for i in cart_items:
+        selected_product_id = i['product_number']
+        selected_product = Product.objects.get(
+            pk=selected_product_id
+            )
+        new_quantity = selected_product.quantity_in_stock - i['quantity']
+        selected_product.quantity_in_stock=new_quantity
+        selected_product.save()
+
 # Create your views here.
 def checkout(request):
     if request.method == "GET":
@@ -176,6 +186,7 @@ def payment(request):
                     cart_items = request.session.get('user_cart')['cart_items']
                     user = request.user
                     order_creator(user,charge_id,cart_items)
+                    quantity_reducer(cart_items)
                     del request.session['user_cart']
                     return redirect(shop)
                     
@@ -192,7 +203,6 @@ def payment(request):
             "This cart does not exist."
             )
         return redirect(view_cart)    
-    
     
 def coupon_check(request):
     coupon_code = request.GET.get('coupon_code', None)
