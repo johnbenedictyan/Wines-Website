@@ -170,19 +170,51 @@
               }
           );
       }
-  $(function(){
-    $(".product-search-button").click(function(){
-      let search_terms = toTitleCase($("#search_terms").val());
+      
+  function filter_helper_function(){
+    let body_value = $("#bodySelectionType").val();
+    let region_value = $("#regionSelectionType").val();
+    let nodes_value = $("#nodesSelectionType").val();
+    let input_array = [
+        body_value,
+        region_value,
+        nodes_value
+        ];
+      for(i=0;i<input_array.length;i++){
+        if(input_array[i]!="Any"){
+          let filter_choice = input_array[i]
+          console.log(filter_choice)
+          $(`.product-name:contains(${filter_choice})`).each(function(){
+            $(this).closest(".product-wrapper").show(400);
+          });
+        }
+      }
+    }
+  
+  function name_search_helper_function(){
+    let search_terms = toTitleCase($("#search_terms").val());
       if(search_terms != ""){
-        $(".product-wrapper").hide();
         $(`.product-name:contains(${search_terms})`).each(function(){
           $(this).closest(".product-wrapper").show(400);
         });
       }
+  }
+  
+  $(function(){
+    $(".product-search-button").click(function(){
+      $(".product-wrapper").hide();
+      name_search_helper_function()
+      filter_helper_function();
     });
     
     $(".reset-button").click(function(){
       $(".product-wrapper").show(400);
+    });
+    
+    $("#bodySelectionType,#regionSelectionType,#nodesSelectionType").change(function(){
+      $(".product-wrapper").hide();
+      filter_helper_function();
+      name_search_helper_function();
     });
     
   });
