@@ -89,6 +89,9 @@
           <div>
             <h3 class="heading mb-1 product-name"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
             <h4 class="heading mb-1"><a href="{% url 'individual_product' product.id %}">{{product.year}}</a></h4>
+            <span class="product-region d-none">{{product.region}}</span>
+            <span class="product-nodes d-none">{{product.nodes}}</span>
+            <span class="product-body d-none">{{product.body}}</span>
             <span class="price">${{product.price}}</span>
           </div>
 
