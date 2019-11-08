@@ -89,9 +89,9 @@
           <div>
             <h3 class="heading mb-1 product-name"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
             <h4 class="heading mb-1"><a href="{% url 'individual_product' product.id %}">{{product.year}}</a></h4>
-            <span class="product-region d-none">{{product.region}}</span>
-            <span class="product-nodes d-none">{{product.nodes}}</span>
-            <span class="product-body d-none">{{product.body}}</span>
+            <span class="product-region product-subcat d-none">{{product.region}}</span>
+            <span class="product-nodes product-subcat d-none">{{product.nodes}}</span>
+            <span class="product-body product-subcat d-none">{{product.body}}</span>
             <span class="price">${{product.price}}</span>
           </div>
 
@@ -155,7 +155,7 @@
         if(input_array[i]!="Any"){
           let filter_choice = input_array[i]
           console.log(filter_choice)
-          $(`.product-name:contains(${filter_choice})`).each(function(){
+          $(`.product-subcat:contains(${filter_choice})`).each(function(){
             $(this).closest(".product-wrapper").show(400);
           });
         }
