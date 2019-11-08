@@ -37,7 +37,7 @@ def individual_product(request,product_number):
             request,
             "shop-single.html",
             {
-                "single_product":single_product
+                "product":single_product
             })
 
 @login_required
