@@ -28,15 +28,12 @@ def order_creator(user,charge_id,cart_items):
             selected_product = Product.objects.get(
                 pk=selected_product_id
                 )
-            new_order.product_ordered.add(selected_product)
-            print(i)
-            print(i['quantity'])
-            opi = Order_Product_Intermediary.objects.create(
-                product=selected_product,
-                order=new_order.id
+            new_order.product_ordered.add(
+                selected_product,
+                through_defaults={
+                    'quantity': i['quantity']
+                    }
                 )
-            opi.quantity = i['quantity']
-            opi.save()
         new_order.save()
     except:
         return False
@@ -484,7 +481,6 @@ def clear_cart(request):
 @login_required
 def orders(request):
     orders = Order.objects.all().filter(ordered_by=request.user)
-    print(orders)
     return render(
         request,
         "orders.html",
