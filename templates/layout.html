@@ -90,7 +90,7 @@
                     {% if request.user.is_staff %}
                     <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Console</a>
                     {% endif %}
-                    <a class="dropdown-item" href="#">Your Orders</a>
+                    <a class="dropdown-item" href="{% url 'orders' %}">Your Orders</a>
                     <a class="dropdown-item" href="{% url 'log_out' %}">Log Out</a>
                   </div>
                 </li>
