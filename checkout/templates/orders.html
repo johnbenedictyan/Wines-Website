@@ -36,6 +36,7 @@
                 </div>
                 <hr/>
                 <div class="row">
+                    {% for product in order.product_ordered.all %}
                     <div class="col-4">
                         <div class="card">
                             <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
@@ -90,6 +91,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
