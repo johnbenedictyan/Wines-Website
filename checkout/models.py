@@ -128,6 +128,11 @@ class Order(models.Model):
     def __str__(self):
         return "Order - " + str(self.id)
 
+class Order_Product_Intermediary(models.Model):
+    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    quantity = models.CharField(max_length=64)
+    
 class Coupon(models.Model):
     COUPON_CODE_CHOICES = [
         ('10PERCENT', '10% Off'),
