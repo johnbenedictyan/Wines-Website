@@ -13,7 +13,6 @@
             <div class="col-lg-8 section-title text-center mb-5">
                 <input type="text" class="form-control w-50 d-inline-block" id="search_terms" aria-describedby="searchTerms" placeholder="Search">
                 <button type="button" class="btn btn-primary">Search</button>
-                <a class="btn btn-primary" href="{% url 'product_creator' %}">Create New Product<a>
             </div>
             <div class="col-lg-2">&nbsp;</div>
         </div>
@@ -22,72 +21,79 @@
 
             </div>
         </div>
-        <div class="row">
-            {% for product in all_products %}
-            <div class="col-4">
-                <div class="card">
-                    <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h4 class="card-title text-center">{{product.name|title}}</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="text-center">Price</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="text-center"><span class="badge badge-primary">{{product.price}}</span></h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="text-center">Quantity</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="text-center"><span class="badge badge-primary">{{product.quantity_in_stock}}</span></h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="text-center">Region</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="text-center"><span class="badge badge-primary">{{product.region}}</span></h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="text-center">Nodes</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="text-center"><span class="badge badge-primary">{{product.nodes}}</span></h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="text-center">Body</h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="text-center"><span class="badge badge-primary">{{product.body}}</span></h5>
-                            </div>
-                        </div>
+        {% for order in orders %}
+        <div class="row mb-5">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="text-primary">Order <span>{{order.id}}</span></h3>
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col text-left">
-                                <a class="btn btn-primary w-75" href="{% url 'product_update' product.id %}">Edit<a>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>{{order.time_of_purchase}}</p>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card">
+                            <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="card-title text-center">{{product.name|title}}</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Price</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.price}}</span></h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Quantity</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.quantity_in_stock}}</span></h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Region</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.region}}</span></h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Nodes</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.nodes}}</span></h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Body</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.body}}</span></h5>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col text-right">
-                                <a class="btn btn-primary w-75" href="{% url 'delete_product' product.id %}">Delete<a>
+                            <div class="card-footer">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
