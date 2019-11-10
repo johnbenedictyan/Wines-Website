@@ -471,3 +471,14 @@ def delete_from_cart(request,product_number):
 def clear_cart(request):
     request.session['user_cart'] = cart().export_data()
     return redirect(view_cart)
+    
+@login_required
+def orders(request):
+    orders = Order.objects.all().filter(ordered_by=request.user)
+    print(orders)
+    return render(
+        request,
+        "orders.html",
+        {
+            "orders":orders,
+        })
