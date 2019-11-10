@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomerDetailForm,PaymentForm
 from products.models import Product
-from .models import Coupon,Order
+from .models import Coupon,Order,Order_Product_Intermediary
 from django.http import JsonResponse
 from products.views import shop
 from datetime import datetime
@@ -29,6 +29,14 @@ def order_creator(user,charge_id,cart_items):
                 pk=selected_product_id
                 )
             new_order.product_ordered.add(selected_product)
+            print(i)
+            print(i['quantity'])
+            opi = Order_Product_Intermediary.objects.create(
+                product=selected_product,
+                order=new_order.id
+                )
+            opi.quantity = i['quantity']
+            opi.save()
         new_order.save()
     except:
         return False
@@ -312,6 +320,7 @@ class cart:
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
+    print(user_cart)
     return render(
         request,
         "cart.html",
