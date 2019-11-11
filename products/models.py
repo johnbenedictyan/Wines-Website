@@ -11,19 +11,19 @@ def current_year():
     return datetime.date.today().year
         
 class Product(models.Model):
-    FRANCE = "FR"
-    ITALY = "IT"
-    USA = "US"
-    SPAIN = "ES"
-    PORTUGAL = "PT"
-    ARGENTINA = "AR"
-    AUSTRALIA = "AU"
-    NEW_ZEALAND = "NZ"
-    UNITED_KINGDOM = "UK"
+    FR = "FRANCE"
+    IT = "ITALY"
+    US = "USA"
+    ES = "SPAIN"
+    PT = "PORTUGAL"
+    AR = "ARGENTINA"
+    AU = "AUSTRALIA"
+    NZ = "NEW ZEALAND"
+    UK = "UNITED KINGDOM"
 
-    LIGHT_BODIED = "LB"
-    MEDIUM_BODIED = "MB"
-    FULL_BODIED = "FB"
+    LB = "LIGHT BODIED"
+    MB = "MEDIUM BODIED"
+    FB = "FULL BODIED"
     
     FRUITS = "Fruits"
     HERBS = "Herbs"
@@ -38,21 +38,21 @@ class Product(models.Model):
     CHOCOLATE = "Chocolate"
     
     REGION_CHOICES = [
-        (FRANCE, "France"),
-        (ITALY, "Italy"),
-        (USA, "USA"),
-        (SPAIN, "Spain"),
-        (PORTUGAL, "Portugal"),
-        (ARGENTINA, "Argentina"),
-        (AUSTRALIA, "Australia"),
-        (NEW_ZEALAND, "New Zealand"),
-        (UNITED_KINGDOM, "United Kingdom")
+        (FR, "France"),
+        (IT, "Italy"),
+        (US, "USA"),
+        (ES, "Spain"),
+        (PT, "Portugal"),
+        (AR, "Argentina"),
+        (AU, "Australia"),
+        (NZ, "New Zealand"),
+        (UK, "United Kingdom")
     ]
 
     BODY_CHOICES = [
-        (LIGHT_BODIED, "Light-Bodied"),
-        (MEDIUM_BODIED, "Medium-Bodied"),
-        (FULL_BODIED, "Full-Bodied")
+        (LB, "Light-Bodied"),
+        (MB, "Medium-Bodied"),
+        (FB, "Full-Bodied")
     ]
 
     NODE_CHOICES = [
