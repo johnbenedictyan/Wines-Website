@@ -29,17 +29,8 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = (
-            'name',
-            'description',
-            'price',
-            'product_picture',
-            'region',
-            'nodes',
-            'body',
-            'seller_id',
-            'quantity_in_stock'
-        )
+        fields = '__all__'
+        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,6 +51,10 @@ class ProductForm(forms.ModelForm):
                     Row(
                         Column(
                             'price',
+                            css_class="form-group col mb-0"
+                            ),
+                        Column(
+                            'year',
                             css_class="form-group col mb-0"
                             ),
                         css_class="form-row"
