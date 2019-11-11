@@ -21,9 +21,9 @@ class Product(models.Model):
     NZ = "NEW ZEALAND"
     UK = "UNITED KINGDOM"
 
-    LB = "LIGHT BODIED"
-    MB = "MEDIUM BODIED"
-    FB = "FULL BODIED"
+    LB = "Light"
+    MB = "Medium"
+    FB = "Full"
     
     FRUITS = "Fruits"
     HERBS = "Herbs"
