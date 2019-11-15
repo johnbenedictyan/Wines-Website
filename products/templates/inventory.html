@@ -18,17 +18,12 @@
             <div class="col-lg-2">&nbsp;</div>
         </div>
         <div class="row">
-            <div class="col">
-
-            </div>
-        </div>
-        <div class="row">
             {% for product in all_products %}
-            <div class="col-4">
+            <div class="col-md-6 col-lg-4 mb-3">
                 <div class="card">
                     <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row card-product-name">
                             <div class="col">
                                 <h4 class="card-title text-center">{{product.name|title}}</h4>
                             </div>
