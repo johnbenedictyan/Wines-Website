@@ -317,7 +317,6 @@ class cart:
 
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
-    print(user_cart)
     return render(
         request,
         "cart.html",
