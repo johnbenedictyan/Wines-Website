@@ -1643,3 +1643,7 @@ h1, h2, h3, h4, h5,
 .dropdown-item {
   font-size: .8rem;
 }
+
+.card-product-name{
+  min-height: 14vh;
+}
