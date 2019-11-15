@@ -8,6 +8,7 @@
     </div>
     <div class="row mb-5">
       <form class="col-md-12" method="post" action="edit/">
+        {% if user_cart.cart_items is defined %}
         <div class="site-blocks-table">
           <table class="table table-bordered">
             <thead>
@@ -21,7 +22,8 @@
               </tr>
             </thead>
             <tbody>
-              {% csrf_token %} {% for item in user_cart.cart_items %}
+              {% csrf_token %}
+              {% for item in user_cart.cart_items %}
               <tr>
                 <td class="product-thumbnail">
                   <img src="{{item.img_url}}" alt="Image" class="img-fluid">
@@ -60,6 +62,13 @@
             </tbody>
           </table>
         </div>
+        {% else %}
+        <div class="jumbotron">
+          <p class="lead text-center">No items</p>
+          <hr class="my-4">
+          <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-md btn-block w-50 mx-auto">Let's Change That</a>
+        </div>
+        {% endif %}
       </form>
     </div>
 
