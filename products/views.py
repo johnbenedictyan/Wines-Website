@@ -4,6 +4,12 @@ from django.contrib import messages
 from .forms import ProductForm
 from .models import Product
 
+def view_adder(product_number):
+    selected_product = Product.objects.get(pk=product_number)
+    selected_product.views += 1
+    selected_product.save()
+    return True
+    
 # Create your views here.
 def shop(request):
     all_products = Product.objects.all()
@@ -33,6 +39,7 @@ def individual_product(request,product_number):
                 )
         return redirect(shop)
     else:
+        view_adder(product_number)
         return render(
             request,
             "shop-single.html",
