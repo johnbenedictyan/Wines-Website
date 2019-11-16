@@ -1,19 +1,24 @@
 {% extends "layout.html" %} {% load static %} 
 {% block messages_section %} 
-{% if messages is defined %}
-<div class="site-section mt-5">
+{% if messages %}
+<div class="site-section message-wrapper">
     <div class="container">
-        <div class="row mb-5">
-            <div class="col-12 section-title text-center mb-5">
-                <h2 class="d-block">Messages</h2>
-                {% for message in messages %}
-                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button> {{ message }}
-                </div>
-                {% endfor %}
+        <div class="row mx-5">
+            <div class="col">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="message-wrapper-close-btn">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4 class="text-primary">Messages</h4>
             </div>
+        </div>
+        <div class="row mx-5">
+            {% for message in messages %}
+            <div class="col">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -226,3 +231,13 @@
     </div>
 </div>
 {% endblock %}
+{% block js_scripts_section %}
+<script type="text/javascript">
+    $(function(){
+       $("#message-wrapper-close-btn").click(function(){
+          $(".message-wrapper").remove(); 
+       }); 
+    });
+</script>
+{% endblock %}
+closeFramerfunction()
