@@ -7,8 +7,8 @@
       </div>
     </div>
     <div class="row mb-5">
+      {% if user_cart.cart_items %}
       <form class="col-md-12" method="post" action="edit/">
-        {% if user_cart.cart_items is defined %}
         <div class="site-blocks-table">
           <table class="table table-bordered">
             <thead>
@@ -62,14 +62,16 @@
             </tbody>
           </table>
         </div>
-        {% else %}
+      </form>
+      {% else %}
+      <div class="col">
         <div class="jumbotron">
           <p class="lead text-center">No items</p>
           <hr class="my-4">
           <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-md btn-block w-50 mx-auto">Let's Change That</a>
         </div>
-        {% endif %}
-      </form>
+      </div>
+      {% endif %}
     </div>
 
   </div>
