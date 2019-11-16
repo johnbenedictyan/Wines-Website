@@ -111,7 +111,10 @@ class Product(models.Model):
         blank=False,
         default=1
     )
-
+    views = models.IntegerField(
+        blank=False,
+        default=0
+    )
     def __str__(self):
         return self.name
         
