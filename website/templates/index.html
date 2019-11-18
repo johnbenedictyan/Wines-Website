@@ -57,92 +57,41 @@
             </div>
         </div>
         <div class="row">
-
-            <div class="col-lg-4 mb-5 col-md-6">
-
-                <div class="wine_v_1 text-center pb-4">
-                    <a href="shop-single.html" class="thumbnail d-block mb-4"><img src="{% static 'images/wine_2.png' %}" alt="Image" class="img-fluid"></a>
-                    <div>
-                        <h3 class="heading mb-1"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price">$629.00</span>
-                    </div>
-
-
-                    <div class="wine-actions">
-
-                        <h3 class="heading-2"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price d-block">$629.00</span>
-
-                        <div class="rating">
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star-o"></span>
-                        </div>
-
-                        <a href="#" class="btn add"><span class="icon-shopping-bag mr-3"></span> Add to Cart</a>
-                    </div>
+            {% for product in best_sellers %}
+                <div class="col-lg-4 mb-5 col-md-6 product-wrapper">
+    
+            <div class="wine_v_1 text-center pb-4">
+              <a href="{% url 'individual_product' product.id %}" class="thumbnail d-block mb-4"><img src="{{ product.product_picture.cdn_url }}" alt="Image" class="img-fluid"></a>
+              <div>
+                <h3 class="heading mb-1 product-name"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
+                <h4 class="heading mb-1"><a href="{% url 'individual_product' product.id %}">{{product.year}}</a></h4>
+                <span class="product-region product-subcat d-none">{{product.region}}</span>
+                <span class="product-nodes product-subcat d-none">{{product.nodes}}</span>
+                <span class="product-body product-subcat d-none">{{product.body}}</span>
+                <span class="price">${{product.price}}</span>
+              </div>
+    
+    
+              <div class="wine-actions">
+    
+                <h3 class="heading-2"><a href="{% url 'individual_product' product.id %}">{{product.name|title}}</a></h3>
+                <h4 class="heading-2"><a href="{% url 'individual_product' product.id %}">{{product.year}}</a></h4>
+                <span class="price d-block">${{product.price}}</span>
+    
+                <div class="rating">
+                  <span class="icon-star"></span>
+                  <span class="icon-star"></span>
+                  <span class="icon-star"></span>
+                  <span class="icon-star"></span>
+                  <span class="icon-star-o"></span>
                 </div>
-
+    
+                <a href="{% url 'add_to_cart' product.id 1 %}" class="btn add"><span class="icon-shopping-bag mr-3"></span> Add to Cart</a>
+              </div>
             </div>
-
-            <div class="col-lg-4 mb-5 col-md-6">
-                <div class="wine_v_1 text-center pb-4">
-                    <a href="shop-single.html" class="thumbnail d-block mb-4"><img src="{% static 'images/wine_3.png' %}" alt="Image" class="img-fluid"></a>
-                    <div>
-                        <h3 class="heading mb-1"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price">$629.00</span>
-                    </div>
-
-
-                    <div class="wine-actions">
-
-                        <h3 class="heading-2"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price d-block"><del>$900.00</del> $629.00</span>
-
-                        <div class="rating">
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star-o"></span>
-                        </div>
-
-                        <a href="#" class="btn add"><span class="icon-shopping-bag mr-3"></span> Add to Cart</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 mb-5 col-md-6">
-                <div class="wine_v_1 text-center pb-4">
-                    <a href="shop-single.html" class="thumbnail d-block mb-4"><img src="{% static 'images/wine_1.png' %}" alt="Image" class="img-fluid"></a>
-                    <div>
-                        <h3 class="heading mb-1"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price">$629.00</span>
-                    </div>
-
-
-                    <div class="wine-actions">
-
-                        <h3 class="heading-2"><a href="#">Trius Cabernet France 2011</a></h3>
-                        <span class="price d-block"><del>$900.00</del> $629.00</span>
-
-                        <div class="rating">
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star"></span>
-                            <span class="icon-star-o"></span>
-                        </div>
-
-                        <a href="#" class="btn add"><span class="icon-shopping-bag mr-3"></span> Add to Cart</a>
-                    </div>
-                </div>
-            </div>
-
-
-
+    
+          </div>
+            {% endfor %}
         </div>
     </div>
 </div>
