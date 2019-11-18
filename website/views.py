@@ -2,33 +2,33 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from project4 import settings
 from .forms import ContactForm
+from products.models import Product
 
 # Create your views here.
 def main_page(request):
-    return render(request,
-                    'index.html',
-                    {
-                        
-                    }
-        )
+    best_sellers = Product.objects.order_by('views')[:3]
+    return render(
+        request,
+        'index.html',
+        {
+            'best_sellers':best_sellers
+        })
 
 def about_us(request):
-    return render(request,
-                    'about-us.html',
-                    {
-                        
-                    }
+    return render(
+        request,
+        'about-us.html'
         )
 
 def contact_us(request):
     if request.method=="GET":
         contact_form = ContactForm()
-        return render(request,
-                        'contact.html',
-                        {
-                            'contact_form':contact_form
-                        }
-        )
+        return render(
+            request,
+            'contact.html',
+            {
+                'contact_form':contact_form
+            })
     else:
         dirty_contact_form = ContactForm(request.POST)
         if dirty_contact_form.is_valid():
@@ -43,12 +43,13 @@ def contact_us(request):
                 request,
                 "There was an error in the contact form."
             )
-            return render(request,
-                  'contact.html',
-                  {
-                      'contact_form':dirty_contact_form
-                  })
-            
+            return render(
+                request,
+                'contact.html',
+                {
+                    'contact_form':dirty_contact_form
+                })
+        
         
         
 def csrf_failure(request, reason=""):
