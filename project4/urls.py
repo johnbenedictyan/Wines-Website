@@ -21,6 +21,7 @@ from checkout.urls import urlpatterns as checkout_urls
 from products.urls import urlpatterns as products_urls
 from users.urls import urlpatterns as users_urls
 from website.urls import urlpatterns as website_urls
+from website.views import handler404 as handler404_view_function
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,3 +40,5 @@ if settings.DEBUG: # new
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+    
+handler404 = handler404_view_function
