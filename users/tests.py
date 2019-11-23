@@ -4,6 +4,18 @@ from .models import UserAccount
 # Create your tests here.
 
 class UserAccountTest(TestCase):
+    def setUp(self):
+        UserAccount.objects.create(
+            username="penguinrider",
+            password="password123",
+            email="asd@asd.com",
+            first_name="penguin",
+            last_name="rider",
+            bio="Hi im a penguinrider",
+            profile_picture="default.png"
+            )
+        ta = UserAccount.objects.get(username="penguinrider")
+        
     def testCanCreateAccount(self):
         ta = UserAccount(
             username="penguinrider",
