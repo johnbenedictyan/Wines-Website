@@ -46,10 +46,11 @@ SESSION_COOKIE_SECURE = True
 SECRET_KEY = 'c)zch_zo7chrm@wpk0)f4q8_rvx0$34l=-bs2@pk#vp30$)$_1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    'da5617fb5ae443e79240258551287458.vfs.cloud9.ap-southeast-1.amazonaws.com'
+    'da5617fb5ae443e79240258551287458.vfs.cloud9.ap-southeast-1.amazonaws.com',
+    'jby-tgc-project-4.herokuapp.com'
     ]
 
 
