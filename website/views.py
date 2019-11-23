@@ -58,3 +58,10 @@ def csrf_failure(request, reason=""):
                 "This form has expired. Please try again."
             )
     return redirect("/")
+    
+def handler404(request, exception=None):
+    return render(
+        request,
+        '404.html',
+        status=404
+        )
