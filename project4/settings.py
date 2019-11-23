@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import env
+# import env
 from django.contrib.messages import constants as messages
 import dj_database_url
 import sys
