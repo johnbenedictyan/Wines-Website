@@ -1,131 +1,136 @@
 from django.test import TestCase
+from users.models import UserAccount
+from .models import Product
 # Product Test Cases
 # Create your tests here.
-class ListingTest(TestCase):
-    def setUp(self):
-        UserAccount.objects.create(
-            username="penguinrider",
-            password="password123",
-            email="asd@asd.com",
-            first_name="penguin",
-            last_name="rider",
-            bio="Hi im a penguinrider",
-            profile_picture="default.png"
+DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
+def create_account():
+    ta = UserAccount(
+        username="penguinrider",
+        password="password123",
+        email="asd@asd.com",
+        first_name="penguin",
+        last_name="rider",
+        bio="Hi im a penguinrider",
+        profile_picture=DEFAULT_IMAGE_UUID
+        )
+    ta.save()
+    return ta
+    
+class ProductTest(TestCase):
+    def testCanCreateProduct(self):
+        ta = create_account()
+        test_product = Product(
+            name="Generic Wine",
+            year=2013,
+            description="This is a bottpe of Generic Wine",
+            price=53.99,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="France",
+            nodes="Fruits",
+            body="Light-Bodied",
+            seller_id=ta.id,
+            views=0
             )
-        ta = UserAccount.objects.get(username="penguinrider")
-            
-    def testCanCreateListing(self):
-        ta = UserAccount(username="penguinrider",password="password123",email="asd@asd.com",first_name="penguin",last_name="rider")
-        ta.save()
-        test_listing = Listing(name="Bench",description="Rustic Bench, very rustic.",price=53.99,location="Bedok Avenue 1",used=True,seller=ta)
-        test_listing.save()
+        test_product.save()
         
-        test_lc_1 = ListingCategory(name="furniture",description="""
-        Furniture refers to movable objects intended to support various human activities such as seating 
-        (e.g., chairs, stools, and sofas), eating (tables), and sleeping (e.g., beds). """)
+        tp_from_db = Product.objects.all().get(pk=test_product.id)
         
-        test_lc_1.save()
-        test_listing.categories.add(test_lc_1)
+        self.assertEquals(
+            test_product.name,
+            tp_from_db.name
+            )
+        self.assertEquals(
+            test_product.year,
+            tp_from_db.year
+            )
+        self.assertEquals(
+            test_product.description,
+            tp_from_db.description
+            )
+        self.assertEquals(
+            test_product.price,
+            tp_from_db.price
+            )
+        self.assertEquals(
+            test_product.quantity_in_stock,
+            tp_from_db.quantity_in_stock
+            )
+        self.assertEquals(
+            test_product.region,
+            tp_from_db.region
+            )
+        self.assertEquals(
+            test_product.nodes,
+            tp_from_db.nodes
+            )
+        self.assertEquals(
+            test_product.body,
+            tp_from_db.body
+            )
+        self.assertEquals(
+            test_product.views,
+            tp_from_db.views
+            )
+        self.assertEquals(
+            tp_from_db.seller_id,
+            ta.id
+            )
         
-        tl_from_db = Listing.objects.all().get(pk=test_listing.id)
-        
-        self.assertEquals(test_listing.name,tl_from_db.name)
-        self.assertEquals(test_listing.description,tl_from_db.description)
-        self.assertEquals(test_listing.price,tl_from_db.price)
-        self.assertEquals(test_listing.location,tl_from_db.location)
-        self.assertEquals(test_listing.used,tl_from_db.used)
-        self.assertEquals(tl_from_db.categories.count(),1)
-        self.assertEquals(tl_from_db.categories.all()[0].name,"furniture")
-        self.assertEquals(tl_from_db.seller.username,ta.username)
-        self.assertEquals(tl_from_db.seller.password,ta.password)
-        self.assertEquals(tl_from_db.seller.email,ta.email)
-        
-    def testListingCanHaveManyCategories(self):
-        ta = UserAccount(username="penguinrider",password="password123",email="asd@asd.com",first_name="penguin",last_name="rider")
-        ta.save()
-        test_listing = Listing(name="Bench",description="Rustic Bench, very rustic.",price=53.99,location="Bedok Avenue 1",seller=ta)
-        test_listing.save()
-        
-        test_lc_1 = ListingCategory(name="furniture",description="""
-        Furniture refers to movable objects intended to support various human activities such as seating 
-        (e.g., chairs, stools, and sofas), eating (tables), and sleeping (e.g., beds). """)
-        
-        test_lc_1.save()
-        
-        test_lc_2 = ListingCategory(name="rustic",description="""
-        simple and often rough in appearance; typical of the countryside """)
-        
-        test_lc_2.save()
-        
-        test_listing.categories.add(test_lc_1,test_lc_2)
-        
-        tl_from_db = Listing.objects.all().get(pk=test_listing.id)
-        
-        self.assertEquals(tl_from_db.categories.count(),2)
-        self.assertEquals(tl_from_db.categories.all()[0].name,"furniture")
-        self.assertEquals(tl_from_db.categories.all()[1].name,"rustic")
-        
-    def testCanDeleteListing(self):
-        ta = UserAccount(username="penguinrider",password="password123",email="asd@asd.com",first_name="penguin",last_name="rider")
-        ta.save()
-        test_listing = Listing(name="Bench",description="Rustic Bench, very rustic.",price=53.99,location="Bedok Avenue 1",seller=ta)
-        test_listing.save()
-        
-        test_lc_1 = ListingCategory(name="furniture",description="""
-        Furniture refers to movable objects intended to support various human activities such as seating 
-        (e.g., chairs, stools, and sofas), eating (tables), and sleeping (e.g., beds). """)
-        
-        test_lc_1.save()
-        test_listing.categories.add(test_lc_1)
-        
-        Listing.objects.filter(id=test_listing.id).delete()
-        tl_from_db = list(Listing.objects.all().filter(pk=test_listing.id))
-        self.assertEquals(tl_from_db,[])
+    def testCanDeleteproduct(self):
+        ta = create_account()
+        test_product = Product(
+            name="Generic Wine",
+            year=2013,
+            description="This is a bottpe of Generic Wine",
+            price=53.99,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="France",
+            nodes="Fruits",
+            body="Light-Bodied",
+            seller_id=ta.id,
+            views=0
+            )
+        test_product.save()
+        Product.objects.filter(id=test_product.id).delete()
+        tp_from_db = list(Product.objects.all().filter(pk=test_product.id))
+        self.assertEquals(tp_from_db,[])
     
-    def testCanUpdateListingDetails(self):
-        ta = UserAccount(username="penguinrider",password="password123",email="asd@asd.com",first_name="penguin",last_name="rider")
-        ta.save()
-        test_listing = Listing(name="Bench",description="Rustic Bench, very rustic.",price=53.99,location="Bedok Avenue 1",seller=ta)
-        test_listing.save()
+    def testCanUpdateproductDetails(self):
+        ta = create_account()
+        test_product = Product(
+            name="Generic Wine",
+            year=2013,
+            description="This is a bottpe of Generic Wine",
+            price=53.99,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="France",
+            nodes="Fruits",
+            body="Light-Bodied",
+            seller_id=ta.id,
+            views=0
+            )
+        test_product.save()
         
-        test_listing.name="Stool"
-        test_listing.description="Not so rustic stool"
-        test_listing.price=14.99
-        test_listing.location="Yishun Avenue 2"
-        test_listing.save()
+        test_product.name="Generic Wine 2"
+        test_product.description="A different kind of generic"
+        test_product.price=14.99
+        test_product.save()
         
-        tl_from_db = Listing.objects.all().get(pk=test_listing.id)
-        self.assertEquals(tl_from_db.name,"Stool")
-        self.assertEquals(tl_from_db.description,"Not so rustic stool")
-        self.assertEquals(tl_from_db.price,14.99)
-        self.assertEquals(tl_from_db.location,"Yishun Avenue 2")
+        tp_from_db = Product.objects.all().get(pk=test_product.id)
+        self.assertEquals(
+            tp_from_db.name,
+            "Generic Wine 2"
+            )
+        self.assertEquals(
+            tp_from_db.description,
+            "A different kind of generic"
+            )
+        self.assertEquals(
+            tp_from_db.price,
+            14.99
+            )
     
-    def testCanRemoveCategory(self):
-        ta = UserAccount(username="penguinrider",password="password123",email="asd@asd.com",first_name="penguin",last_name="rider")
-        ta.save()
-        
-        test_listing = Listing(name="Bench",description="Rustic Bench, very rustic.",price=53.99,location="Bedok Avenue 1",seller=ta)
-        test_listing.save()
-        
-        test_lc_1 = ListingCategory(name="furniture",description="""
-        Furniture refers to movable objects intended to support various human activities such as seating 
-        (e.g., chairs, stools, and sofas), eating (tables), and sleeping (e.g., beds). """)
-        
-        test_lc_1.save()
-        
-        test_lc_2 = ListingCategory(name="rustic",description="""
-        simple and often rough in appearance; typical of the countryside """)
-        
-        test_lc_2.save()
-        
-        test_listing.categories.add(test_lc_1,test_lc_2)
-        
-        tl_from_db = Listing.objects.all().get(pk=test_listing.id)
-        
-        self.assertEquals(tl_from_db.categories,test_listing.categories)
-        
-        test_listing.categories.remove(test_lc_1)
-        new_tl_from_db = Listing.objects.all().get(pk=test_listing.id)
-        
-        self.assertEquals(new_tl_from_db.categories.count(),1)
-        self.assertEquals(new_tl_from_db.categories.all()[0].name,"rustic")
