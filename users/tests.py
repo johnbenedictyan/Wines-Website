@@ -13,6 +13,7 @@ def create_account():
         bio="Hi im a penguinrider",
         profile_picture=DEFAULT_IMAGE_UUID
         )
+    ta.save()
     return ta
         
 class UserAccountTest(TestCase):
