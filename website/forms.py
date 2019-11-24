@@ -4,22 +4,22 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
 
 class ContactForm(forms.Form):
     first_name = forms.CharField(
-        required=False,
+        required=True,
         max_length = 255
     )
     last_name = forms.CharField(
-        required=False,
+        required=True,
         max_length = 255
     )
     phone_number = forms.IntegerField(
-        required=False
+        required=True
     )
     email_address = forms.EmailField(
-        required=False
+        required=True
     )
     message = forms.CharField(
         widget=forms.Textarea(attrs={'rows':10, 'cols':30}),
-        required=False
+        required=True
     )
     
     def __init__(self, *args, **kwargs):
