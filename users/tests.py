@@ -133,4 +133,14 @@ class UserAccountFormTest(TestCase):
             )
         self.assertNotIn('_auth_user_id', self.client.session)
 
-    
+    def testCanLogout(self):
+        self.client.login(username='penguinrider', password='password123')
+        response = self.client.get(
+            '/users/log-out/'
+            )
+        self.assertRedirects(
+            response,
+            '/',
+            status_code=302,
+            target_status_code=200
+            )
