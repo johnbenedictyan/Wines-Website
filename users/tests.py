@@ -2,20 +2,20 @@ from django.test import TestCase
 from .models import UserAccount
 # Users Test Cases
 # Create your tests here.
-
-class UserAccountTest(TestCase):
-    def setUp(self):
-        UserAccount.objects.create(
-            username="penguinrider",
-            password="password123",
-            email="asd@asd.com",
-            first_name="penguin",
-            last_name="rider",
-            bio="Hi im a penguinrider",
-            profile_picture="default.png"
-            )
-        ta = UserAccount.objects.get(username="penguinrider")
+DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
+def create_account():
+    ta = UserAccount(
+        username="penguinrider",
+        password="password123",
+        email="asd@asd.com",
+        first_name="penguin",
+        last_name="rider",
+        bio="Hi im a penguinrider",
+        profile_picture=DEFAULT_IMAGE_UUID
+        )
+    return ta
         
+class UserAccountTest(TestCase):
     def testCanCreateAccount(self):
         ta = UserAccount(
             username="penguinrider",
@@ -24,7 +24,7 @@ class UserAccountTest(TestCase):
             first_name="penguin",
             last_name="rider",
             bio="Hi im a penguinrider",
-            profile_picture="default.png"
+            profile_picture=DEFAULT_IMAGE_UUID
             )
         ta.save()
         
@@ -37,16 +37,7 @@ class UserAccountTest(TestCase):
         self.assertEquals(ta.bio,ta_from_db.bio)
         
     def testCanUpdateAccountDetails(self):
-        ta = UserAccount(
-            username="penguinrider",
-            password="password123",
-            email="asd@asd.com",
-            first_name="penguin",
-            last_name="rider",
-            bio="Hi im a penguinrider",
-            profile_picture="default.png"
-            )
-        ta.save()
+        ta = create_account()
         
         ta.username="penguinrider123"
         ta.password="password12345"
@@ -59,16 +50,7 @@ class UserAccountTest(TestCase):
         self.assertEquals(ta_from_db.email,"qwe@qwe.com")
         
     def testCanDeleteAccount(self):
-        ta = UserAccount(
-            username="penguinrider",
-            password="password123",
-            email="asd@asd.com",
-            first_name="penguin",
-            last_name="rider",
-            bio="Hi im a penguinrider",
-            profile_picture="default.png"
-            )        
-        ta.save()
+        ta = create_account()
         
         UserAccount.objects.filter(id=ta.id).delete()
         ta_from_db=list(UserAccount.objects.all().filter(pk=ta.id))
