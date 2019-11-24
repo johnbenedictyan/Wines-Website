@@ -57,3 +57,34 @@ class UserAccountTest(TestCase):
         ta_from_db=list(UserAccount.objects.all().filter(pk=ta.id))
         self.assertEquals(ta_from_db,[])
         
+class UserAccountUrlTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        self.user = ta
+        
+    def testCanRedirectToLoginUrlForLoginRequiredPages(self):
+        response = self.client.get('/users/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/users/',
+            status_code=302,
+            target_status_code=200
+            )
+        
+    def testCanLoadLoginPage(self):
+        response = self.client.get('/users/log-in/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+    
+    def testCanLoadRegisterPage(self):
+        response = self.client.get('/users/registration/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'register.html')
+        
+    def testCanLoadAccountPage(self):
+        self.client.login(username='penguinrider', password='password123')
+        response = self.client.get('/users/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'account.html')
