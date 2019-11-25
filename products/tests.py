@@ -29,9 +29,9 @@ class ProductTest(TestCase):
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
-            region="France",
+            region="FRANCE",
             nodes="Fruits",
-            body="Light-Bodied",
+            body="Light",
             seller_id=ta.id,
             views=0
             )
@@ -89,9 +89,9 @@ class ProductTest(TestCase):
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
-            region="France",
+            region="FRANCE",
             nodes="Fruits",
-            body="Light-Bodied",
+            body="Light",
             seller_id=ta.id,
             views=0
             )
@@ -109,9 +109,9 @@ class ProductTest(TestCase):
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
-            region="France",
+            region="FRANCE",
             nodes="Fruits",
-            body="Light-Bodied",
+            body="Light",
             seller_id=ta.id,
             views=0
             )
@@ -192,9 +192,9 @@ class ProductUrlTest(TestCase):
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
-            region="France",
+            region="FRANCE",
             nodes="Fruits",
-            body="Light-Bodied",
+            body="Light",
             seller_id=ta.id,
             views=0
             )
@@ -236,13 +236,274 @@ class ProductFormCreationTest(TestCase):
             'price':53.99,
             'quantity_in_stock':100,
             'product_picture':DEFAULT_IMAGE_UUID,
-            'region':"France",
+            'region':"FRANCE",
             'nodes':"Fruits",
-            'body':"Light-Bodied",
+            'body':"Light",
             'seller_id':user.id,
             'views':0
         }
         test_form = ProductForm(
             data=test_form_data
             )
+        
         self.assertTrue(test_form.is_valid())
+        
+    def testMissingNameErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'name',
+            'This field is required.'
+            )
+        
+    def testMissingYearErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'year',
+            'This field is required.'
+            )
+    
+    def testMissingDescriptionErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'description',
+            'This field is required.'
+            )
+    
+    def testMissingPriceErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'price',
+            'This field is required.'
+            )
+    
+    def testMissingQuantityInStockErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'quantity_in_stock',
+            'This field is required.'
+            )
+            
+    def testMissingProductPictureErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'product_picture',
+            'This field is required.'
+            )
+    
+    def testMissingRegionErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'region',
+            'This field is required.'
+            ) 
+    
+    def testMissingNodeErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'nodes',
+            'This field is required.'
+            ) 
+            
+    def testMissingBodyErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'body',
+            'This field is required.'
+            ) 
+            
+    def testMissingSellerIDErrorMessage(self):
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'seller_id',
+            'This field is required.'
+            ) 
+            
