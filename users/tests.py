@@ -91,6 +91,19 @@ class UserAccountUrlTest(TestCase):
         response = self.client.get('/users/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'account.html')
+    
+    def testCanLogout(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/users/log-out/')
+        self.assertRedirects(
+            response,
+            '/',
+            status_code=302,
+            target_status_code=200
+            )
         
 class UserAccountFormTest(TestCase):
     def setUp(self):
@@ -132,18 +145,3 @@ class UserAccountFormTest(TestCase):
             target_status_code=200
             )
         self.assertNotIn('_auth_user_id', self.client.session)
-
-    def testCanLogout(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        response = self.client.get(
-            '/users/log-out/'
-            )
-        self.assertRedirects(
-            response,
-            '/',
-            status_code=302,
-            target_status_code=200
-            )
