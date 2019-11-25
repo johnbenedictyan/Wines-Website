@@ -217,7 +217,7 @@ class ProductUrlTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wine-collection.html')
         
-class ProductFormTest(TestCase):
+class ProductFormCreationTest(TestCase):
     def setUp(self):
         ta = create_account()
         ta.set_password('password123')
