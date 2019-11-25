@@ -134,7 +134,10 @@ class UserAccountFormTest(TestCase):
         self.assertNotIn('_auth_user_id', self.client.session)
 
     def testCanLogout(self):
-        self.client.login(username='penguinrider', password='password123')
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
         response = self.client.get(
             '/users/log-out/'
             )
