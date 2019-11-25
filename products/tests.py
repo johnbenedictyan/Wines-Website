@@ -134,3 +134,74 @@ class ProductTest(TestCase):
             14.99
             )
     
+class ProductUrlTest(TestCase):
+    def testCanLoadInventoryPageWithLogin(self):
+        response = self.client.get('/shop/products/inventory/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'inventory.html')
+            
+    def testCannotLoadInventoryPageWithoutLogin(self):
+        response = self.client.get('/shop/products/inventory/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+    
+    def testCanLoadProductCreationPage(self):
+        response = self.client.get('/shop/products/create/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'product-form.html')
+        
+    def testCannotLoadProductCreationPageWithoutLogin(self):
+        response = self.client.get('/shop/products/create/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/create/',
+            status_code=302,
+            target_status_code=200
+            )
+    
+    def testCanLoadShopPage(self):
+        response = self.client.get('/shop/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shop.html')
+    
+    def testCanLoadShopSinglePage(self):
+        ta = create_account()
+        test_product = Product(
+            name="Generic Wine",
+            year=2013,
+            description="This is a bottpe of Generic Wine",
+            price=53.99,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="France",
+            nodes="Fruits",
+            body="Light-Bodied",
+            seller_id=ta.id,
+            views=0
+            )
+        test_product.save()
+        response = self.client.get('/shop/products/1/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shop-single.html')
+        
+    def testCannotLoadNonExistentShopSinglePage(self):
+        response = self.client.get('/shop/products/1/')
+        self.assertRedirects(
+            response,
+            '/shop/',
+            status_code=302,
+            target_status_code=200
+            )
+    
+    def testCanLoadBestSellersPage(self):
+        response = self.client.get('/shop/collection/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'wine-collection.html')
+        
+class ProductFormTest(TestCase):
+    def testCan(self):
+        pass
