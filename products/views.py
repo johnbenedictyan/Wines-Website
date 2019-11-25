@@ -59,7 +59,8 @@ def inventory(request):
             "all_products":all_products,
             "number_of_products_found":number_of_products_found
         })
-        
+
+@login_required        
 def product_creator(request):
     if request.method == "GET":
         product_form = ProductForm()
