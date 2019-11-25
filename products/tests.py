@@ -216,5 +216,11 @@ class ProductUrlTest(TestCase):
         self.assertTemplateUsed(response, 'wine-collection.html')
         
 class ProductFormTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        self.user = ta
+        
     def testCan(self):
         pass
