@@ -1,6 +1,8 @@
 from django.test import TestCase
+from django.contrib import auth
 from users.models import UserAccount
 from .models import Product
+from .forms import ProductForm
 # Product Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
@@ -23,7 +25,7 @@ class ProductTest(TestCase):
         test_product = Product(
             name="Generic Wine",
             year=2013,
-            description="This is a bottpe of Generic Wine",
+            description="This is a bottle of Generic Wine",
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
@@ -83,7 +85,7 @@ class ProductTest(TestCase):
         test_product = Product(
             name="Generic Wine",
             year=2013,
-            description="This is a bottpe of Generic Wine",
+            description="This is a bottle of Generic Wine",
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
@@ -103,7 +105,7 @@ class ProductTest(TestCase):
         test_product = Product(
             name="Generic Wine",
             year=2013,
-            description="This is a bottpe of Generic Wine",
+            description="This is a bottle of Generic Wine",
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
@@ -186,7 +188,7 @@ class ProductUrlTest(TestCase):
         test_product = Product(
             name="Generic Wine",
             year=2013,
-            description="This is a bottpe of Generic Wine",
+            description="This is a bottle of Generic Wine",
             price=53.99,
             quantity_in_stock=100,
             product_picture=DEFAULT_IMAGE_UUID,
@@ -220,7 +222,27 @@ class ProductFormTest(TestCase):
         ta = create_account()
         ta.set_password('password123')
         ta.save()
-        self.user = ta
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
         
-    def testCan(self):
-        pass
+    def testValidProductFormSubmission(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':100,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"France",
+            'nodes':"Fruits",
+            'body':"Light-Bodied",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        self.assertTrue(test_form.is_valid())
