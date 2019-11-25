@@ -135,7 +135,16 @@ class ProductTest(TestCase):
             )
     
 class ProductUrlTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        
     def testCanLoadInventoryPageWithLogin(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
         response = self.client.get('/shop/products/inventory/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'inventory.html')
@@ -150,6 +159,10 @@ class ProductUrlTest(TestCase):
             )
     
     def testCanLoadProductCreationPage(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
         response = self.client.get('/shop/products/create/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'product-form.html')
@@ -169,7 +182,7 @@ class ProductUrlTest(TestCase):
         self.assertTemplateUsed(response, 'shop.html')
     
     def testCanLoadShopSinglePage(self):
-        ta = create_account()
+        ta = UserAccount.objects.get(pk=1)
         test_product = Product(
             name="Generic Wine",
             year=2013,
