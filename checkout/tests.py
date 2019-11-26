@@ -40,6 +40,30 @@ class CheckoutUrlGeneralTest(TestCase):
         ta = create_account()
         ta.set_password('password123')
         ta.save()
+        
+    def testCanLoadOrdersPageWithLogin(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/checkout/orders/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'orders.html') 
+    
+    def testCannotLoadOrdersPageWithoutLogin(self):
+        response = self.client.get('/checkout/orders/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/checkout/orders/',
+            status_code=302,
+            target_status_code=200
+            ) 
+            
+class CheckoutUrlCartTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
         ta_2 = UserAccount(
             username="penguinrider2",
             password="password123",
@@ -60,7 +84,7 @@ class CheckoutUrlGeneralTest(TestCase):
             )
         response = self.client.get('/checkout/cart/')
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'cart.html') 
+        self.assertTemplateUsed(response, 'cart.html')
     
     def testCannotLoadViewCartPageWithoutLogin(self):
         response = self.client.get('/checkout/cart/')
@@ -70,21 +94,50 @@ class CheckoutUrlGeneralTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
-            
-    def testCanLoadOrdersPageWithLogin(self):
+    
+    def testCanAddItemToCart(self):
         self.client.login(
             username='penguinrider',
             password='password123'
             )
-        response = self.client.get('/checkout/orders/')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'orders.html') 
-    
-    def testCannotLoadOrdersPageWithoutLogin(self):
-        response = self.client.get('/checkout/orders/')
+        response = self.client.get('/checkout/cart/add/1/2/')
         self.assertRedirects(
             response,
-            '/users/log-in/?next=/checkout/orders/',
+            '/checkout/cart/',
             status_code=302,
             target_status_code=200
-            ) 
+            )    
+        user_cart = self.client.session['user_cart']
+        self.assertEqual(len(user_cart['cart_items']), 1)
+        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
+        self.assertEqual(user_cart['cart_items'][0]['quantity'], 2)
+        
+    def testCannotAddItemToCartNonExistentProduct(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/checkout/cart/add/999/2/')
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )    
+        session = self.client.session
+        self.assertNotIn('user_cart',session)
+        
+    def testCannotAddItemToCartQuantityTooLarge(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/checkout/cart/add/1/100000/')
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )
+        session = self.client.session
+        self.assertNotIn('user_cart',session)
