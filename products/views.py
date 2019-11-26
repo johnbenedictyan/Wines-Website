@@ -101,47 +101,64 @@ def product_update(request,product_number):
                 )
         return redirect(inventory)
     else:
-        if request.method == "GET":
-            product_form = ProductForm(instance=selected_product)
-            return render(
-                request,
-                "product-form.html",
-                {
-                    "product_form":product_form
-                })
-        else:
-            dirty_product_form = ProductForm(
-                request.POST,
-                instance=selected_product
-                )
-            if dirty_product_form.is_valid():
-                dirty_product_form.save()
-                return redirect(inventory)
-            else:
-                messages.error(
-                    request,
-                    "We were unable to update the details of this product."
-                    )
+        if current_user.id is selected_product.seller_id:
+            if request.method == "GET":
+                product_form = ProductForm(instance=selected_product)
                 return render(
                     request,
                     "product-form.html",
                     {
-                        "product_form":dirty_product_form
+                        "product_form":product_form
                     })
+            else:
+                dirty_product_form = ProductForm(
+                    request.POST,
+                    instance=selected_product
+                    )
+                if dirty_product_form.is_valid():
+                    dirty_product_form.save()
+                    return redirect(inventory)
+                else:
+                    messages.error(
+                        request,
+                        "We were unable to update the details of this product."
+                        )
+                    return render(
+                        request,
+                        "product-form.html",
+                        {
+                            "product_form":dirty_product_form
+                        })
+        else:
+            messages.error(
+                request,
+                "You are not allowed to update the details of this product."
+                )
+            return redirect(inventory)
                 
+@login_required
 def delete_product(request,product_number):
+    current_user = request.user
     try:
-        Product.objects.filter(pk=product_number).delete()
+        selected_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
         messages.error(
-                request,
-                "This product does not exist."
-                )
-    else:
-        messages.success(
             request,
-            "The listing has been successfully deleted!"
+            "This product does not exist."
             )
+    else:
+        if current_user.id is selected_product.seller_id:
+            selected_product.delete()
+            messages.success(
+                request,
+                "The listing has been successfully deleted!"
+                )
+        else:
+            messages.error(
+                request,
+                "You are not allowed to delete this product."
+                )
+            
     finally:
         return redirect(inventory)
     
