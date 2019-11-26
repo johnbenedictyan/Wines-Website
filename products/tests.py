@@ -256,6 +256,7 @@ class ProductUrlDeleteTest(TestCase):
             )
         ta_2.set_password('password123')
         ta_2.save()
+        create_test_product(ta.id)
         
     def testCannotLoadProductDeletePageWithoutLogin(self):
         response = self.client.get('/shop/products/delete/1/')
@@ -291,7 +292,7 @@ class ProductUrlDeleteTest(TestCase):
             status_code=302,
             target_status_code=200
             )
-        self.assertEqual(Product.objects.get(pk=1).count(), 1)
+        self.assertEqual(Product.objects.filter(pk=1).count(), 1)
     
 class ProductFormCreationTest(TestCase):
     def setUp(self):
