@@ -18,11 +18,9 @@ def create_account():
         )
     ta.save()
     return ta
-    
-class ProductTest(TestCase):
-    def testCanCreateProduct(self):
-        ta = create_account()
-        test_product = Product(
+
+def create_test_product(seller_id):
+    tp = Product(
             name="Generic Wine",
             year=2013,
             description="This is a bottle of Generic Wine",
@@ -32,10 +30,16 @@ class ProductTest(TestCase):
             region="FRANCE",
             nodes="Fruits",
             body="Light",
-            seller_id=ta.id,
+            seller_id=seller_id,
             views=0
             )
-        test_product.save()
+    tp.save()
+    return tp
+    
+class ProductTest(TestCase):
+    def testCanCreateProduct(self):
+        ta = create_account()
+        test_product = create_test_product(ta.id)
         
         tp_from_db = Product.objects.all().get(pk=test_product.id)
         
@@ -82,40 +86,14 @@ class ProductTest(TestCase):
         
     def testCanDeleteproduct(self):
         ta = create_account()
-        test_product = Product(
-            name="Generic Wine",
-            year=2013,
-            description="This is a bottle of Generic Wine",
-            price=53.99,
-            quantity_in_stock=100,
-            product_picture=DEFAULT_IMAGE_UUID,
-            region="FRANCE",
-            nodes="Fruits",
-            body="Light",
-            seller_id=ta.id,
-            views=0
-            )
-        test_product.save()
+        test_product = create_test_product(ta.id)
         Product.objects.filter(id=test_product.id).delete()
         tp_from_db = list(Product.objects.all().filter(pk=test_product.id))
         self.assertEquals(tp_from_db,[])
     
     def testCanUpdateproductDetails(self):
         ta = create_account()
-        test_product = Product(
-            name="Generic Wine",
-            year=2013,
-            description="This is a bottle of Generic Wine",
-            price=53.99,
-            quantity_in_stock=100,
-            product_picture=DEFAULT_IMAGE_UUID,
-            region="FRANCE",
-            nodes="Fruits",
-            body="Light",
-            seller_id=ta.id,
-            views=0
-            )
-        test_product.save()
+        test_product = create_test_product(ta.id)
         
         test_product.name="Generic Wine 2"
         test_product.description="A different kind of generic"
@@ -167,20 +145,7 @@ class ProductUrlGeneralTest(TestCase):
     
     def testCanLoadShopSinglePage(self):
         ta = UserAccount.objects.get(pk=1)
-        test_product = Product(
-            name="Generic Wine",
-            year=2013,
-            description="This is a bottle of Generic Wine",
-            price=53.99,
-            quantity_in_stock=100,
-            product_picture=DEFAULT_IMAGE_UUID,
-            region="FRANCE",
-            nodes="Fruits",
-            body="Light",
-            seller_id=ta.id,
-            views=0
-            )
-        test_product.save()
+        create_test_product(ta.id)
         response = self.client.get('/shop/products/1/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'shop-single.html')
@@ -651,20 +616,7 @@ class ProductFormUpdateTest(TestCase):
         ta = create_account()
         ta.set_password('password123')
         ta.save()
-        test_product = Product(
-            name="Generic Wine",
-            year=2013,
-            description="This is a bottle of Generic Wine",
-            price=53.99,
-            quantity_in_stock=100,
-            product_picture=DEFAULT_IMAGE_UUID,
-            region="FRANCE",
-            nodes="Fruits",
-            body="Light",
-            seller_id=ta.id,
-            views=0
-            )
-        test_product.save()
+        create_test_product(ta.id)
         
         self.client.login(
             username='penguinrider',
