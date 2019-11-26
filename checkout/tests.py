@@ -58,24 +58,12 @@ class CheckoutUrlGeneralTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
-            
-class CheckoutUrlCartTest(TestCase):
+    
+class CheckoutCartViewFunctionTest(TestCase):
     def setUp(self):
         ta = create_account()
         ta.set_password('password123')
         ta.save()
-        ta_2 = UserAccount(
-            username="penguinrider2",
-            password="password123",
-            email="a@a.com",
-            first_name="penguin",
-            last_name="rider",
-            bio="Hi im a penguinrider",
-            profile_picture=DEFAULT_IMAGE_UUID
-            )
-        ta_2.set_password('password123')
-        ta_2.save()
-        create_test_product(ta.id)
         
     def testCanLoadViewCartPageWithLogin(self):
         self.client.login(
@@ -94,7 +82,14 @@ class CheckoutUrlCartTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
-    
+
+class CheckoutCartAddFunctionTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        create_test_product(ta.id)
+        
     def testCanAddItemToCart(self):
         self.client.login(
             username='penguinrider',
@@ -139,5 +134,6 @@ class CheckoutUrlCartTest(TestCase):
             status_code=302,
             target_status_code=200
             )
+        
         session = self.client.session
         self.assertNotIn('user_cart',session)
