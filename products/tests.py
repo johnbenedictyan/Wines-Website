@@ -227,7 +227,7 @@ class ProductFormCreationTest(TestCase):
             password='password123'
             )
         
-    def testValidProductFormSubmission(self):
+    def testValidProductFormCreationSubmission(self):
         user = auth.get_user(self.client)
         test_form_data = {
             'name':"Generic Wine",
@@ -507,3 +507,69 @@ class ProductFormCreationTest(TestCase):
             'This field is required.'
             ) 
             
+class ProductFormUpdateTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        test_product = Product(
+            name="Generic Wine",
+            year=2013,
+            description="This is a bottle of Generic Wine",
+            price=53.99,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="FRANCE",
+            nodes="Fruits",
+            body="Light",
+            seller_id=ta.id,
+            views=0
+            )
+        test_product.save()
+        
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        
+    def ValidProductFormUpdateSubmission(self):
+        test_form_data = {
+            'name':"Generic Wine 2",
+            'year':2015,
+            'description':"This is a bottle of Generic Wine",
+            'price':192.62,
+            'quantity_in_stock':150,
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Medium"
+        }
+        
+        response = self.client.post(
+            '/shop/products/update/1/',
+            test_form_data
+            )
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+        test_product = Product.objects.get(pk=1)
+        test_product.refresh_from_db()
+        self.assertEquals(
+            test_product.name,
+            test_form_data['name']
+            )
+        self.assertEquals(
+            test_product.year,
+            test_form_data['year']
+            )
+        self.assertEquals(
+            test_product.price,
+            test_form_data['price']
+            )
+        self.assertEquals(
+            test_product.body,
+            test_form_data['body']
+            )
