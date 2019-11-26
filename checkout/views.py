@@ -52,6 +52,7 @@ def quantity_reducer(cart_items):
         selected_product.save()
 
 # Create your views here.
+@login_required
 def checkout(request):
     if request.method == "GET":
         custom_detail_form = CustomerDetailForm()
@@ -85,6 +86,7 @@ def checkout(request):
                     "custom_detail_form":dirty_custom_detail_form
                 })
 
+@login_required
 def payment(request):
     if request.session.get('user_cart'):
         if request.method == "GET":
@@ -315,6 +317,7 @@ class cart:
         self.coupon_applied = cart_data["coupon_applied"]
         self.chargable_percentage = cart_data["chargable_percentage"]
 
+@login_required
 def view_cart(request):
     user_cart = request.session.get('user_cart', cart().export_data())
     return render(
@@ -323,7 +326,8 @@ def view_cart(request):
         {
             "user_cart":user_cart
         })
-        
+
+@login_required        
 def add_to_cart(request,product_number,quantity):
     # This checks to see if there is cart data stored in the session.
     # It first creates a new cart object.
@@ -377,6 +381,7 @@ def add_to_cart(request,product_number,quantity):
                 )
     return redirect(view_cart)
 
+@login_required
 def edit_cart(request):
     # This packages the product number and item quantity from their individual
     # lists into an array of dictionaries which can then be ingested by the 
@@ -448,7 +453,8 @@ def edit_cart(request):
             "This cart does not exist."
             )
     return redirect(view_cart)
-    
+
+@login_required    
 def delete_from_cart(request,product_number):
     if request.session.get('user_cart'):
         cart_data = request.session.get('user_cart')
@@ -472,7 +478,8 @@ def delete_from_cart(request,product_number):
             "This cart does not exist."
             )
     return redirect(view_cart)
-    
+
+@login_required    
 def clear_cart(request):
     request.session['user_cart'] = cart().export_data()
     return redirect(view_cart)
