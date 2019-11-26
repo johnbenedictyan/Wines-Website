@@ -294,6 +294,20 @@ class ProductUrlDeleteTest(TestCase):
             )
         self.assertEqual(Product.objects.filter(pk=1).count(), 1)
     
+    def testCanLoadProductDeletePageAndDelete(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+        self.assertEqual(Product.objects.filter(pk=1).count(), 0)
+    
 class ProductFormCreationTest(TestCase):
     def setUp(self):
         ta = create_account()
