@@ -199,6 +199,28 @@ class ProductUrlTest(TestCase):
             status_code=302,
             target_status_code=200
             )
+            
+    def testCannotLoadProductDeletePageWithoutLogin(self):
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/delete/1/',
+            status_code=302,
+            target_status_code=200
+            )
+            
+    def testCannotLoadProductDeletePageForNonExistentProduct(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
     
     def testCanLoadShopPage(self):
         response = self.client.get('/shop/')

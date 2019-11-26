@@ -92,31 +92,23 @@ def product_creator(request):
             
 @login_required
 def product_update(request,product_number):
-    current_user = request.user
     try:
         selected_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
         messages.error(
-            request,
-            "This product does not exist."
-            )
+                request,
+                "This product does not exist."
+                )
         return redirect(inventory)
     else:
         if request.method == "GET":
-            if current_user.id is selected_product.seller_id:
-                product_form = ProductForm(instance=selected_product)
-                return render(
-                    request,
-                    "product-form.html",
-                    {
-                        "product_form":product_form
-                    })
-            else:
-                messages.error(
-                    request,
-                    "You are not allowed to update this product's information."
-                    )
-                return redirect(inventory)
+            product_form = ProductForm(instance=selected_product)
+            return render(
+                request,
+                "product-form.html",
+                {
+                    "product_form":product_form
+                })
         else:
             dirty_product_form = ProductForm(
                 request.POST,
@@ -136,29 +128,20 @@ def product_update(request,product_number):
                     {
                         "product_form":dirty_product_form
                     })
-        
-@login_required        
+                
 def delete_product(request,product_number):
-    current_user = request.user
     try:
-        selected_product = Product.objects.get(pk=product_number)
+        Product.objects.filter(pk=product_number).delete()
     except Product.DoesNotExist:
         messages.error(
                 request,
                 "This product does not exist."
                 )
     else:
-        if current_user.id is selected_product.seller_id:
-            Product.objects.filter(pk=product_number).delete()
-            messages.success(
-                request,
-                "The listing has been successfully deleted!"
-                )
-        else:
-            messages.error(
-                request,
-                "You are not allowed to delete this product."
-                )
+        messages.success(
+            request,
+            "The listing has been successfully deleted!"
+            )
     finally:
         return redirect(inventory)
     
