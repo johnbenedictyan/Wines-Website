@@ -220,7 +220,7 @@ class ProductUrlUpdateTest(TestCase):
             username='penguinrider',
             password='password123'
             )
-        response = self.client.get('/shop/products/update/1/')
+        response = self.client.get('/shop/products/update/999/')
         self.assertRedirects(
             response,
             '/shop/products/inventory/',
