@@ -92,6 +92,7 @@ def product_creator(request):
             
 @login_required
 def product_update(request,product_number):
+    current_user = request.user
     try:
         selected_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
