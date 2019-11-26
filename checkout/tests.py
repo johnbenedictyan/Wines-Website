@@ -70,3 +70,21 @@ class CheckoutUrlGeneralTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
+            
+    def testCanLoadOrdersPageWithLogin(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/checkout/orders/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'orders.html') 
+    
+    def testCannotLoadOrdersPageWithoutLogin(self):
+        response = self.client.get('/checkout/orders/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/checkout/orders/',
+            status_code=302,
+            target_status_code=200
+            ) 
