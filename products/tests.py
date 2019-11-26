@@ -204,6 +204,7 @@ class ProductUrlUpdateTest(TestCase):
             )
         ta_2.set_password('password123')
         ta_2.save()
+        create_test_product(ta.id)
         
     def testCannotLoadProductUpdatePageWithoutLogin(self):
         response = self.client.get('/shop/products/update/1/')
