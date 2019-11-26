@@ -368,17 +368,17 @@ def add_to_cart(request,product_number,quantity):
                     "quantity":quantity
                 }
     
-    if user_cart.add_item_to_cart(cart_item):
-        messages.success(
-                request,
-                "Item added to cart."
-                )
-        request.session['user_cart']=user_cart.export_data()
-    else:
-        messages.error(
-                request,
-                "We are unable to add this item to your cart."
-                )
+        if user_cart.add_item_to_cart(cart_item):
+            messages.success(
+                    request,
+                    "Item added to cart."
+                    )
+            request.session['user_cart']=user_cart.export_data()
+        else:
+            messages.error(
+                    request,
+                    "We are unable to add this item to your cart."
+                    )
     return redirect(view_cart)
 
 @login_required
