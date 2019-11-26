@@ -261,6 +261,19 @@ class ProductUrlUpdateTest(TestCase):
             status_code=302,
             target_status_code=200
             )
+    
+    def testCannotLoadProductUpdatePageUnauthorisedUser(self):
+        self.client.login(
+            username='penguinrider2',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/update/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
             
 class ProductUrlDeleteTest(TestCase):
     def setUp(self):
@@ -300,6 +313,20 @@ class ProductUrlDeleteTest(TestCase):
             status_code=302,
             target_status_code=200
             )
+    
+    def testCannotLoadProductDeletePageUnauthorisedUser(self):
+        self.client.login(
+            username='penguinrider2',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+        self.assertEqual(Product.objects.get(pk=1).count(), 1)
     
 class ProductFormCreationTest(TestCase):
     def setUp(self):
