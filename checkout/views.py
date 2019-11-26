@@ -360,25 +360,31 @@ def add_to_cart(request,product_number,quantity):
             
         # The temporary cart_item variable stores all of the information which
         # will be displayed in the cart page.
-        cart_item = {
-                    "img_url":img_url,
-                    "product_number":product_number,
-                    "product_name":product_name,
-                    "price":price,
-                    "quantity":quantity
-                }
-    
-        if user_cart.add_item_to_cart(cart_item):
-            messages.success(
+        if quantity <= selected_product.quantity_in_stock:
+            cart_item = {
+                        "img_url":img_url,
+                        "product_number":product_number,
+                        "product_name":product_name,
+                        "price":price,
+                        "quantity":quantity
+                    }
+        
+            if user_cart.add_item_to_cart(cart_item):
+                messages.success(
                     request,
                     "Item added to cart."
                     )
-            request.session['user_cart']=user_cart.export_data()
-        else:
-            messages.error(
+                request.session['user_cart']=user_cart.export_data()
+            else:
+                messages.error(
                     request,
                     "We are unable to add this item to your cart."
                     )
+        else:
+            messages.error(
+                request,
+                "The quantity in stock for this item is too low."
+                )
     return redirect(view_cart)
 
 @login_required
