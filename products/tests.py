@@ -136,7 +136,7 @@ class ProductTest(TestCase):
             14.99
             )
     
-class ProductUrlTest(TestCase):
+class ProductUrlGeneralTest(TestCase):
     def setUp(self):
         ta = create_account()
         ta.set_password('password123')
@@ -156,68 +156,6 @@ class ProductUrlTest(TestCase):
         self.assertRedirects(
             response,
             '/users/log-in/?next=/shop/products/inventory/',
-            status_code=302,
-            target_status_code=200
-            )
-    
-    def testCanLoadProductCreationPage(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        response = self.client.get('/shop/products/create/')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'product-form.html')
-        
-    def testCannotLoadProductCreationPageWithoutLogin(self):
-        response = self.client.get('/shop/products/create/')
-        self.assertRedirects(
-            response,
-            '/users/log-in/?next=/shop/products/create/',
-            status_code=302,
-            target_status_code=200
-            )
-    
-    def testCannotLoadProductUpdatePageWithoutLogin(self):
-        response = self.client.get('/shop/products/update/1/')
-        self.assertRedirects(
-            response,
-            '/users/log-in/?next=/shop/products/update/1/',
-            status_code=302,
-            target_status_code=200
-            )
-            
-    def testCannotLoadProductUpdatePageForNonExistentProduct(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        response = self.client.get('/shop/products/update/1/')
-        self.assertRedirects(
-            response,
-            '/shop/products/inventory/',
-            status_code=302,
-            target_status_code=200
-            )
-            
-    def testCannotLoadProductDeletePageWithoutLogin(self):
-        response = self.client.get('/shop/products/delete/1/')
-        self.assertRedirects(
-            response,
-            '/users/log-in/?next=/shop/products/delete/1/',
-            status_code=302,
-            target_status_code=200
-            )
-            
-    def testCannotLoadProductDeletePageForNonExistentProduct(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        response = self.client.get('/shop/products/delete/1/')
-        self.assertRedirects(
-            response,
-            '/shop/products/inventory/',
             status_code=302,
             target_status_code=200
             )
@@ -261,6 +199,108 @@ class ProductUrlTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'wine-collection.html')
         
+class ProductUrlCreationTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        
+    def testCanLoadProductCreationPage(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/create/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'product-form.html')
+        
+    def testCannotLoadProductCreationPageWithoutLogin(self):
+        response = self.client.get('/shop/products/create/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/create/',
+            status_code=302,
+            target_status_code=200
+            )
+            
+class ProductUrlUpdateTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        ta_2 = UserAccount(
+            username="penguinrider2",
+            password="password123",
+            email="a@a.com",
+            first_name="penguin",
+            last_name="rider",
+            bio="Hi im a penguinrider",
+            profile_picture=DEFAULT_IMAGE_UUID
+            )
+        ta_2.set_password('password123')
+        ta_2.save()
+        
+    def testCannotLoadProductUpdatePageWithoutLogin(self):
+        response = self.client.get('/shop/products/update/1/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/update/1/',
+            status_code=302,
+            target_status_code=200
+            )
+            
+    def testCannotLoadProductUpdatePageForNonExistentProduct(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/update/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+            
+class ProductUrlDeleteTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        ta_2 = UserAccount(
+            username="penguinrider2",
+            password="password123",
+            email="a@a.com",
+            first_name="penguin",
+            last_name="rider",
+            bio="Hi im a penguinrider",
+            profile_picture=DEFAULT_IMAGE_UUID
+            )
+        ta_2.set_password('password123')
+        ta_2.save()
+        
+    def testCannotLoadProductDeletePageWithoutLogin(self):
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/users/log-in/?next=/shop/products/delete/1/',
+            status_code=302,
+            target_status_code=200
+            )
+            
+    def testCannotLoadProductDeletePageForNonExistentProduct(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/delete/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
+    
 class ProductFormCreationTest(TestCase):
     def setUp(self):
         ta = create_account()
