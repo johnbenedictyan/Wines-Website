@@ -507,6 +507,34 @@ class ProductFormCreationTest(TestCase):
             'This field is required.'
             ) 
             
+    def testInvalidQuantityInStockErrorMessage(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'name':"Generic Wine",
+            'year':2013,
+            'description':"This is a bottle of Generic Wine",
+            'price':53.99,
+            'quantity_in_stock':'This is not a number',
+            'product_picture':DEFAULT_IMAGE_UUID,
+            'region':"FRANCE",
+            'nodes':"Fruits",
+            'body':"Light",
+            'seller_id':user.id,
+            'views':0
+        }
+        test_form = ProductForm(
+            data=test_form_data
+            )
+        
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertFormError(
+            response,
+            'product_form',
+            'quantity_in_stock',
+            'Enter a whole number.'
+            ) 
+            
 class ProductFormUpdateTest(TestCase):
     def setUp(self):
         ta = create_account()
