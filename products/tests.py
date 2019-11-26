@@ -177,6 +177,19 @@ class ProductUrlTest(TestCase):
             status_code=302,
             target_status_code=200
             )
+            
+    def testCannotLoadProductUpdatePageForNonExistentProduct(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        response = self.client.get('/shop/products/update/1/')
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
     
     def testCanLoadShopPage(self):
         response = self.client.get('/shop/')
