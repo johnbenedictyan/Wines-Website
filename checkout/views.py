@@ -399,21 +399,25 @@ def edit_cart(request):
     for c, v in enumerate(product_number):
         # This checks if the request quantity of wine exceeds the quantity
         # in stock.
-        selected_product = Product.objects.get(pk=v)
-        if selected_product.quantity_in_stock > int(item_quantity[c]):
-            cart_item = {
-                'product_number':v,
-                'item_quantity':item_quantity[c]
-            }
-            edit_cart_data.append(cart_item)
+        try:
+            selected_product = Product.objects.get(pk=v)
+        except Product.DoesNotExist:
+            pass
         else:
-            selected_product_name = selected_product.name
-            messages.error(
-                 request,
-                 "Quantity selected for '{}' is too high".format(
-                     selected_product_name
+            if selected_product.quantity_in_stock > int(item_quantity[c]):
+                cart_item = {
+                    'product_number':v,
+                    'item_quantity':item_quantity[c]
+                }
+                edit_cart_data.append(cart_item)
+            else:
+                selected_product_name = selected_product.name
+                messages.error(
+                     request,
+                     "Quantity selected for '{}' is too high".format(
+                         selected_product_name
+                         )
                      )
-                 )
         
     # This section is responsible for gathering the information needed to
     # update the cart total and coupon applied.
