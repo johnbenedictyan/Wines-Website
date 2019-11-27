@@ -159,7 +159,6 @@
     });
     
     $(".apply-coupon-btn").click(function(){
-      console.log("Clicked")
       let coupon_code = $("#coupon").val();
       $.ajax({
         url: '{% url "coupon_check" %}',
