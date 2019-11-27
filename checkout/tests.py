@@ -404,6 +404,20 @@ class CheckoutCartDeleteFunctionTest(TestCase):
         self.assertEqual(len(user_cart['cart_items']), 1)
         self.assertEqual(user_cart['cart_subtotal'], tp_1.price)
         self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        
+    def testCannotDeleteItemFromCartItemNotInCart(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        tp_1 = Product.objects.get(pk=1)
+        response = self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.get('/checkout/cart/delete/2/')
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(len(user_cart['cart_items']), 1)
+        self.assertEqual(user_cart['cart_subtotal'], tp_1.price)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
     
 class CheckoutCartClearFunctionTest(TestCase):
     def setUp(self):
