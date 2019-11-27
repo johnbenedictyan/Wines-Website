@@ -334,3 +334,24 @@ class CheckoutCartEditFunctionTest(TestCase):
                 'status': 'Coupon Applied'
             }
         )
+        
+    def testCannotApplyInvalidCouponCode(self):
+        create_test_coupon()
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+            
+        test_form_data = {
+            'coupon_code': 'testcoupon2'
+        }
+        
+        response = self.client.get('/checkout/coupon/', test_form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'discount': None,
+                'status': 'Coupon Does Not Exist'
+            }
+        )
