@@ -215,7 +215,8 @@ def coupon_check(request):
     coupon_code = request.GET.get('coupon_code', None)
     if coupon_code is None:
         data = {
-            'discount': None
+            'discount': None,
+            'status': 'Missing Coupon Input'
         }
         
     try:
@@ -223,7 +224,8 @@ def coupon_check(request):
     except Coupon.DoesNotExist:
         
         data = {
-            'discount': None
+            'discount': None,
+            'status': 'Coupon Does Not Exist'
         }
         messages.error(
             request,
@@ -231,7 +233,8 @@ def coupon_check(request):
             )
     else:
         data = {
-            'discount': int(selected_coupon.discount[:2])
+            'discount': int(selected_coupon.discount[:2]),
+            'status': 'Coupon Applied'
         }
     finally:    
         return JsonResponse(data)
