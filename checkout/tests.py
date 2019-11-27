@@ -270,3 +270,37 @@ class CheckoutCartEditFunctionTest(TestCase):
         
         self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        
+    def testCannotEditItemInCartSelectedQuantityTooLarge(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+            
+        response = self.client.get('/checkout/cart/add/1/1/')
+        
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
+        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        
+        test_form_data = {
+            'product-number': ['1'],
+            'item-quantity': ['1000000'],
+            'coupon-applied': ['no-coupon'],
+            'chargable-percentage': ['1']
+        }
+        
+        response = self.client.post('/checkout/cart/edit/', test_form_data)
+        
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )    
+            
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
+        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
