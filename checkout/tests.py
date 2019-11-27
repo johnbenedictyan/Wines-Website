@@ -104,6 +104,7 @@ class CheckoutCartAddFunctionTest(TestCase):
             username='penguinrider',
             password='password123'
             )
+        tp = Product.objects.get(pk=1)
         response = self.client.get('/checkout/cart/add/1/2/')
         self.assertRedirects(
             response,
@@ -115,6 +116,10 @@ class CheckoutCartAddFunctionTest(TestCase):
         self.assertEqual(len(user_cart['cart_items']), 1)
         self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 2)
+        self.assertEqual(user_cart['cart_subtotal'], tp.price*2)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotAddItemToCartNonExistentProduct(self):
         self.client.login(
@@ -173,16 +178,12 @@ class CheckoutCartEditFunctionTest(TestCase):
             username='penguinrider',
             password='password123'
             )
-            
+        tp_1 = Product.objects.get(pk=1)
+        tp_2 = Product.objects.get(pk=2)
         response = self.client.get('/checkout/cart/add/1/1/')
         response = self.client.get('/checkout/cart/add/2/1/')
         
         user_cart = self.client.session['user_cart']
-        
-        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
-        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
-        self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
-        self.assertEqual(user_cart['cart_items'][1]['quantity'], 1)
         
         test_form_data = {
             'product-number': ['1', '2'],
@@ -206,22 +207,23 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 3)
         self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
         self.assertEqual(user_cart['cart_items'][1]['quantity'], 4)
+        self.assertEqual(user_cart['cart_subtotal'], tp_1.price*3+tp_2.price*4)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartNonExistentProduct(self):
         self.client.login(
             username='penguinrider',
             password='password123'
             )
-            
+        
+        tp_1 = Product.objects.get(pk=1)
+        tp_2 = Product.objects.get(pk=2)
         response = self.client.get('/checkout/cart/add/1/1/')
         response = self.client.get('/checkout/cart/add/2/1/')
         
         user_cart = self.client.session['user_cart']
-        
-        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
-        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
-        self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
-        self.assertEqual(user_cart['cart_items'][1]['quantity'], 1)
         
         test_form_data = {
             'product-number': ['1', '3'],
@@ -245,19 +247,21 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 3)
         self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
         self.assertEqual(user_cart['cart_items'][1]['quantity'], 1)
+        self.assertEqual(user_cart['cart_subtotal'], tp_1.price*3+tp_2.price)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartSelectedItemNotInCart(self):
         self.client.login(
             username='penguinrider',
             password='password123'
             )
-            
+
+        tp = Product.objects.get(pk=1)
         response = self.client.get('/checkout/cart/add/1/1/')
         
         user_cart = self.client.session['user_cart']
-        
-        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
-        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
         
         test_form_data = {
             'product-number': ['2'],
@@ -279,19 +283,21 @@ class CheckoutCartEditFunctionTest(TestCase):
         
         self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        self.assertEqual(user_cart['cart_subtotal'], tp.price)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartSelectedQuantityTooLarge(self):
         self.client.login(
             username='penguinrider',
             password='password123'
             )
-            
+        
+        tp = Product.objects.get(pk=1)
         response = self.client.get('/checkout/cart/add/1/1/')
         
         user_cart = self.client.session['user_cart']
-        
-        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
-        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
         
         test_form_data = {
             'product-number': ['1'],
@@ -313,6 +319,10 @@ class CheckoutCartEditFunctionTest(TestCase):
         
         self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        self.assertEqual(user_cart['cart_subtotal'], tp.price)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCanApplyValidCouponCode(self):
         create_test_coupon()
