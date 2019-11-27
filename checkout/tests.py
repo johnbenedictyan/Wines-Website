@@ -137,3 +137,68 @@ class CheckoutCartAddFunctionTest(TestCase):
         
         session = self.client.session
         self.assertNotIn('user_cart',session)
+        
+class CheckoutCartEditFunctionTest(TestCase):
+    def setUp(self):
+        ta = create_account()
+        ta.set_password('password123')
+        ta.save()
+        create_test_product(ta.id)
+        tp = Product(
+            name="Generic Wine 2",
+            year=2013,
+            description="This is another bottle of Generic Wine",
+            price=102,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="FRANCE",
+            nodes="Fruits",
+            body="Light",
+            seller_id=ta.id,
+            views=0
+            )
+        tp.save()
+        
+    def testCanEditItemInCart(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+            
+        response = self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.get('/checkout/cart/add/2/1/')
+        
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(len(user_cart['cart_items']), 2)
+        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
+        self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
+        self.assertEqual(user_cart['cart_items'][1]['quantity'], 1)
+        
+        test_form_data = {
+            'product-number': ['1', '2'],
+            'item-quantity': ['3', '4'],
+            'coupon-applied': ['no-coupon'],
+            'chargable-percentage': ['1']
+        }
+        
+        response = self.client.post('/checkout/cart/edit/', test_form_data)
+        
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )    
+            
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(len(user_cart['cart_items']), 2)
+        self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
+        self.assertEqual(user_cart['cart_items'][0]['quantity'], 3)
+        self.assertEqual(user_cart['cart_items'][1]['product_number'], 2)
+        self.assertEqual(user_cart['cart_items'][1]['quantity'], 4)
+        
+    def testCannotAddItemToCartNonExistentProduct(self):
+        pass
