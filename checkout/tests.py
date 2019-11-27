@@ -394,3 +394,7 @@ class CheckoutCartClearFunctionTest(TestCase):
             
         user_cart = self.client.session['user_cart']
         self.assertEqual(user_cart['cart_items'],[])
+        self.assertEqual(user_cart['cart_subtotal'], 0)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+        self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
+        self.assertEqual(user_cart['chargable_percentage'], 1)
