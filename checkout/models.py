@@ -146,11 +146,11 @@ class Coupon(models.Model):
     )
     date_time_created = models.DateTimeField(
         blank=False,
-        default=datetime.now()
+        default=timezone.now()
     )
     date_time_expiry = models.DateTimeField(
         blank=False,
-        default=datetime.now()+timedelta(days=365)
+        default=timezone.now()+timedelta(days=365)
     )
     discount = models.CharField(
         max_length=9,
