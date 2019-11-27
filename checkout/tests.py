@@ -1,11 +1,13 @@
 from django.test import TestCase
 from users.models import UserAccount
 from products.models import Product
+from .models import Coupon
+from datetime import timedelta,datetime
 # Checkout Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
 
-def create_account():
+def create_test_account():
     ta = UserAccount(
         username="penguinrider",
         password="password123",
@@ -35,9 +37,16 @@ def create_test_product(seller_id):
     tp.save()
     return tp
     
+def create_test_coupon():
+    tc = Coupon(
+        coupon_code = 'testcoupon',
+        )
+    tc.save()
+    return tc
+    
 class CheckoutUrlGeneralTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         
@@ -61,7 +70,7 @@ class CheckoutUrlGeneralTest(TestCase):
     
 class CheckoutCartViewFunctionTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         
@@ -85,7 +94,7 @@ class CheckoutCartViewFunctionTest(TestCase):
 
 class CheckoutCartAddFunctionTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         create_test_product(ta.id)
@@ -140,7 +149,7 @@ class CheckoutCartAddFunctionTest(TestCase):
         
 class CheckoutCartEditFunctionTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         create_test_product(ta.id)
@@ -304,3 +313,24 @@ class CheckoutCartEditFunctionTest(TestCase):
         
         self.assertEqual(user_cart['cart_items'][0]['product_number'], 1)
         self.assertEqual(user_cart['cart_items'][0]['quantity'], 1)
+        
+    def testCanApplyValidCouponCode(self):
+        create_test_coupon()
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+            
+        test_form_data = {
+            'coupon_code': 'testcoupon'
+        }
+        
+        response = self.client.get('/checkout/coupon/', test_form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'discount': 10,
+                'status': 'Coupon Applied'
+            }
+        )
