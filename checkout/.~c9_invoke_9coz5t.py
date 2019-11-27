@@ -384,3 +384,4 @@ class CheckoutCartClearFunctionTest(TestCase):
             
         user_cart = self.client.session['user_cart']
         self.assertEqual(user_cart['cart_items'],[])
+
