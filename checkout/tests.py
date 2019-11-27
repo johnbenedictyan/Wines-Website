@@ -355,3 +355,10 @@ class CheckoutCartEditFunctionTest(TestCase):
                 'status': 'Coupon Does Not Exist'
             }
         )
+        
+class CheckoutCartClearFunctionTest(TestCase):
+    def setUp(self):
+        ta = create_test_account()
+        ta.set_password('password123')
+        ta.save()
+        create_test_product(ta.id)
