@@ -366,6 +366,45 @@ class CheckoutCartEditFunctionTest(TestCase):
             }
         )
         
+class CheckoutCartDeleteFunctionTest(TestCase):
+    def setUp(self):
+        ta = create_test_account()
+        ta.set_password('password123')
+        ta.save()
+        create_test_product(ta.id)
+        tp = Product(
+            name="Generic Wine 2",
+            year=2013,
+            description="This is another bottle of Generic Wine",
+            price=102,
+            quantity_in_stock=100,
+            product_picture=DEFAULT_IMAGE_UUID,
+            region="FRANCE",
+            nodes="Fruits",
+            body="Light",
+            seller_id=ta.id,
+            views=0
+            )
+        tp.save()
+        
+    def testCanDeleteItemFromCart(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        tp_1 = Product.objects.get(pk=1)
+        response = self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.get('/checkout/cart/add/2/1/')
+        user_cart = self.client.session['user_cart']
+        self.assertEqual(len(user_cart['cart_items']), 2)
+        
+        response = self.client.get('/checkout/cart/delete/2/')
+        user_cart = self.client.session['user_cart']
+        
+        self.assertEqual(len(user_cart['cart_items']), 1)
+        self.assertEqual(user_cart['cart_subtotal'], tp_1.price)
+        self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
+    
 class CheckoutCartClearFunctionTest(TestCase):
     def setUp(self):
         ta = create_test_account()
@@ -398,3 +437,4 @@ class CheckoutCartClearFunctionTest(TestCase):
         self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
         self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
         self.assertEqual(user_cart['chargable_percentage'], 1)
+        
