@@ -83,13 +83,21 @@
       <div class="col-md-6">
         <div class="row mb-5">
           <div class="col-md-4 mb-3 mb-md-0">
+            {% if user_cart.cart_items %}
             <button class="btn btn-primary btn-md btn-block btn-update">Update Cart</button>
+            {% else %}
+            <button class="btn btn-primary btn-md btn-block btn-update" disabled>Update Cart</button>
+            {% endif %}
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            {% if user_cart.cart_items %}
+            <a href="{% url 'clear_cart' %}"><button class="btn btn-primary btn-md btn-block">Clear Cart</button></a>
+            {% else %}
+            <a href="{% url 'clear_cart' %}"><button class="btn btn-primary btn-md btn-block" disabled>Clear Cart</button></a>
+            {% endif %}
           </div>
           <div class="col-md-4">
-            <a href="{% url 'clear_cart' %}" class="btn btn-outline-primary btn-md btn-block">Clear Cart</a>
-          </div>
-          <div class="col-md-4">
-            <a href="{% url 'shop' %}" class="btn btn-outline-primary btn-md btn-block">Continue Shopping</a>
+            <a href="{% url 'shop' %}" class="btn btn-primary btn-md btn-block">Continue Shopping</a>
           </div>
         </div>
         <div class="row">
