@@ -3,6 +3,8 @@ from users.models import UserAccount
 from products.models import Product
 from .models import Coupon
 from datetime import timedelta,datetime
+from .forms import CustomerDetailForm
+from django.contrib import auth
 # Checkout Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
@@ -452,3 +454,39 @@ class CheckoutCartClearFunctionTest(TestCase):
         self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
+class CustomerDetailCreationTest(TestCase):
+    def setUp(self):
+        ta = create_test_account()
+        ta.set_password('password123')
+        ta.save()
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+            
+    def testValidCustomerDetailCreationSubmission(self):
+        user = auth.get_user(self.client)
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        
+        self.assertTrue(test_form.is_valid())
