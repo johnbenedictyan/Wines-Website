@@ -91,12 +91,6 @@ class Customer_Detail(models.Model):
         blank=True
     )
 
-    coupon_code = models.CharField(
-        verbose_name="Enter your coupon code if you have one",
-        max_length=50,
-        blank=True
-    )
-
     order_notes = models.CharField(
         verbose_name="Order Notes",
         max_length=200,
@@ -145,15 +139,18 @@ class Coupon(models.Model):
         max_length=255
     )
     date_time_created = models.DateTimeField(
-        blank=False,
-        default=timezone.now()
+        editable=False
     )
-    date_time_expiry = models.DateTimeField(
-        blank=False,
-        default=timezone.now()+timedelta(days=365)
-    )
+    date_time_expiry = models.DateTimeField()
+    
     discount = models.CharField(
         max_length=9,
         choices=COUPON_CODE_CHOICES,
         default='10PERCENT'
     )
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.date_time_created = timezone.now()
+        self.date_time_expiry = timezone.now()+timedelta(days=365)
+        return super(Coupon, self).save(*args, **kwargs)
