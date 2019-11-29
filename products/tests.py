@@ -6,7 +6,7 @@ from .forms import ProductForm
 # Product Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
-def create_account():
+def create_test_account():
     ta = UserAccount(
         username="penguinrider",
         password="password123",
@@ -38,7 +38,7 @@ def create_test_product(seller_id):
     
 class ProductTest(TestCase):
     def testCanCreateProduct(self):
-        ta = create_account()
+        ta = create_test_account()
         test_product = create_test_product(ta.id)
         
         tp_from_db = Product.objects.all().get(pk=test_product.id)
@@ -85,14 +85,14 @@ class ProductTest(TestCase):
             )
         
     def testCanDeleteproduct(self):
-        ta = create_account()
+        ta = create_test_account()
         test_product = create_test_product(ta.id)
         Product.objects.filter(id=test_product.id).delete()
         tp_from_db = list(Product.objects.all().filter(pk=test_product.id))
         self.assertEquals(tp_from_db,[])
     
     def testCanUpdateproductDetails(self):
-        ta = create_account()
+        ta = create_test_account()
         test_product = create_test_product(ta.id)
         
         test_product.name="Generic Wine 2"
@@ -116,7 +116,7 @@ class ProductTest(TestCase):
     
 class ProductUrlGeneralTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         
@@ -166,7 +166,7 @@ class ProductUrlGeneralTest(TestCase):
         
 class ProductUrlCreationTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         
@@ -190,7 +190,7 @@ class ProductUrlCreationTest(TestCase):
             
 class ProductUrlUpdateTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         ta_2 = UserAccount(
@@ -243,7 +243,7 @@ class ProductUrlUpdateTest(TestCase):
             
 class ProductUrlDeleteTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         ta_2 = UserAccount(
@@ -311,7 +311,7 @@ class ProductUrlDeleteTest(TestCase):
     
 class ProductFormCreationTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         self.client.login(
@@ -629,7 +629,7 @@ class ProductFormCreationTest(TestCase):
             
 class ProductFormUpdateTest(TestCase):
     def setUp(self):
-        ta = create_account()
+        ta = create_test_account()
         ta.set_password('password123')
         ta.save()
         create_test_product(ta.id)
