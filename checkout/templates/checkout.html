@@ -15,4 +15,15 @@
         </form>
       </div>
     </div>
+    <meta id="create-account-intention" data-state="{{create_account_intention}}">
+{% endblock %}
+{% block js_scripts_section %}
+<script type="text/javascript">
+  $(function(){
+    if ($('#create-account-intention').data('state') == "True"){
+      $('#c_create_account').prop( "checked", true );
+      $('#create_an_account').collapse('show');
+    }
+  });
+</script>
 {% endblock %}
