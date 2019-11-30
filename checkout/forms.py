@@ -4,6 +4,8 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
 from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
 from datetime import datetime
+from django.contrib.auth.password_validation import validate_password
+from users.models import UserAccount
 
 class CustomerDetailForm(forms.ModelForm):
     
@@ -246,7 +248,69 @@ class CustomerDetailForm(forms.ModelForm):
                 )
             )
         )
-
+        
+    def clean_account_username(self):
+        username = self.cleaned_data.get("account_username")
+        if username != '':
+            if UserAccount.objects.filter(username=username).count() > 0:
+                raise forms.ValidationError(
+                    "This username is already taken",
+                    code='username_taken',
+                )
+        return username
+    
+    def clean_account_password_1(self):
+        username = self.cleaned_data.get("account_username")
+        password1 = self.cleaned_data.get("account_password_1")
+        if username != '' and password1 == '':
+            raise forms.ValidationError(
+                ("This field is required for account creation."),
+                code='required',
+            )
+        if username == '' and password1 != '':
+            self.add_error(
+                "account_username",
+                forms.ValidationError(
+                    ("This field is required for account creation."),
+                    code='required',
+                    )
+                )
+        if username != '' and password1:
+            validate_password(
+                password1,
+                self.instance
+            )
+        return password1 
+        
+    def clean_account_password_2(self):
+        username = self.cleaned_data.get("account_username")
+        password1 = self.cleaned_data.get("account_password_1")
+        password2 = self.cleaned_data.get("account_password_2")
+        if username != '' and password2 == '':
+            raise forms.ValidationError(
+                ("This field is required for account creation."),
+                code='required',
+            )
+        if username == '' and password2 != '':
+            self.add_error(
+                "account_username",
+                forms.ValidationError(
+                    ("This field is required for account creation."),
+                    code='required',
+                    )
+                )
+        if username != '' and password2:
+            validate_password(
+                password2,
+                self.instance
+            )
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                ("Passwords don't match"),
+                code='password_mismatch',
+            )
+        return password2
+    
 class PaymentForm(forms.Form):
     MONTH_CHOICES = [(i, i) for i in range(1, 12)]
     YEAR_CHOICES = [(i, i) for i in range(2019, 2039)]
