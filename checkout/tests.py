@@ -71,11 +71,6 @@ class CheckoutUrlGeneralTest(TestCase):
             ) 
     
 class CheckoutCartViewFunctionTest(TestCase):
-    def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
-        
     def testCanLoadViewCartPage(self):
         response = self.client.get('/checkout/cart/')
         self.assertEqual(response.status_code, 200)
@@ -83,10 +78,7 @@ class CheckoutCartViewFunctionTest(TestCase):
 
 class CheckoutCartAddFunctionTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
-        create_test_product(ta.id)
+        create_test_product(create_test_account().id)
         
     def testCanAddItemToCart(self):
         tp = Product.objects.get(pk=1)
@@ -133,8 +125,6 @@ class CheckoutCartAddFunctionTest(TestCase):
 class CheckoutCartEditFunctionTest(TestCase):
     def setUp(self):
         ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
         create_test_product(ta.id)
         tp = Product(
             name="Generic Wine 2",
@@ -318,8 +308,6 @@ class CheckoutCartEditFunctionTest(TestCase):
 class CheckoutCartDeleteFunctionTest(TestCase):
     def setUp(self):
         ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
         create_test_product(ta.id)
         tp = Product(
             name="Generic Wine 2",
@@ -368,10 +356,7 @@ class CheckoutCartDeleteFunctionTest(TestCase):
     
 class CheckoutCartClearFunctionTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
-        create_test_product(ta.id)
+        create_test_product(create_test_account().id)
         
     def testCanClearCart(self):
         self.client.get('/checkout/cart/add/1/2/')
@@ -651,4 +636,3 @@ class CustomerDetailCreationTest(TestCase):
             )
         self.assertFalse(test_form.is_valid())
         
-    
