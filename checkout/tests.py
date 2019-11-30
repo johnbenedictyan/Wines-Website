@@ -76,23 +76,10 @@ class CheckoutCartViewFunctionTest(TestCase):
         ta.set_password('password123')
         ta.save()
         
-    def testCanLoadViewCartPageWithLogin(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
+    def testCanLoadViewCartPage(self):
         response = self.client.get('/checkout/cart/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'cart.html')
-    
-    def testCannotLoadViewCartPageWithoutLogin(self):
-        response = self.client.get('/checkout/cart/')
-        self.assertRedirects(
-            response,
-            '/users/log-in/?next=/checkout/cart/',
-            status_code=302,
-            target_status_code=200
-            ) 
 
 class CheckoutCartAddFunctionTest(TestCase):
     def setUp(self):
@@ -102,10 +89,6 @@ class CheckoutCartAddFunctionTest(TestCase):
         create_test_product(ta.id)
         
     def testCanAddItemToCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
         tp = Product.objects.get(pk=1)
         response = self.client.get('/checkout/cart/add/1/2/')
         self.assertRedirects(
@@ -124,10 +107,6 @@ class CheckoutCartAddFunctionTest(TestCase):
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotAddItemToCartNonExistentProduct(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
         response = self.client.get('/checkout/cart/add/999/2/')
         self.assertRedirects(
             response,
@@ -139,10 +118,7 @@ class CheckoutCartAddFunctionTest(TestCase):
         self.assertNotIn('user_cart',session)
         
     def testCannotAddItemToCartQuantityTooLarge(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
+        
         response = self.client.get('/checkout/cart/add/1/100000/')
         self.assertRedirects(
             response,
@@ -176,10 +152,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         tp.save()
         
     def testCanEditItemInCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
         tp_1 = Product.objects.get(pk=1)
         tp_2 = Product.objects.get(pk=2)
         self.client.get('/checkout/cart/add/1/1/')
@@ -215,11 +187,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartNonExistentProduct(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        
         tp_1 = Product.objects.get(pk=1)
         tp_2 = Product.objects.get(pk=2)
         self.client.get('/checkout/cart/add/1/1/')
@@ -255,11 +222,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartSelectedItemNotInCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-
         tp = Product.objects.get(pk=1)
         self.client.get('/checkout/cart/add/1/1/')
         
@@ -291,11 +253,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCannotEditItemInCartSelectedQuantityTooLarge(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-        
         tp = Product.objects.get(pk=1)
         self.client.get('/checkout/cart/add/1/1/')
         
@@ -328,11 +285,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         
     def testCanApplyValidCouponCode(self):
         create_test_coupon()
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-            
         test_form_data = {
             'coupon_code': 'testcoupon'
         }
@@ -349,11 +301,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         
     def testCannotApplyInvalidCouponCode(self):
         create_test_coupon()
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-            
         test_form_data = {
             'coupon_code': 'testcoupon2'
         }
@@ -390,10 +337,6 @@ class CheckoutCartDeleteFunctionTest(TestCase):
         tp.save()
         
     def testCanDeleteItemFromCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
         tp_1 = Product.objects.get(pk=1)
         self.client.get('/checkout/cart/add/1/1/')
         self.client.get('/checkout/cart/add/2/1/')
@@ -414,10 +357,6 @@ class CheckoutCartDeleteFunctionTest(TestCase):
         self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
         
     def testCannotDeleteItemFromCartItemNotInCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
         tp_1 = Product.objects.get(pk=1)
         self.client.get('/checkout/cart/add/1/1/')
         self.client.get('/checkout/cart/delete/2/')
@@ -435,11 +374,6 @@ class CheckoutCartClearFunctionTest(TestCase):
         create_test_product(ta.id)
         
     def testCanClearCart(self):
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
-            
         self.client.get('/checkout/cart/add/1/2/')
         user_cart = self.client.session['user_cart']
         
@@ -466,10 +400,6 @@ class CustomerDetailCreationTest(TestCase):
         ta.set_password('password123')
         ta.save()
         create_test_product(ta.id)
-        self.client.login(
-            username='penguinrider',
-            password='password123'
-            )
             
     def testValidCustomerDetailCreationSubmission(self):
         test_form_data = {
@@ -504,7 +434,6 @@ class CustomerDetailCreationTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
-        
     
     def testInvalidCustomerDetailCreationSubmissionMissingCountry(self):
         test_form_data = {
@@ -722,3 +651,4 @@ class CustomerDetailCreationTest(TestCase):
             )
         self.assertFalse(test_form.is_valid())
         
+    
