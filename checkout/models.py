@@ -66,8 +66,14 @@ class Customer_Detail(models.Model):
         blank=True
     )
     
-    account_password = models.CharField(
+    account_password_1 = models.CharField(
         verbose_name="Account Password",
+        max_length=50,
+        blank=True
+    )
+    
+    account_password_2 = models.CharField(
+        verbose_name="Confirm Password",
         max_length=50,
         blank=True
     )
