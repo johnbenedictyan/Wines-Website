@@ -54,10 +54,16 @@ def quantity_reducer(cart_items):
 # Create your views here.
 @login_required
 def checkout(request):
-    if request.method == "GET":
-        custom_detail_form = CustomerDetailForm()
-        if request.session.get('user_cart'):
-            user_cart = request.session.get('user_cart')
+    user_cart = request.session.get('user_cart')
+    if user_cart is None or user_cart['cart_items'] == []:
+        messages.error(
+            request,
+            "This cart does not exist."
+            )
+        return redirect(view_cart)
+    else:
+        if request.method == "GET":
+            custom_detail_form = CustomerDetailForm()
             return render(
                 request,
                 "checkout.html",
@@ -66,25 +72,18 @@ def checkout(request):
                     "custom_detail_form":custom_detail_form
                 })
         else:
-            messages.error(
-                request,
-                "This cart does not exist."
-                )
-            return redirect(view_cart)
-        
-    else:
-        dirty_custom_detail_form = CustomerDetailForm(request.POST)
-        if dirty_custom_detail_form.is_valid():
-            dirty_custom_detail_form.save()
-            return redirect(payment)
-        else:
-            return render(
-                request,
-                "checkout.html",
-                {
-                    "user_cart":user_cart,
-                    "custom_detail_form":dirty_custom_detail_form
-                })
+            dirty_custom_detail_form = CustomerDetailForm(request.POST)
+            if dirty_custom_detail_form.is_valid():
+                dirty_custom_detail_form.save()
+                return redirect(payment)
+            else:
+                return render(
+                    request,
+                    "checkout.html",
+                    {
+                        "user_cart":user_cart,
+                        "custom_detail_form":dirty_custom_detail_form
+                    })
 
 @login_required
 def payment(request):
