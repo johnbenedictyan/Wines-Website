@@ -118,6 +118,10 @@ class CustomerDetailForm(forms.ModelForm):
                                         """
                                     ),
                                     Div(
+                                        "account_username",
+                                        css_class="form-group"
+                                    ),
+                                    Div(
                                         "account_password",
                                         css_class="form-group"
                                     ),

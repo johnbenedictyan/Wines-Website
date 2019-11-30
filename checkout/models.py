@@ -59,7 +59,13 @@ class Customer_Detail(models.Model):
         max_length=50,
         blank=False
     )
-
+    
+    account_username = models.CharField(
+        verbose_name="Account Username",
+        max_length=50,
+        blank=True
+    )
+    
     account_password = models.CharField(
         verbose_name="Account Password",
         max_length=50,
