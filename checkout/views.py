@@ -73,20 +73,23 @@ def checkout(request):
                     "custom_detail_form":custom_detail_form
                 })
         else:
+            req_username = request.POST.get('account_username')
+            req_password1 = request.POST.get('account_password_1')
+            req_password2 = request.POST.get('account_password_2')
             user_creation_data = {
-                'username':request.POST.get('account_username'),
+                'username':req_username,
                 'first_name':request.POST.get('first_name'),
                 'last_name':request.POST.get('last_name'),
                 'email':request.POST.get('email'),
-                'password1':request.POST.get('account_password_1'),
-                'password2':request.POST.get('account_password_2'),
+                'password1':req_password1,
+                'password2':req_password2,
                 'profile_picture':DEFAULT_IMAGE_UUID,
                 'seller':False
                 }
             dirty_custom_detail_form = CustomerDetailForm(request.POST)
             if dirty_custom_detail_form.is_valid():
                 dirty_custom_detail_form.save()
-                if request.POST.get('account_username'):
+                if req_username:
                     try:
                         dirty_user_creation_form = RegisterForm(
                             user_creation_data
@@ -103,14 +106,17 @@ def checkout(request):
                             )
                 return redirect(payment)
             else:
+                if req_username or req_password1 or req_password2:
+                    create_account_intention = True
                 return render(
                     request,
                     "checkout.html",
                     {
                         "user_cart":user_cart,
                         "custom_detail_form":dirty_custom_detail_form,
-                        "create_account_intention":True,
+                        "create_account_intention":create_account_intention,
                     })
+                
 
 def payment(request):
     if request.session.get('user_cart'):
