@@ -182,8 +182,8 @@ class CheckoutCartEditFunctionTest(TestCase):
             )
         tp_1 = Product.objects.get(pk=1)
         tp_2 = Product.objects.get(pk=2)
-        response = self.client.get('/checkout/cart/add/1/1/')
-        response = self.client.get('/checkout/cart/add/2/1/')
+        self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/add/2/1/')
         
         user_cart = self.client.session['user_cart']
         
@@ -222,8 +222,8 @@ class CheckoutCartEditFunctionTest(TestCase):
         
         tp_1 = Product.objects.get(pk=1)
         tp_2 = Product.objects.get(pk=2)
-        response = self.client.get('/checkout/cart/add/1/1/')
-        response = self.client.get('/checkout/cart/add/2/1/')
+        self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/add/2/1/')
         
         user_cart = self.client.session['user_cart']
         
@@ -261,7 +261,7 @@ class CheckoutCartEditFunctionTest(TestCase):
             )
 
         tp = Product.objects.get(pk=1)
-        response = self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/add/1/1/')
         
         user_cart = self.client.session['user_cart']
         
@@ -297,7 +297,7 @@ class CheckoutCartEditFunctionTest(TestCase):
             )
         
         tp = Product.objects.get(pk=1)
-        response = self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/add/1/1/')
         
         user_cart = self.client.session['user_cart']
         
@@ -395,8 +395,8 @@ class CheckoutCartDeleteFunctionTest(TestCase):
             password='password123'
             )
         tp_1 = Product.objects.get(pk=1)
-        response = self.client.get('/checkout/cart/add/1/1/')
-        response = self.client.get('/checkout/cart/add/2/1/')
+        self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/add/2/1/')
         user_cart = self.client.session['user_cart']
         self.assertEqual(len(user_cart['cart_items']), 2)
         
@@ -413,8 +413,8 @@ class CheckoutCartDeleteFunctionTest(TestCase):
             password='password123'
             )
         tp_1 = Product.objects.get(pk=1)
-        response = self.client.get('/checkout/cart/add/1/1/')
-        response = self.client.get('/checkout/cart/delete/2/')
+        self.client.get('/checkout/cart/add/1/1/')
+        self.client.get('/checkout/cart/delete/2/')
         user_cart = self.client.session['user_cart']
         
         self.assertEqual(len(user_cart['cart_items']), 1)
@@ -434,7 +434,7 @@ class CheckoutCartClearFunctionTest(TestCase):
             password='password123'
             )
             
-        response = self.client.get('/checkout/cart/add/1/2/')
+        self.client.get('/checkout/cart/add/1/2/')
         user_cart = self.client.session['user_cart']
         
         self.assertEqual(len(user_cart['cart_items']), 1)
