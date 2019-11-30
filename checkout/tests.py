@@ -401,6 +401,12 @@ class CheckoutCartDeleteFunctionTest(TestCase):
         self.assertEqual(len(user_cart['cart_items']), 2)
         
         response = self.client.get('/checkout/cart/delete/2/')
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )    
         user_cart = self.client.session['user_cart']
         
         self.assertEqual(len(user_cart['cart_items']), 1)
