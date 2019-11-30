@@ -339,6 +339,13 @@ class ProductFormCreationTest(TestCase):
             )
         
         self.assertTrue(test_form.is_valid())
+        response = self.client.post('/shop/products/create/', test_form_data)
+        self.assertRedirects(
+            response,
+            '/shop/products/inventory/',
+            status_code=302,
+            target_status_code=200
+            )
         
     def testMissingNameErrorMessage(self):
         user = auth.get_user(self.client)
