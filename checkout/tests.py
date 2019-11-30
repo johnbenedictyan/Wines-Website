@@ -397,6 +397,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -430,6 +431,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -454,6 +456,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -478,6 +481,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -502,6 +506,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -526,6 +531,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -550,6 +556,7 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -574,6 +581,7 @@ class CustomerDetailCreationTest(TestCase):
             'state_or_country':'Afghanistan',
             'email':"johndoe@asd.com",
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -598,6 +606,7 @@ class CustomerDetailCreationTest(TestCase):
             'state_or_country':'Afghanistan',
             'postal_code_or_zip':'123456',
             'phone':"12345678",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -622,6 +631,7 @@ class CustomerDetailCreationTest(TestCase):
             'state_or_country':'Afghanistan',
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
+            'account_username':'',
             'account_password':'',
             'alt_country':'',
             'alt_address_1':'', 
@@ -636,3 +646,44 @@ class CustomerDetailCreationTest(TestCase):
             )
         self.assertFalse(test_form.is_valid())
         
+    def testCanCreateUserFromCustomerDetailForm(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_username':'',
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        
+        self.assertTrue(test_form.is_valid())
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.post('/checkout/checkout/', test_form_data)
+        self.assertRedirects(
+            response,
+            '/checkout/payment/',
+            status_code=302,
+            target_status_code=200
+            ) 
+        user = auth.get_user(self.client)
+        self.assertFalse(user.is_anonymous)
+        self.assertEqual(user.username,test_form_data['account_username'])
+        self.assertEqual(user.password,test_form_data['account_password'])
+        self.assertEqual(user.first_name,test_form_data['first_name'])
+        self.assertEqual(user.last_name,test_form_data['last_name'])
+        self.assertEqual(user.email,test_form_data['email'])
