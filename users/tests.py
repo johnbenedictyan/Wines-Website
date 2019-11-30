@@ -105,7 +105,7 @@ class UserAccountUrlTest(TestCase):
             target_status_code=200
             )
         
-class UserAccountFormTest(TestCase):
+class UserAccountLoginFormTest(TestCase):
     def setUp(self):
         ta = create_account()
         ta.set_password('password123')
@@ -145,3 +145,153 @@ class UserAccountFormTest(TestCase):
             target_status_code=200
             )
         self.assertNotIn('_auth_user_id', self.client.session)
+
+class UserAccountRegisterFormTest(TestCase):
+    def ValidRegisterFormSubmission(self):
+        test_form_data = {
+            'username':'johndoe',
+            'first_name':'john',
+            'last_name':'doe',
+            'email':'johndoe@johndoe.com',
+            'password1':'Password123!',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+        
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        
+        self.assertTrue(test_form.is_valid())
+        
+    def testMissingUserNameErrorMessage(self):
+        test_form_data = {
+            'first_name':'john',
+            'last_name':'doe',
+            'email':'johndoe@johndoe.com',
+            'password1':'Password123!',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'username',
+            'This field is required.'
+            )
+    
+    def testMissingFirstNameErrorMessage(self):
+        test_form_data = {
+            'username':'johndoe',
+            'last_name':'doe',
+            'email':'johndoe@johndoe.com',
+            'password1':'Password123!',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'first_name',
+            'This field is required.'
+            )
+            
+    def testMissingLastNameErrorMessage(self):
+        test_form_data = {
+            'username':'johndoe',
+            'first_name':'john',
+            'email':'johndoe@johndoe.com',
+            'password1':'Password123!',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'last_name',
+            'This field is required.'
+            )
+            
+    def testMissingEmailErrorMessage(self):
+        test_form_data = {
+            'username':'johndoe',
+            'first_name':'john',
+            'last_name':'doe',
+            'password1':'Password123!',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'email',
+            'This field is required.'
+            )
+            
+    def testMissingPassword1ErrorMessage(self):
+        test_form_data = {
+            'username':'johndoe',
+            'first_name':'john',
+            'last_name':'doe',
+            'email':'johndoe@johndoe.com',
+            'password2':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'password1',
+            'This field is required.'
+            )
+            
+    def testMissingPassword2ErrorMessage(self):
+        test_form_data = {
+            'username':'johndoe',
+            'first_name':'john',
+            'last_name':'doe',
+            'email':'johndoe@johndoe.com',
+            'password1':'Password123!',
+            'profile_picture':DEFAULT_IMAGE_UUID
+            }
+            
+        test_form = RegisterForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        response = self.client.post('/users/registration/', test_form_data)
+        self.assertFormError(
+            response,
+            'registration_form',
+            'password2',
+            'This field is required.'
+            )
