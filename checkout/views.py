@@ -6,11 +6,13 @@ from products.models import Product
 from .models import Coupon,Order,Order_Product_Intermediary
 from django.http import JsonResponse
 from products.views import shop
+from users.forms import RegisterForm
 from datetime import datetime
 import stripe
 import os
 import math
 
+DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 # This is a helper function which creates a new order
@@ -71,9 +73,34 @@ def checkout(request):
                     "custom_detail_form":custom_detail_form
                 })
         else:
+            user_creation_data = {
+                'username':request.POST.get('account_username'),
+                'first_name':request.POST.get('first_name'),
+                'last_name':request.POST.get('last_name'),
+                'email':request.POST.get('email'),
+                'password1':request.POST.get('account_password_1'),
+                'password2':request.POST.get('account_password_2'),
+                'profile_picture':DEFAULT_IMAGE_UUID,
+                'seller':False
+                }
             dirty_custom_detail_form = CustomerDetailForm(request.POST)
             if dirty_custom_detail_form.is_valid():
                 dirty_custom_detail_form.save()
+                if request.POST.get('account_username'):
+                    try:
+                        dirty_user_creation_form = RegisterForm(
+                            user_creation_data
+                            )
+                    except Exception as e:
+                        print(e)
+                    else:
+                        if dirty_user_creation_form.is_valid():
+                            dirty_user_creation_form.save()
+                        else:
+                            messages.error(
+                                request,
+                                "We are unable to create your account!"
+                            )
                 return redirect(payment)
             else:
                 return render(
@@ -81,7 +108,8 @@ def checkout(request):
                     "checkout.html",
                     {
                         "user_cart":user_cart,
-                        "custom_detail_form":dirty_custom_detail_form
+                        "custom_detail_form":dirty_custom_detail_form,
+                        "create_account_intention":True,
                     })
 
 def payment(request):
