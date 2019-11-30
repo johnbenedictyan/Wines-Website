@@ -459,13 +459,13 @@ class CustomerDetailCreationTest(TestCase):
         ta = create_test_account()
         ta.set_password('password123')
         ta.save()
+        create_test_product(ta.id)
         self.client.login(
             username='penguinrider',
             password='password123'
             )
             
     def testValidCustomerDetailCreationSubmission(self):
-        user = auth.get_user(self.client)
         test_form_data = {
             'country':'AF',
             'first_name':'John',
@@ -490,3 +490,36 @@ class CustomerDetailCreationTest(TestCase):
             )
         
         self.assertTrue(test_form.is_valid())
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.post('/checkout/checkout/', test_form_data)
+        self.assertRedirects(
+            response,
+            '/checkout/payment/',
+            status_code=302,
+            target_status_code=200
+            ) 
+        
+    
+    def testInvalidCustomerDetailCreationSubmissionMissingCountry(self):
+        test_form_data = {
+            'country':'AF',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
