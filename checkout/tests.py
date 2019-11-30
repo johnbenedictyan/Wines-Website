@@ -508,6 +508,30 @@ class CustomerDetailCreationTest(TestCase):
     
     def testInvalidCustomerDetailCreationSubmissionMissingCountry(self):
         test_form_data = {
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
+    def testInvalidCustomerDetailCreationSubmissionMissingFirstName(self):
+        test_form_data = {
             'country':'AF',
             'last_name':'Doe',
             'address_1':"123 Random Road",
@@ -529,3 +553,172 @@ class CustomerDetailCreationTest(TestCase):
             data=test_form_data
             )
         self.assertFalse(test_form.is_valid())
+    
+    def testInvalidCustomerDetailCreationSubmissionMissingLastName(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
+    def testInvalidCustomerDetailCreationSubmissionMissingAddress1(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
+    def testInvalidCustomerDetailCreationSubmissionMissingAddress2(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+    
+    def testInvalidCustomerDetailCreationSubmissionMissingStateOrCountry(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
+    def testInvalidCustomerDetailCreationSubmissionMissingPostalCodeOrZip(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'email':"johndoe@asd.com",
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
+    def testInvalidCustomerDetailCreationSubmissionMissingEmail(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'phone':"12345678",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+    
+    def testInvalidCustomerDetailCreationSubmissionMissingPhone(self):
+        test_form_data = {
+            'country':'AF',
+            'first_name':'John',
+            'last_name':'Doe',
+            'address_1':"123 Random Road",
+            'address_2':"12-34",
+            'state_or_country':'Afghanistan',
+            'postal_code_or_zip':'123456',
+            'email':"johndoe@asd.com",
+            'account_password':'',
+            'alt_country':'',
+            'alt_address_1':'', 
+            'alt_address_2':'', 
+            'alt_state_or_country':'',
+            'alt_postal_code_or_zip':'', 
+            'order_notes':''
+        }
+
+        test_form = CustomerDetailForm(
+            data=test_form_data
+            )
+        self.assertFalse(test_form.is_valid())
+        
