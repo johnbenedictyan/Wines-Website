@@ -1,7 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div, Button
-from crispy_forms.bootstrap import StrictButton,FieldWithButtons
 from .models import Customer_Detail
 from django_countries.widgets import CountrySelectWidget
 from datetime import datetime
@@ -13,6 +12,8 @@ class CustomerDetailForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'country': CountrySelectWidget(),
+            'account_password_1': forms.PasswordInput(),
+            'account_password_2': forms.PasswordInput(),
             'address_1': forms.TextInput(
                 attrs={
                     'placeholder': 'Street address'
@@ -122,7 +123,11 @@ class CustomerDetailForm(forms.ModelForm):
                                         css_class="form-group"
                                     ),
                                     Div(
-                                        "account_password",
+                                        "account_password_1",
+                                        css_class="form-group"
+                                    ),
+                                    Div(
+                                        "account_password_2",
                                         css_class="form-group"
                                     ),
                                     css_class="py-2"
