@@ -411,7 +411,7 @@ class CustomerDetailCreationTest(TestCase):
         test_form = CustomerDetailForm(
             data=test_form_data
             )
-        
+            
         self.assertTrue(test_form.is_valid())
         self.client.get('/checkout/cart/add/1/1/')
         response = self.client.post('/checkout/checkout/', test_form_data)
@@ -667,9 +667,9 @@ class CustomerDetailCreationTest(TestCase):
             'postal_code_or_zip':'123456',
             'email':"johndoe@asd.com",
             'phone':"12345678",
-            'account_username':'',
-            'account_password_1':'',
-            'account_password_2':'',
+            'account_username':'asdasd',
+            'account_password_1':'Password123!',
+            'account_password_2':'Password123!',
             'alt_country':'',
             'alt_address_1':'', 
             'alt_address_2':'', 
@@ -691,10 +691,14 @@ class CustomerDetailCreationTest(TestCase):
             status_code=302,
             target_status_code=200
             ) 
+        self.assertTrue(
+            self.client.login(
+                username=test_form_data['account_username'],
+                password=test_form_data['account_password_1']
+                )
+            )
+        
         user = auth.get_user(self.client)
-        self.assertFalse(user.is_anonymous)
-        self.assertEqual(user.username,test_form_data['account_username'])
-        self.assertEqual(user.password,test_form_data['account_password'])
         self.assertEqual(user.first_name,test_form_data['first_name'])
         self.assertEqual(user.last_name,test_form_data['last_name'])
         self.assertEqual(user.email,test_form_data['email'])
