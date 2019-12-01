@@ -70,7 +70,7 @@ class CheckoutUrlGeneralTest(TestCase):
             target_status_code=200
             ) 
     
-class CheckoutCartViewFunctionTest(TestCase):
+class CheckoutCartUrlTest(TestCase):
     def testCanLoadViewCartPage(self):
         response = self.client.get('/checkout/cart/')
         self.assertEqual(response.status_code, 200)
@@ -378,14 +378,21 @@ class CheckoutCartClearFunctionTest(TestCase):
         self.assertEqual(user_cart['cart_subtotal'], user_cart['cart_total'])
         self.assertEqual(user_cart['coupon_applied'], 'no-coupon')
         self.assertEqual(user_cart['chargable_percentage'], 1)
-        
-class CustomerDetailCreationTest(TestCase):
+
+class CheckoutCartCheckoutUrlTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
-        create_test_product(ta.id)
-            
+        create_test_product(create_test_account().id)
+    
+    def testCanLoadCheckoutPage(self):
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.get('/checkout/checkout/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'checkout.html')
+    
+class CustomerDetailFormCreationTest(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
+                    
     def testValidCustomerDetailCreationSubmission(self):
         test_form_data = {
             'country':'AF',
@@ -702,3 +709,34 @@ class CustomerDetailCreationTest(TestCase):
         self.assertEqual(user.first_name,test_form_data['first_name'])
         self.assertEqual(user.last_name,test_form_data['last_name'])
         self.assertEqual(user.email,test_form_data['email'])
+        
+class CheckoutPaymentUrlTest(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
+        
+    def testCanLoadCheckoutPage(self):
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.get('/checkout/payment/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'payment.html')
+        
+class PaymentFormCreationTest(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
+    
+    def testValidPaymentFormCreationSubmission(self):
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':100.0
+        }
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertRedirects(
+            response,
+            '/shop/',
+            status_code=302,
+            target_status_code=200
+            )
