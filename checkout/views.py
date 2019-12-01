@@ -116,7 +116,6 @@ def checkout(request):
                         "custom_detail_form":dirty_custom_detail_form,
                         "create_account_intention":create_account_intention,
                     })
-                
 
 def payment(request):
     if request.session.get('user_cart'):
