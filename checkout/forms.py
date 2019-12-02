@@ -316,25 +316,25 @@ class PaymentForm(forms.Form):
     YEAR_CHOICES = [(i, i) for i in range(2019, 2039)]
     credit_card_number = forms.CharField(
         label='Credit Card Number',
-        required=False
+        required=True
     )
     cvc = forms.CharField(
         label='Security Code (cvc)',
-        required=False
+        required=True
     )
     expiry_month = forms.ChoiceField(
         label='Month',
         choices=MONTH_CHOICES,
-        required=False
+        required=True
     )
     expiry_year = forms.ChoiceField(
         label='Year',
         choices=YEAR_CHOICES,
-        required=False
+        required=True
     )
     payable_amount = forms.CharField(
         widget=forms.HiddenInput,
-        required=False
+        required=True
     )
     
     def __init__(self, *args, **kwargs):
@@ -381,31 +381,47 @@ class PaymentForm(forms.Form):
         )
     
     def clean_credit_card_number(self):
-        data = self.cleaned_data.get('credit_card_number')
-        if (len(data) < 14 or len(data) > 16) or not data.isdigit():
-            raise forms.ValidationError("Invalid Credit Card Number")
+        cc_number = self.cleaned_data.get('credit_card_number')
+        len_cc_number = len(cc_number)    
+        if(len_cc_number < 14 or len_cc_number > 16) or not cc_number.isdigit():
+            raise forms.ValidationError(
+                    "Invalid Credit Card Number",
+                    code='invalid_cc_number',
+                )
         
-        return data
+        return cc_number
         
     def clean_cvc(self):
-        data = self.cleaned_data.get('cvc')
-        if (len(data) != 3 and len(data) != 4) or not data.isdigit():
-            raise forms.ValidationError("Invalid CVC")
+        cvc = self.cleaned_data.get('cvc')
+        if (len(cvc) != 3 and len(cvc) != 4) or not cvc.isdigit():
+            raise forms.ValidationError(
+                    "Invalid CVC",
+                    code='invalid_cvc',
+                )
             
-        return data
-
+        return cvc
+    
+    def clean_expiry_month(self):
+        expiry_month = self.cleaned_data.get('expiry_month')
+        return int(expiry_month)
+    
+    def clean_expiry_year(self):
+        expiry_year = self.cleaned_data.get('expiry_year')
+        return int(expiry_year)
+            
     def clean(self):
         cleaned_data = super().clean()
         currentMonth = datetime.now().month
         currentYear = datetime.now().year
-        expiry_month = int(self.cleaned_data.get('expiry_month'))
-        expiry_year = int(self.cleaned_data.get('expiry_year'))
+        expiry_month = self.cleaned_data.get('expiry_month')
+        expiry_year = self.cleaned_data.get('expiry_year')
         
-        if currentYear == expiry_year:
-            if currentMonth > expiry_month:
-                self.add_error('expiry_month', "Invalid Expiry Month")
-        elif currentYear > expiry_year:
-            self.add_error('expiry_year', "Invalid Expiry Year")
+        if expiry_year:
+            if currentYear == expiry_year:
+                if currentMonth > expiry_month:
+                    self.add_error('expiry_month', "Invalid Expiry Month")
+            elif currentYear > expiry_year:
+                self.add_error('expiry_year', "Invalid Expiry Year")
         
         return cleaned_data
         
