@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django import forms
 from .forms import CustomerDetailForm,PaymentForm
 from products.models import Product
 from .models import Coupon,Order,Order_Product_Intermediary
@@ -174,42 +175,66 @@ def payment(request):
                     if error_code == 'card_declined':
                         dirty_payment_form.add_error(
                             'credit_card_number',
-                            'Card Declined'
+                            forms.ValidationError(
+                                ("Card Declined."),
+                                code='card_declined'
+                                )
                             )
                     elif error_code == 'expired_card':
                         dirty_payment_form.add_error(
                             'credit_card_number',
-                            'This card is expired'
+                            forms.ValidationError(
+                                ("This card is expired."),
+                                code='expired_card'
+                                )
                             )
                     elif error_code == 'incorrect_cvc':
                         dirty_payment_form.add_error(
                             'cvc',
-                            'Incorrect CVC'
+                            forms.ValidationError(
+                                ("Incorrect CVC."),
+                                code='incorrect_cvc'
+                                )
                             )
                     elif error_code == 'invalid_cvc':
                         dirty_payment_form.add_error(
                             'cvc',
-                            'Invalid CVC'
+                            forms.ValidationError(
+                                ("Invalid CVC."),
+                                code='invalid_cvc'
+                                )
                             )
                     elif error_code == 'incorrect_number':
                         dirty_payment_form.add_error(
                             'credit_card_number',
-                            'Incorrect Credit Card Number'
+                            forms.ValidationError(
+                                ("Incorrect Credit Card Number."),
+                                code='incorrect_number'
+                                )
                             )
                     elif error_code == 'invalid_number':
                         dirty_payment_form.add_error(
                             'credit_card_number',
-                            'Invalid Credit Card Number'
+                            forms.ValidationError(
+                                ("Invalid Credit Card Number."),
+                                code='invalid_number'
+                                )
                             )
                     elif error_code == 'invalid_expiry_month':
                         dirty_payment_form.add_error(
                             'expiry_month',
-                            'Invalid Expiry Month'
+                            forms.ValidationError(
+                                ("Invalid Expiry Month."),
+                                code='invalid_expiry_month'
+                                )
                             )
                     elif error_code == 'invalid_expiry_year':
                         dirty_payment_form.add_error(
                             'expiry_year',
-                            'Invalid Expiry Year'
+                            forms.ValidationError(
+                                ("Invalid Expiry Year."),
+                                code='invalid_expiry_year'
+                                )
                             )
                             
                     return render(
