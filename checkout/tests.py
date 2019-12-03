@@ -8,6 +8,12 @@ from django.contrib import auth
 # Checkout Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
+STRIPE_TESTCARD_DICTIONARY = {
+    "card_declined":"4000000000000002",
+    "expired_card":"4000000000000069",
+    "incorrect_cvc":"4000000000000127",
+    "incorrect_number":"4242424242424241",
+    }
 
 def create_test_account():
     ta = UserAccount(
@@ -841,3 +847,69 @@ class PaymentFormCreationTest(TestCase):
 class PaymentFormCreationTestStripeTesting(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/1/')
+
+    def testInvalidPaymentFormCreationCardDeclined(self):
+        test_form_data = {
+            'credit_card_number':STRIPE_TESTCARD_DICTIONARY['card_declined'],
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':100.0
+        }
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'credit_card_number',
+            'Card Declined.'
+            )
+            
+    def testInvalidPaymentFormCreationExpiredCard(self):
+        test_form_data = {
+            'credit_card_number':STRIPE_TESTCARD_DICTIONARY['expired_card'],
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':100.0
+        }
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'credit_card_number',
+            'This card is expired.'
+            )
+            
+    def testInvalidPaymentFormCreationIncorrectCVC(self):
+        test_form_data = {
+            'credit_card_number':STRIPE_TESTCARD_DICTIONARY['incorrect_cvc'],
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':100.0
+        }
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'cvc',
+            'Incorrect CVC.'
+            )
+            
+    def testInvalidPaymentFormCreationIncorrectCreditCardNumber(self):
+        test_form_data = {
+            'credit_card_number':STRIPE_TESTCARD_DICTIONARY['incorrect_number'],
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':100.0
+        }
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'credit_card_number',
+            'Incorrect Credit Card Number.'
+            )
+            
