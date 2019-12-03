@@ -382,9 +382,9 @@ class CheckoutCartClearFunctionTest(TestCase):
 class CheckoutCartCheckoutUrlTest(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/1/')
     
     def testCanLoadCheckoutPage(self):
-        self.client.get('/checkout/cart/add/1/1/')
         response = self.client.get('/checkout/checkout/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'checkout.html')
@@ -392,6 +392,7 @@ class CheckoutCartCheckoutUrlTest(TestCase):
 class CustomerDetailFormCreationTest(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/1/')
                     
     def testValidCustomerDetailCreationSubmission(self):
         test_form_data = {
@@ -420,7 +421,6 @@ class CustomerDetailFormCreationTest(TestCase):
             )
             
         self.assertTrue(test_form.is_valid())
-        self.client.get('/checkout/cart/add/1/1/')
         response = self.client.post('/checkout/checkout/', test_form_data)
         self.assertRedirects(
             response,
@@ -690,7 +690,6 @@ class CustomerDetailFormCreationTest(TestCase):
             )
         
         self.assertTrue(test_form.is_valid())
-        self.client.get('/checkout/cart/add/1/1/')
         response = self.client.post('/checkout/checkout/', test_form_data)
         self.assertRedirects(
             response,
@@ -713,9 +712,9 @@ class CustomerDetailFormCreationTest(TestCase):
 class CheckoutPaymentUrlTest(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/1/')
         
     def testCanLoadCheckoutPage(self):
-        self.client.get('/checkout/cart/add/1/1/')
         response = self.client.get('/checkout/payment/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'payment.html')
@@ -723,7 +722,8 @@ class CheckoutPaymentUrlTest(TestCase):
 class PaymentFormCreationTest(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
-    
+        self.client.get('/checkout/cart/add/1/1/')
+        
     def testValidPaymentFormCreationSubmission(self):
         test_form_data = {
             'credit_card_number':'4242424242424242',
@@ -732,7 +732,6 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2024',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertRedirects(
             response,
@@ -748,7 +747,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2024',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -764,7 +763,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2024',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -780,7 +779,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2024',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -796,7 +795,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_month':'1',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -813,7 +812,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2018',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -830,7 +829,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year':'2019',
             'payable_amount':100.0
         }
-        self.client.get('/checkout/cart/add/1/1/')
+        
         response = self.client.post('/checkout/payment/', test_form_data)
         self.assertFormError(
             response,
@@ -838,3 +837,7 @@ class PaymentFormCreationTest(TestCase):
             'expiry_month',
             'Invalid Expiry Month.'
             )
+            
+class PaymentFormCreationTestStripeTesting(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
