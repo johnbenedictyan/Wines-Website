@@ -646,7 +646,8 @@ class ProductFormUpdateTest(TestCase):
             password='password123'
             )
         
-    def ValidProductFormUpdateSubmission(self):
+    def testValidProductFormUpdateSubmission(self):
+        user = auth.get_user(self.client)
         test_form_data = {
             'name':"Generic Wine 2",
             'year':2015,
@@ -656,7 +657,9 @@ class ProductFormUpdateTest(TestCase):
             'product_picture':DEFAULT_IMAGE_UUID,
             'region':"FRANCE",
             'nodes':"Fruits",
-            'body':"Medium"
+            'body':"Medium",
+            'seller_id':user.id,
+            'views':0
         }
         
         response = self.client.post(
