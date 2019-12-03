@@ -804,3 +804,37 @@ class PaymentFormCreationTest(TestCase):
             'expiry_year',
             'This field is required.'
             )
+    
+    def testInvalidPaymentFormCreationSubmissionExpiredCardByYear(self):
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2018',
+            'payable_amount':100.0
+        }
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'expiry_year',
+            'Invalid Expiry Year.'
+            )
+            
+    def testInvalidPaymentFormCreationSubmissionExpiredCardByMonth(self):
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2019',
+            'payable_amount':100.0
+        }
+        self.client.get('/checkout/cart/add/1/1/')
+        response = self.client.post('/checkout/payment/', test_form_data)
+        self.assertFormError(
+            response,
+            'payment_form',
+            'expiry_month',
+            'Invalid Expiry Month.'
+            )
