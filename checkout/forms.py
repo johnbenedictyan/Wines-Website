@@ -313,7 +313,7 @@ class CustomerDetailForm(forms.ModelForm):
     
 class PaymentForm(forms.Form):
     MONTH_CHOICES = [(i, i) for i in range(1, 12)]
-    YEAR_CHOICES = [(i, i) for i in range(2019, 2039)]
+    YEAR_CHOICES = [(i, i) for i in range(2017, 2039)]
     credit_card_number = forms.CharField(
         label='Credit Card Number',
         required=True
@@ -419,9 +419,9 @@ class PaymentForm(forms.Form):
         if expiry_year:
             if currentYear == expiry_year:
                 if currentMonth > expiry_month:
-                    self.add_error('expiry_month', "Invalid Expiry Month")
+                    self.add_error('expiry_month', "Invalid Expiry Month.")
             elif currentYear > expiry_year:
-                self.add_error('expiry_year', "Invalid Expiry Year")
+                self.add_error('expiry_year', "Invalid Expiry Year.")
         
         return cleaned_data
         
