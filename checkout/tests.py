@@ -1,7 +1,7 @@
 from django.test import TestCase
 from users.models import UserAccount
 from products.models import Product
-from .models import Coupon
+from .models import Coupon,Order
 from datetime import timedelta,datetime
 from .forms import CustomerDetailForm
 from django.contrib import auth
@@ -25,6 +25,7 @@ def create_test_account():
         bio="Hi im a penguinrider",
         profile_picture=DEFAULT_IMAGE_UUID
         )
+    ta.set_password('password123')
     ta.save()
     return ta
 
@@ -54,9 +55,7 @@ def create_test_coupon():
     
 class CheckoutUrlGeneralTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_account()
         
     def testCanLoadOrdersPageWithLogin(self):
         self.client.login(
@@ -912,4 +911,30 @@ class PaymentFormCreationTestStripeTesting(TestCase):
             'credit_card_number',
             'Incorrect Credit Card Number.'
             )
-            
+   
+class OrderCreatorTest(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        self.client.get('/checkout/cart/add/1/50/')
+        
+    def testCanCreateOrder(self):
+        user = auth.get_user(self.client)
+        selected_product = Product.objects.get(pk=1)
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':2700.0
+        }
+        self.client.post('/checkout/payment/', test_form_data)
+        order_from_db = Order.objects.get(ordered_by=user)
+        self.assertTrue(order_from_db.payment_recieved)
+        self.assertEquals(
+            order_from_db.product_ordered.get(pk=1),
+            selected_product
+            )
