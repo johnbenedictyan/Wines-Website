@@ -129,7 +129,6 @@ class Order(models.Model):
     product_ordered = models.ManyToManyField(
         product,
         through='Order_Product_Intermediary',
-        related_name="orders"
     )
 
     def __str__(self):
