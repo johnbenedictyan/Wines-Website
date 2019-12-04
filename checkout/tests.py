@@ -915,13 +915,13 @@ class PaymentFormCreationTestStripeTesting(TestCase):
 class OrderCreatorTest(TestCase):
     def setUp(self):
         create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/50/')
+        
+    def testCanCreateOrder(self):
         self.client.login(
             username='penguinrider',
             password='password123'
             )
-        self.client.get('/checkout/cart/add/1/50/')
-        
-    def testCanCreateOrder(self):
         user = auth.get_user(self.client)
         selected_product = Product.objects.get(pk=1)
         test_form_data = {
@@ -946,3 +946,14 @@ class OrderCreatorTest(TestCase):
                 ),
             50
             )
+            
+    def testCannotCreateOrderAnoymousUser(self):
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':2700.0
+        }
+        self.client.post('/checkout/payment/', test_form_data)
+        self.assertEquals( Order.objects.all().count(),0)
