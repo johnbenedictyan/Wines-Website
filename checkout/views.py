@@ -18,30 +18,31 @@ stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 # This is a helper function which creates a new order
 def order_creator(user,charge_id,cart_items):
-    try:
-        new_order = Order(
-            ordered_by=user,
-            stripe_charge_token=charge_id,
-            time_of_purchase=datetime.now(),
-            payment_recieved=True
-            )
-        new_order.save()
-        for i in cart_items:
-            selected_product_id = i['product_number']
-            selected_product = Product.objects.get(
-                pk=selected_product_id
+    if user:
+        try:
+            new_order = Order(
+                ordered_by=user,
+                stripe_charge_token=charge_id,
+                time_of_purchase=datetime.now(),
+                payment_recieved=True
                 )
-            new_order.product_ordered.add(
-                selected_product,
-                through_defaults={
-                    'quantity': i['quantity']
-                    }
-                )
-        new_order.save()
-    except:
-        return False
-    else:
-        return True
+            new_order.save()
+            for i in cart_items:
+                selected_product_id = i['product_number']
+                selected_product = Product.objects.get(
+                    pk=selected_product_id
+                    )
+                new_order.product_ordered.add(
+                    selected_product,
+                    through_defaults={
+                        'quantity': i['quantity']
+                        }
+                    )
+            new_order.save()
+        except:
+            return False
+        else:
+            return True
 
 # This is a helper function which reduces the quantity of the purchased items
 def quantity_reducer(cart_items):
