@@ -16,6 +16,7 @@ def create_test_account():
         bio="Hi im a penguinrider",
         profile_picture=DEFAULT_IMAGE_UUID
         )
+    ta.set_password('password123')
     ta.save()
     return ta
 
@@ -85,15 +86,13 @@ class ProductTest(TestCase):
             )
         
     def testCanDeleteproduct(self):
-        ta = create_test_account()
-        test_product = create_test_product(ta.id)
+        test_product = create_test_product(create_test_account().id)
         Product.objects.filter(id=test_product.id).delete()
         tp_from_db = list(Product.objects.all().filter(pk=test_product.id))
         self.assertEquals(tp_from_db,[])
     
     def testCanUpdateproductDetails(self):
-        ta = create_test_account()
-        test_product = create_test_product(ta.id)
+        test_product = create_test_product(create_test_account().id)
         
         test_product.name="Generic Wine 2"
         test_product.description="A different kind of generic"
@@ -116,9 +115,7 @@ class ProductTest(TestCase):
     
 class ProductUrlGeneralTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_product(create_test_account().id)
         
     def testCanLoadInventoryPageWithLogin(self):
         self.client.login(
@@ -144,14 +141,12 @@ class ProductUrlGeneralTest(TestCase):
         self.assertTemplateUsed(response, 'shop.html')
     
     def testCanLoadShopSinglePage(self):
-        ta = UserAccount.objects.get(pk=1)
-        create_test_product(ta.id)
         response = self.client.get('/shop/products/1/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'shop-single.html')
         
     def testCannotLoadNonExistentShopSinglePage(self):
-        response = self.client.get('/shop/products/1/')
+        response = self.client.get('/shop/products/999/')
         self.assertRedirects(
             response,
             '/shop/',
@@ -166,9 +161,7 @@ class ProductUrlGeneralTest(TestCase):
         
 class ProductUrlCreationTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_account()
         
     def testCanLoadProductCreationPage(self):
         self.client.login(
@@ -190,9 +183,7 @@ class ProductUrlCreationTest(TestCase):
             
 class ProductUrlUpdateTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_product(create_test_account().id)
         ta_2 = UserAccount(
             username="penguinrider2",
             password="password123",
@@ -204,7 +195,6 @@ class ProductUrlUpdateTest(TestCase):
             )
         ta_2.set_password('password123')
         ta_2.save()
-        create_test_product(ta.id)
         
     def testCannotLoadProductUpdatePageWithoutLogin(self):
         response = self.client.get('/shop/products/update/1/')
@@ -243,9 +233,7 @@ class ProductUrlUpdateTest(TestCase):
             
 class ProductUrlDeleteTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_product(create_test_account().id)
         ta_2 = UserAccount(
             username="penguinrider2",
             password="password123",
@@ -257,7 +245,6 @@ class ProductUrlDeleteTest(TestCase):
             )
         ta_2.set_password('password123')
         ta_2.save()
-        create_test_product(ta.id)
         
     def testCannotLoadProductDeletePageWithoutLogin(self):
         response = self.client.get('/shop/products/delete/1/')
@@ -311,9 +298,7 @@ class ProductUrlDeleteTest(TestCase):
     
 class ProductFormCreationTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
+        create_test_account()
         self.client.login(
             username='penguinrider',
             password='password123'
@@ -636,11 +621,7 @@ class ProductFormCreationTest(TestCase):
             
 class ProductFormUpdateTest(TestCase):
     def setUp(self):
-        ta = create_test_account()
-        ta.set_password('password123')
-        ta.save()
-        create_test_product(ta.id)
-        
+        create_test_product(create_test_account().id)
         self.client.login(
             username='penguinrider',
             password='password123'
