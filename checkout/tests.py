@@ -938,3 +938,11 @@ class OrderCreatorTest(TestCase):
             order_from_db.product_ordered.get(pk=1),
             selected_product
             )
+        self.assertEquals(
+            int(
+                selected_product.order_product_intermediary_set.get(
+                    order=order_from_db
+                    ).quantity
+                ),
+            50
+            )
