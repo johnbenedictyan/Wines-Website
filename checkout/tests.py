@@ -957,3 +957,25 @@ class OrderCreatorTest(TestCase):
         }
         self.client.post('/checkout/payment/', test_form_data)
         self.assertEquals( Order.objects.all().count(),0)
+        
+class QuantityReducerTest(TestCase):
+    def setUp(self):
+        create_test_product(create_test_account().id)
+        self.client.get('/checkout/cart/add/1/50/')
+        
+    def testCanReduceQuantity(self):
+        self.client.login(
+            username='penguinrider',
+            password='password123'
+            )
+        test_form_data = {
+            'credit_card_number':'4242424242424242',
+            'cvc':'123',
+            'expiry_month':'1',
+            'expiry_year':'2024',
+            'payable_amount':2700.0
+        }
+        self.client.post('/checkout/payment/', test_form_data)
+        selected_product = Product.objects.get(pk=1)
+        self.assertEquals(selected_product.quantity_in_stock,50)
+            
