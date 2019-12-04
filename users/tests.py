@@ -6,7 +6,7 @@ from django.contrib import auth
 # Users Test Cases
 # Create your tests here.
 DEFAULT_IMAGE_UUID = "0662e7f0-e44d-4f4b-8482-715f396f5fb0"
-def create_account():
+def create_test_account():
     ta = UserAccount(
         username="penguinrider",
         password="password123",
@@ -16,6 +16,7 @@ def create_account():
         bio="Hi im a penguinrider",
         profile_picture=DEFAULT_IMAGE_UUID
         )
+    ta.set_password('password123')
     ta.save()
     return ta
         
@@ -41,7 +42,7 @@ class UserAccountTest(TestCase):
         self.assertEquals(ta.bio,ta_from_db.bio)
         
     def testCanUpdateAccountDetails(self):
-        ta = create_account()
+        ta = create_test_account()
         
         ta.username="penguinrider123"
         ta.password="password12345"
@@ -54,7 +55,7 @@ class UserAccountTest(TestCase):
         self.assertEquals(ta_from_db.email,"qwe@qwe.com")
         
     def testCanDeleteAccount(self):
-        ta = create_account()
+        ta = create_test_account()
         
         UserAccount.objects.filter(id=ta.id).delete()
         ta_from_db=list(UserAccount.objects.all().filter(pk=ta.id))
@@ -62,10 +63,7 @@ class UserAccountTest(TestCase):
         
 class UserAccountUrlTest(TestCase):
     def setUp(self):
-        ta = create_account()
-        ta.set_password('password123')
-        ta.save()
-        self.user = ta
+        create_test_account()
         
     def testCanRedirectToLoginUrlForLoginRequiredPages(self):
         response = self.client.get('/users/')
@@ -107,10 +105,7 @@ class UserAccountUrlTest(TestCase):
         
 class UserAccountLoginFormTest(TestCase):
     def setUp(self):
-        ta = create_account()
-        ta.set_password('password123')
-        ta.save()
-        self.user = ta
+        create_test_account()
         
     def testValidLogin(self):
         test_form_data = {
