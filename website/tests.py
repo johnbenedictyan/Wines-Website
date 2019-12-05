@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .forms import ContactForm
+from .models import Contact
 # Website Test Cases
 # Create your tests here.
 class WebsiteURLTest(TestCase):
@@ -36,6 +37,34 @@ class WebsiteFormTest(TestCase):
             data=test_form_data
             )
         self.assertTrue(test_form.is_valid())
+        response = self.client.post('/contact-us/', test_form_data)
+        self.assertRedirects(
+            response,
+            '/',
+            status_code=302,
+            target_status_code=200
+            )
+        contact_from_db = Contact.objects.get(pk=1)
+        self.assertEqual(
+            contact_from_db.first_name,
+            test_form_data['first_name']
+            )
+        self.assertEqual(
+            contact_from_db.last_name,
+            test_form_data['last_name']
+            )
+        self.assertEqual(
+            contact_from_db.phone_number,
+            test_form_data['phone_number']
+            )
+        self.assertEqual(
+            contact_from_db.email_address,
+            test_form_data['email_address']
+            )
+        self.assertEqual(
+            contact_from_db.message,
+            test_form_data['message']
+            )
     
     def testMissingFirstNameErrorMessage(self):
         test_form_data = {
