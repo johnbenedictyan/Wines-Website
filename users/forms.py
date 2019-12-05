@@ -9,12 +9,12 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-                                required=True
-                                )
+        required=True
+        )
     password = forms.CharField(
-                                required=True,
-                                widget=forms.PasswordInput
-                                )
+        required=True,
+        widget=forms.PasswordInput
+        )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -179,5 +179,3 @@ class RegisterForm(UserCreationForm):
         
             return UserAccount
             
-            
-           
