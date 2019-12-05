@@ -145,14 +145,13 @@ class CheckoutCartEditFunctionTest(TestCase):
             views=0
             )
         tp.save()
+        create_test_coupon()
         
     def testCanEditItemInCart(self):
         tp_1 = Product.objects.get(pk=1)
         tp_2 = Product.objects.get(pk=2)
         self.client.get('/checkout/cart/add/1/1/')
         self.client.get('/checkout/cart/add/2/1/')
-        
-        user_cart = self.client.session['user_cart']
         
         test_form_data = {
             'product-number': ['1', '2'],
@@ -279,7 +278,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         self.assertEqual(user_cart['chargable_percentage'], 1)
         
     def testCanApplyValidCouponCode(self):
-        create_test_coupon()
         test_form_data = {
             'coupon_code': 'testcoupon'
         }
@@ -295,7 +293,6 @@ class CheckoutCartEditFunctionTest(TestCase):
         )
         
     def testCannotApplyInvalidCouponCode(self):
-        create_test_coupon()
         test_form_data = {
             'coupon_code': 'testcoupon2'
         }
@@ -310,6 +307,30 @@ class CheckoutCartEditFunctionTest(TestCase):
             }
         )
         
+    def testCanDisplayCorrectAmountAfterCouponApplied(self):
+        response = self.client.get('/checkout/cart/add/1/1/')
+        test_form_data = {
+            'product-number': ['1'],
+            'item-quantity': ['3'],
+            'coupon-applied': ['testcoupon'],
+            'chargable-percentage': ['0.9']
+        }
+        
+        response = self.client.post('/checkout/cart/edit/', test_form_data)
+        
+        self.assertRedirects(
+            response,
+            '/checkout/cart/',
+            status_code=302,
+            target_status_code=200
+            )    
+            
+        user_cart = self.client.session['user_cart']
+        self.assertEqual(user_cart['cart_subtotal'], 161.97)
+        self.assertEqual(user_cart['cart_total'], 145.773)
+        self.assertEqual(user_cart['coupon_applied'], 'testcoupon')
+        self.assertEqual(user_cart['chargable_percentage'], '0.9')
+    
 class CheckoutCartDeleteFunctionTest(TestCase):
     def setUp(self):
         ta = create_test_account()
@@ -934,11 +955,11 @@ class OrderCreatorTest(TestCase):
         self.client.post('/checkout/payment/', test_form_data)
         order_from_db = Order.objects.get(ordered_by=user)
         self.assertTrue(order_from_db.payment_recieved)
-        self.assertEquals(
+        self.assertEqual(
             order_from_db.product_ordered.get(pk=1),
             selected_product
             )
-        self.assertEquals(
+        self.assertEqual(
             int(
                 selected_product.order_product_intermediary_set.get(
                     order=order_from_db
@@ -956,7 +977,7 @@ class OrderCreatorTest(TestCase):
             'payable_amount':2700.0
         }
         self.client.post('/checkout/payment/', test_form_data)
-        self.assertEquals( Order.objects.all().count(),0)
+        self.assertEqual( Order.objects.all().count(),0)
         
 class QuantityReducerTest(TestCase):
     def setUp(self):
@@ -977,7 +998,7 @@ class QuantityReducerTest(TestCase):
         }
         self.client.post('/checkout/payment/', test_form_data)
         selected_product = Product.objects.get(pk=1)
-        self.assertEquals(selected_product.quantity_in_stock,50)
+        self.assertEqual(selected_product.quantity_in_stock,50)
             
     def testCannotReduceQuantityCartItemsNeverAdded(self):
         self.client.login(
