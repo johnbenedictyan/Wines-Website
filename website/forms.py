@@ -1,8 +1,9 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
+from .models import Contact
 
-class ContactForm(forms.Form):
+class ContactForm(forms.ModelForm):
     first_name = forms.CharField(
         required=True,
         max_length = 255
@@ -22,6 +23,10 @@ class ContactForm(forms.Form):
         required=True
     )
     
+    class Meta:
+        model = Contact
+        fields = '__all__'
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
