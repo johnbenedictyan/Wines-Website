@@ -179,3 +179,61 @@ class RegisterForm(UserCreationForm):
         
             return UserAccount
             
+class AccountDetailForm(RegisterForm):
+    
+    class Meta(RegisterForm.Meta):
+        exclude = ('first_name','last_name',)
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'New Username'
+        self.fields['email'].label = 'New Email'
+        self.fields['password1'].label = 'New Password'
+        self.fields['password2'].label = 'Confirm Password'
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column(
+                    'profile_picture', 
+                    css_class='form-group col-md-6'
+                ),
+                Column(
+                    'username', 
+                    css_class='form-group col-md-6'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    'email', 
+                    css_class='form-group col-md-6'
+                ),
+                Column(
+                    'seller', 
+                    css_class='form-group col-md-6'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    'password1', 
+                    css_class='form-group col-md-6'
+                ),
+                Column(
+                    'password2', 
+                    css_class='form-group col-md-6'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    Submit(
+                        'submit', 
+                        'Update', 
+                        css_class="btn btn-primary w-50"
+                    ),
+                    css_class='form-group col-12 text-center'
+                ),
+                css_class='form-row'
+            ),
+        )
