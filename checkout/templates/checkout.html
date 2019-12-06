@@ -4,6 +4,25 @@
     <div class="site-section">
       <div class="container">
         <div class="row mb-5">
+          <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button> {{ message }}
+                </div>
+                {% endfor %} {% if custom_detail_form.errors %} {% for field in custom_detail_form %} {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %} {% endfor %} {% for error in custom_detail_form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+        </div>
           <div class="col-md-12">
             <div class="bg-light rounded p-3">
               <p class="mb-0">Returning customer? <a href="#" class="d-inline-block">Click here</a> to login</p>
