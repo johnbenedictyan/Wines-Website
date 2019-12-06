@@ -1,4 +1,30 @@
-{% extends "layout.html" %} {% load static %} {% block main_content_section %}
+{% extends "layout.html" %} {% load static %}
+{% block messages_section %} 
+{% if messages %}
+<div class="site-section message-wrapper">
+    <div class="container">
+        <div class="row mx-5">
+            <div class="col">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="message-wrapper-close-btn">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h4 class="text-primary">Messages</h4>
+            </div>
+        </div>
+        <div class="row mx-5">
+            {% for message in messages %}
+            <div class="col">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block main_content_section %}
 <div class="site-section mt-5">
     <div class="container">
 

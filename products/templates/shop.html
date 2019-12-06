@@ -1,4 +1,26 @@
-{% extends "layout.html" %} {% load static %} {% block products_section %}
+{% extends "layout.html" %} {% load static %} {% block messages_section %} {% if messages %}
+<div class="site-section message-wrapper">
+  <div class="container">
+    <div class="row mx-5">
+      <div class="col">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="message-wrapper-close-btn">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+        <h4 class="text-primary">Messages</h4>
+      </div>
+    </div>
+    <div class="row mx-5">
+      {% for message in messages %}
+      <div class="col">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+          {{ message }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %}{% block products_section %}
 <div class="site-section mt-5">
   <div class="container">
 
@@ -130,65 +152,64 @@
     </div>
   </div>
 </div>
-{% endblock %}
-{% block js_scripts_section %}
+{% endblock %} {% block js_scripts_section %}
 <script type="text/javascript">
   function toTitleCase(str) {
-          return str.replace(
-              /\w\S*/g,
-              function(txt) {
-                  return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-              }
-          );
+    return str.replace(
+      /\w\S*/g,
+      function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       }
-      
-  function filter_helper_function(){
+    );
+  }
+
+  function filter_helper_function() {
     let body_value = $("#bodySelectionType").val();
     let region_value = $("#regionSelectionType").val();
     let nodes_value = $("#nodesSelectionType").val();
     let input_array = [
-        body_value,
-        region_value,
-        nodes_value
-        ];
-      for(i=0;i<input_array.length;i++){
-        if(input_array[i]!="Any"){
-          let filter_choice = input_array[i]
-          console.log(filter_choice)
-          $(`.product-subcat:contains(${filter_choice})`).each(function(){
-            $(this).closest(".product-wrapper").show(400);
-          });
-        }
-      }
-    }
-  
-  function name_search_helper_function(){
-    let search_terms = toTitleCase($("#search_terms").val());
-      if(search_terms != ""){
-        $(`.product-name:contains(${search_terms})`).each(function(){
+      body_value,
+      region_value,
+      nodes_value
+    ];
+    for (i = 0; i < input_array.length; i++) {
+      if (input_array[i] != "Any") {
+        let filter_choice = input_array[i]
+        console.log(filter_choice)
+        $(`.product-subcat:contains(${filter_choice})`).each(function() {
           $(this).closest(".product-wrapper").show(400);
         });
       }
+    }
   }
-  
-  $(function(){
-    $(".product-search-button").click(function(){
+
+  function name_search_helper_function() {
+    let search_terms = toTitleCase($("#search_terms").val());
+    if (search_terms != "") {
+      $(`.product-name:contains(${search_terms})`).each(function() {
+        $(this).closest(".product-wrapper").show(400);
+      });
+    }
+  }
+
+  $(function() {
+    $(".product-search-button").click(function() {
       $(".product-wrapper").hide();
       name_search_helper_function()
       filter_helper_function();
     });
-    
-    $(".reset-button").click(function(){
+
+    $(".reset-button").click(function() {
       $(".product-wrapper").show(400);
       $("#search_terms").val('')
     });
-    
-    $("#bodySelectionType,#regionSelectionType,#nodesSelectionType").change(function(){
+
+    $("#bodySelectionType,#regionSelectionType,#nodesSelectionType").change(function() {
       $(".product-wrapper").hide();
       filter_helper_function();
       name_search_helper_function();
     });
-    
+
   });
 </script>
 {% endblock %}

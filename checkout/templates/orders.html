@@ -1,4 +1,26 @@
-{% extends "layout.html" %} {% load static %} {% block main_content_section %}
+{% extends "layout.html" %} {% load static %} {% block messages_section %} {% if messages %}
+<div class="site-section message-wrapper">
+    <div class="container">
+        <div class="row mx-5">
+            <div class="col">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="message-wrapper-close-btn">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="text-primary">Messages</h4>
+            </div>
+        </div>
+        <div class="row mx-5">
+            {% for message in messages %}
+            <div class="col">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %} {% endblock %}{% block main_content_section %}
 <div class="site-section mt-5">
     <div class="container">
 
@@ -36,45 +58,43 @@
                 </div>
                 <hr/>
                 <div class="row">
-                    {% for product in order.product_ordered.all %}
-                        {% for i in product.order_product_intermediary_set.all %}
-                            <div class="col col-md-4">
-                                <div class="card">
-                                    <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h4 class="card-title text-center">{{product.name|title}}</h4>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <h5 class="text-center">Price</h5>
-                                            </div>
-                                            <div class="col">
-                                                <h5 class="text-center"><span class="badge badge-primary">{{product.price}}</span></h5>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <h5 class="text-center">Quantity</h5>
-                                            </div>
-                                            <div class="col">
-                                                <h5 class="text-center"><span class="badge badge-primary">{{i.quantity}}</span></h5>
-                                            </div>
-                                        </div>
+                    {% for product in order.product_ordered.all %} {% for i in product.order_product_intermediary_set.all %}
+                    <div class="col col-md-4">
+                        <div class="card">
+                            <img src="{{ product.product_picture.cdn_url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="card-title text-center">{{product.name|title}}</h4>
                                     </div>
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col">
-                                                <a href="{% url 'add_to_cart' product.id 1 %}" class="btn add"><span class="icon-shopping-bag mr-3"></span>Add to Cart</a>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Price</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{product.price}}</span></h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-center">Quantity</h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="text-center"><span class="badge badge-primary">{{i.quantity}}</span></h5>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endfor %}
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{% url 'add_to_cart' product.id 1 %}" class="btn add"><span class="icon-shopping-bag mr-3"></span>Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %} {% endfor %}
                 </div>
             </div>
         </div>
