@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .models import UserAccount
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
-from .forms import RegisterForm,LoginForm
+from .forms import RegisterForm,LoginForm,AccountDetailForm
 from django.contrib import auth, messages
 from project4 import settings
 
@@ -10,27 +10,27 @@ from project4 import settings
 def account_details(request):
     current_user = UserAccount.objects.all().get(pk=request.user.id)
     if request.method=="GET":
-        account_details_form = RegisterForm(instance=current_user)
+        account_details_form = AccountDetailForm(instance=current_user)
         return render(request,"account.html",{
             "current_user":current_user,
             "account_details_form":account_details_form
         })
     else:
-        dirty_account_details_form = RegisterForm(
-                                                request.POST,
-                                                instance=current_user
-                                                )
+        dirty_account_details_form = AccountDetailForm(
+            request.POST,
+            instance=current_user
+            )
         if dirty_account_details_form.is_valid():
             dirty_account_details_form.save()
             messages.success(
-                            request,
-                            "Your user details has been successfully updated!"
-                            )
+                request,
+                "Your user details has been successfully updated!"
+                )
             return redirect(settings.HOME_URL)
         else:
             return render(
                 request,
-                "listing-editor.html",
+                "account.html",
                 {
                     "account_details_form":dirty_account_details_form
                     }
