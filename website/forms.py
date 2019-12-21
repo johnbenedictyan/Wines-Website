@@ -1,26 +1,15 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
-from .models import Contact
+from .models import Contact,Blog
 
 class ContactForm(forms.ModelForm):
-    first_name = forms.CharField(
-        required=True,
-        max_length = 255
-    )
-    last_name = forms.CharField(
-        required=True,
-        max_length = 255
-    )
-    phone_number = forms.IntegerField(
-        required=True
-    )
-    email_address = forms.EmailField(
-        required=True
-    )
     message = forms.CharField(
-        widget=forms.Textarea(attrs={'rows':10, 'cols':30}),
-        required=True
+        widget=forms.Textarea(
+            attrs={
+                'rows':10,
+                'cols':30
+            })
     )
     
     class Meta:
@@ -65,6 +54,50 @@ class ContactForm(forms.ModelForm):
                     Submit(
                         'submit', 
                         'Send Message', 
+                        css_class="btn btn-primary py-3 px-5"
+                    ),
+                    css_class='col-12'
+                ),
+                css_class='form-row'
+            ),
+        )
+        
+class BlogCreatorFrom(forms.ModelForm):
+    body = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows':10,
+                'cols':30
+            })
+    )
+    
+    class Meta:
+        model = Blog
+        fields = '__all__'
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column(
+                    'headline',
+                    css_class='form-group'
+                ),
+                css_class='form-row mb-2'
+            ),
+            Row(
+                Column(
+                    'message', 
+                    css_class='form-group col-12'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    Submit(
+                        'submit', 
+                        'Submit Blog', 
                         css_class="btn btn-primary py-3 px-5"
                     ),
                     css_class='col-12'
