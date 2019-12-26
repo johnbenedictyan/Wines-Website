@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from project4 import settings
-from .forms import ContactForm
+from .forms import ContactForm,BlogCreatorFrom
+from .models import Blog as blog
 from products.models import Product
 
 # Create your views here.
@@ -49,9 +50,59 @@ def contact_us(request):
                 {
                     'contact_form':dirty_contact_form
                 })
-        
-        
-        
+
+def blog_creator(request):
+    if request.method == "GET":
+        blog_form = BlogCreatorFrom()
+        return render(
+            request,
+            "blog-creator.html",
+            {
+                "blog_form":blog_form
+            })
+    else:
+        dirty_blog_form = BlogCreatorFrom(request.POST)
+        if dirty_blog_form.is_valid():
+            dirty_blog_form.save()
+            return redirect(bloghub)
+        else:
+            messages.error(
+                request,
+                "We were unable to create this blog."
+                )
+            return render(
+                request,
+                "blog-creator.html",
+                {
+                    "blog_form":dirty_blog_form
+                })
+
+def bloghub(request):
+    all_blogs = blog.objects.all()
+    return render(
+        request,
+        "bloghub.html",
+        {
+            "all_blogs":all_blogs
+        })
+
+def single_blog(request,blog_number):
+    try:
+        single_blog = blog.objects.get(pk=blog_number)
+    except blog.DoesNotExist:
+        messages.error(
+                request,
+                "This blog does not exist."
+                )
+        return redirect(bloghub)
+    else:
+        return render(
+            request,
+            "blog.html",
+            {
+                "blog":single_blog
+            })
+
 def csrf_failure(request, reason=""):
     messages.error(
                 request,
