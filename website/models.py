@@ -28,7 +28,7 @@ class Blog(models.Model):
     body = models.TextField(
         blank=False
         )
-    writer = models.ForeignKey(
-        user,
-        on_delete=models.CASCADE
+    writer = models.CharField(
+        blank=False,
+        max_length=50
         )
