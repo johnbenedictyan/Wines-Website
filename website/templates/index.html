@@ -118,7 +118,7 @@
             </blockquote>
             <blockquote class="testimony">
                 <img src="{% static 'images/person_2.jpg' %}" alt="Image">
-                <p>&ldquoNothing short of spectacular!&rdquo;</p>
+                <p>&ldquo;Nothing short of spectacular!&rdquo;</p>
                 <p class="small text-primary">&mdash; Harley Perkins</p>
             </blockquote>
             <blockquote class="testimony">
@@ -138,43 +138,11 @@
 {% endblock %} {% block blogs_section %}
 <div class="site-section bg-light">
     <div class="container">
-        <div class="row mb-5">
-            <div class="col-12 section-title text-center mb-5">
+        <div class="row mb-2">
+            <div class="col-12 section-title text-center mb-0">
                 <h2 class="d-block">Wine's Blog</h2>
                 <p>New articles everyday</p>
-                <p><a href="#">View All Products <span class="icon-long-arrow-right"></span></a></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 mb-4 mb-lg-0 col-md-6">
-                <div class="post-entry-1">
-                    <a href="post-single.html"><img src="{% static 'images/img_1.jpg' %}" alt="Image" class="img-fluid"></a>
-                    <h2><a href="blog-single.html">What You Need To Know About Premium Rosecco</a></h2>
-                    <p>All about the hottest new bottle hitting the shelves.</p>
-                    <div class="post-meta">
-                        <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4 mb-lg-0 col-md-6">
-                <div class="post-entry-1">
-                    <a href="post-single.html"><img src="{% static 'images/img_2.jpg' %}" alt="Image" class="img-fluid"></a>
-                    <h2><a href="blog-single.html">How to keep your wine tasting fresh.</a></h2>
-                    <p>Tips and Tricks on how to store your wine.</p>
-                    <div class="post-meta">
-                        <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4 mb-lg-0 col-md-6">
-                <div class="post-entry-1">
-                    <a href="post-single.html"><img src="{% static 'images/img_3.jpg' %}" alt="Image" class="img-fluid"></a>
-                    <h2><a href="blog-single.html">Drought in Italy</a></h2>
-                    <p>Could this spell disaster for the next batch of Italian wine?</p>
-                    <div class="post-meta">
-                        <span class="d-block"><a href="#">Dave Rogers</a> in <a href="#">News</a></span>
-                    </div>
-                </div>
+                <p><a href="{% url 'bloghub' %}">View All Blogs <span class="icon-long-arrow-right"></span></a></p>
             </div>
         </div>
     </div>
