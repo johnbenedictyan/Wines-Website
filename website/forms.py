@@ -87,7 +87,7 @@ class BlogCreatorFrom(forms.ModelForm):
             Row(
                 Column(
                     'headline',
-                    css_class='form-group'
+                    css_class='form-group col-6'
                 ),
                 css_class='form-row mb-2'
             ),
