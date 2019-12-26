@@ -4,6 +4,7 @@ from project4 import settings
 from .forms import ContactForm,BlogCreatorFrom
 from .models import Blog as blog
 from products.models import Product
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def main_page(request):
@@ -51,6 +52,7 @@ def contact_us(request):
                     'contact_form':dirty_contact_form
                 })
 
+@login_required
 def blog_creator(request):
     if request.method == "GET":
         blog_form = BlogCreatorFrom()
