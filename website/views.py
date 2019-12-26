@@ -54,6 +54,7 @@ def contact_us(request):
 def blog_creator(request):
     if request.method == "GET":
         blog_form = BlogCreatorFrom()
+        blog_form.fields["writer"].initial = request.user.username
         return render(
             request,
             "blog-creator.html",
