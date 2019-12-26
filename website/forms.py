@@ -70,6 +70,10 @@ class BlogCreatorFrom(forms.ModelForm):
                 'cols':30
             })
     )
+    writer = forms.CharField(
+        widget = forms.HiddenInput(
+            )
+        )
     
     class Meta:
         model = Blog
@@ -90,6 +94,13 @@ class BlogCreatorFrom(forms.ModelForm):
             Row(
                 Column(
                     'body', 
+                    css_class='form-group col-12'
+                ),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    'writer', 
                     css_class='form-group col-12'
                 ),
                 css_class='form-row'
