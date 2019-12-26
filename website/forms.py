@@ -89,7 +89,7 @@ class BlogCreatorFrom(forms.ModelForm):
             ),
             Row(
                 Column(
-                    'message', 
+                    'body', 
                     css_class='form-group col-12'
                 ),
                 css_class='form-row'
