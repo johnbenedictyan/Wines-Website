@@ -130,8 +130,12 @@
               <span class="icon-star"></span>
               <span class="icon-star-o"></span>
             </div>
-
+            
+            {% if product.quantity_in_stock > 0 %}
             <a href="{% url 'add_to_cart' product.id 1 %}" class="btn add"><span class="icon-shopping-bag mr-3"></span> Add to Cart</a>
+            {% else %}
+            <a href="{% url 'individual_product' product.id %}" class="btn sold-out-btn">Sold Out</a>
+            {% endif %}
           </div>
         </div>
 
