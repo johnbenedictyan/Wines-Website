@@ -7,7 +7,7 @@
         <h2 class="d-block">Blogs</h2>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-5">
         {% for blog in all_blogs %}
         <div class="col-lg-4 mb-4 mb-lg-0 col-md-6">
             <div class="post-entry-1">
@@ -19,6 +19,11 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <a href="{% url 'blog_creator' %}" class="btn btn-primary"></span>Create New Blog</a>
+      </div>
     </div>
   </div>
 </div>
