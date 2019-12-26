@@ -1,5 +1,5 @@
 from django.db import models
-
+from users.models import UserAccount as user
 # Create your models here.
 class Contact(models.Model):
     first_name = models.CharField(
@@ -27,4 +27,8 @@ class Blog(models.Model):
         )
     body = models.TextField(
         blank=False
+        )
+    writer = models.ForeignKey(
+        user,
+        on_delete=models.CASCADE
         )
