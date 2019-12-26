@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% load static %}
+{% block main_content_section %}
+<div class="site-section bg-light">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 section-title text-center mb-5">
+        <h2 class="d-block">Blogs</h2>
+      </div>
+    </div>
+    <div class="row">
+        {% for blog in all_blogs %}
+        <div class="col-lg-4 mb-4 mb-lg-0 col-md-6">
+            <div class="post-entry-1">
+                <h2><a href="{% url 'single_blog' blog.id %}">{{blog.title|title}}</a></h2>
+                <p>{{blog.body|truncate(20)}}</p>
+            </div>
+            <div class="post-meta">
+                <span class="d-block">Dave Rogers</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
