@@ -9,11 +9,11 @@
                 <span aria-hidden="true">&times;</span>
                 </button> {{ message }}
                 </div>
-                {% endfor %} {% if registration_form.errors %} {% for field in registration_form %} {% for error in field.errors %}
+                {% endfor %} {% if blog_form.errors %} {% for field in blog_form %} {% for error in field.errors %}
                 <div class="alert alert-danger">
                     <strong>{{ error|escape }}</strong>
                 </div>
-                {% endfor %} {% endfor %} {% for error in registration_form.non_field_errors %}
+                {% endfor %} {% endfor %} {% for error in blog_form.non_field_errors %}
                 <div class="alert alert-danger">
                     <strong>{{ error|escape }}</strong>
                 </div>
@@ -28,7 +28,7 @@
                     <h2>Account Registration</h2>
                 </div>
                 <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %} {% crispy registration_form %}
+                    {% csrf_token %} {% crispy blog_form %}
                 </form>
             </div>
 
