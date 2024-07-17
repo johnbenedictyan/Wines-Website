@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include,path,re_path
-from django.conf import settings 
-from django.conf.urls.static import static 
+from django.urls import include, path, re_path
+from django.conf import settings
+from django.conf.urls.static import static
 from checkout.urls import urlpatterns as checkout_urls
 from products.urls import urlpatterns as products_urls
 from users.urls import urlpatterns as users_urls
@@ -31,14 +31,14 @@ urlpatterns = [
     re_path(r'^', include(website_urls)),
 ]
 
-if settings.DEBUG: # new
+if settings.DEBUG:  # new
     urlpatterns += static(
-        settings.STATIC_URL, 
+        settings.STATIC_URL,
         document_root=settings.STATIC_ROOT
     )
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
-    
+
 handler404 = handler404_view_function

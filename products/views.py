@@ -1,42 +1,47 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ProductForm
 from .models import Product
+
 
 def view_adder(product_number):
     selected_product = Product.objects.get(pk=product_number)
     selected_product.views += 1
     selected_product.save()
     return True
-    
+
 # Create your views here.
+
+
 def shop(request):
     all_products = Product.objects.all()
     return render(
         request,
         "shop.html",
         {
-            "all_products":all_products
+            "all_products": all_products
         })
+
 
 def wine_collection(request):
     best_sellers = None
-    return render (
+    return render(
         request,
         "wine-collection.html",
         {
-            "best_sellers":best_sellers
+            "best_sellers": best_sellers
         })
-        
-def individual_product(request,product_number):
+
+
+def individual_product(request, product_number):
     try:
         single_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
         messages.error(
-                request,
-                "This product does not exist."
-                )
+            request,
+            "This product does not exist."
+        )
         return redirect(shop)
     else:
         view_adder(product_number)
@@ -44,8 +49,9 @@ def individual_product(request,product_number):
             request,
             "shop-single.html",
             {
-                "product":single_product
+                "product": single_product
             })
+
 
 @login_required
 def inventory(request):
@@ -56,11 +62,12 @@ def inventory(request):
         request,
         "inventory.html",
         {
-            "all_products":all_products,
-            "number_of_products_found":number_of_products_found
+            "all_products": all_products,
+            "number_of_products_found": number_of_products_found
         })
 
-@login_required        
+
+@login_required
 def product_creator(request):
     if request.method == "GET":
         product_form = ProductForm()
@@ -71,7 +78,7 @@ def product_creator(request):
             request,
             "product-form.html",
             {
-                "product_form":product_form
+                "product_form": product_form
             })
     else:
         dirty_product_form = ProductForm(request.POST)
@@ -82,24 +89,25 @@ def product_creator(request):
             messages.error(
                 request,
                 "We were unable to create a listing for this product."
-                )
+            )
             return render(
                 request,
                 "product-form.html",
                 {
-                    "product_form":dirty_product_form
+                    "product_form": dirty_product_form
                 })
-            
+
+
 @login_required
-def product_update(request,product_number):
+def product_update(request, product_number):
     current_user = request.user
     try:
         selected_product = Product.objects.get(pk=product_number)
     except Product.DoesNotExist:
         messages.error(
-                request,
-                "This product does not exist."
-                )
+            request,
+            "This product does not exist."
+        )
         return redirect(inventory)
     else:
         if current_user.id is selected_product.seller_id:
@@ -109,13 +117,13 @@ def product_update(request,product_number):
                     request,
                     "product-form.html",
                     {
-                        "product_form":product_form
+                        "product_form": product_form
                     })
             else:
                 dirty_product_form = ProductForm(
                     request.POST,
                     instance=selected_product
-                    )
+                )
                 if dirty_product_form.is_valid():
                     dirty_product_form.save()
                     return redirect(inventory)
@@ -123,22 +131,23 @@ def product_update(request,product_number):
                     messages.error(
                         request,
                         "We were unable to update the details of this product."
-                        )
+                    )
                     return render(
                         request,
                         "product-form.html",
                         {
-                            "product_form":dirty_product_form
+                            "product_form": dirty_product_form
                         })
         else:
             messages.error(
                 request,
                 "You are not allowed to update the details of this product."
-                )
+            )
             return redirect(inventory)
-                
+
+
 @login_required
-def delete_product(request,product_number):
+def delete_product(request, product_number):
     current_user = request.user
     try:
         selected_product = Product.objects.get(pk=product_number)
@@ -146,20 +155,19 @@ def delete_product(request,product_number):
         messages.error(
             request,
             "This product does not exist."
-            )
+        )
     else:
         if current_user.id is selected_product.seller_id:
             selected_product.delete()
             messages.success(
                 request,
                 "The listing has been successfully deleted!"
-                )
+            )
         else:
             messages.error(
                 request,
                 "You are not allowed to delete this product."
-                )
-            
+            )
+
     finally:
         return redirect(inventory)
-    

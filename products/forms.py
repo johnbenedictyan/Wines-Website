@@ -14,24 +14,22 @@ class ProductForm(forms.ModelForm):
                 'data-preview-step': 'True',
                 'data-image-shrink': '500x500',
                 'data-crop': '1:1',
-                }
-            )
+            }
         )
-    
+    )
+
     seller_id = forms.CharField(
         widget=forms.HiddenInput(
             attrs={
-                'readonly':'readonly'
-                }
-            )
+                'readonly': 'readonly'
+            }
         )
-
+    )
 
     class Meta:
         model = Product
         fields = '__all__'
         exclude = ('views',)
-        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,19 +45,19 @@ class ProductForm(forms.ModelForm):
                         Column(
                             'name',
                             css_class="form-group col mb-0"
-                            ),
+                        ),
                         css_class="form-row"),
                     Row(
                         Column(
                             'price',
                             css_class="form-group col mb-0"
-                            ),
+                        ),
                         Column(
                             'year',
                             css_class="form-group col mb-0"
-                            ),
-                        css_class="form-row"
                         ),
+                        css_class="form-row"
+                    ),
                     css_class='form-group col-md-6 mb-0'
                 ),
                 css_class='form-row'
@@ -89,17 +87,16 @@ class ProductForm(forms.ModelForm):
                 Column(
                     'region',
                     css_class='form-group col-md-4 mb-0'
-                    ),
+                ),
                 Column(
                     'body',
                     css_class='form-group col-md-4 mb-0'
-                    ),
+                ),
                 Column(
                     'nodes',
                     css_class='form-group col-md-4 mb-0'
-                    ),
+                ),
                 css_class='form-row'
             ),
             Submit('submit', 'Save Listing', css_class="btn")
         )
-        

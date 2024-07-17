@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.urls import path
-from .views import main_page,about_us,contact_us,blog_creator,bloghub,single_blog
+from .views import main_page, about_us, contact_us, blog_creator, bloghub, single_blog
 
 urlpatterns = [
     path('', main_page, name="main_page"),

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-#A custom view function for an invalid CSRF token.
+# A custom view function for an invalid CSRF token.
 CSRF_FAILURE_VIEW = 'website.views.csrf_failure'
 
 # Changes the messages tag so that are displayed in Bootstrap
@@ -51,7 +51,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'da5617fb5ae443e79240258551287458.vfs.cloud9.ap-southeast-1.amazonaws.com',
     'jby-tgc-project-4.herokuapp.com'
-    ]
+]
 
 
 # Application definition
@@ -113,7 +113,7 @@ WSGI_APPLICATION = 'project4.wsgi.application'
 DATABASES = {
     'default': dj_database_url.parse(
         os.environ.get("POSTGRESQL_URL")
-        )
+    )
 }
 
 if 'test' in sys.argv:
@@ -162,24 +162,24 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(
         BASE_DIR, 'static'
-        ),
-    )
+    ),
+)
 STATIC_ROOT = os.path.join(
-    BASE_DIR, 
+    BASE_DIR,
     'staticfiles'
-    )
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(
     BASE_DIR,
     'media'
-    )
+)
 
 UPLOADCARE = {
     'pub_key': os.environ.get("UPLOADCARE_PUBLIC_KEY"),
     'secret': os.environ.get("UPLOADCARE_SECRET_KEY"),
     'widget_version': '2.8.1',
-    'widget_build': 'min',  ## without jQuery
+    'widget_build': 'min',  # without jQuery
 }
 
 AUTH_USER_MODEL = 'users.UserAccount'
@@ -190,12 +190,12 @@ HOME_URL = '/'
 
 # AWS S3 Parameters
 AWS_S3_OBJECT_PARAMETERS = {
-   'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-   'CacheControl': 'max-age=9460800'
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'CacheControl': 'max-age=9460800'
 }
 
-AWS_STORAGE_BUCKET_NAME='tgc-ci-project4'
-AWS_S3_REGION_NAME='ap-southeast-1'
+AWS_STORAGE_BUCKET_NAME = 'tgc-ci-project4'
+AWS_S3_REGION_NAME = 'ap-southeast-1'
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_SECRET_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME

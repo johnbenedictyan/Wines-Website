@@ -1,21 +1,22 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Div
-from .models import Contact,Blog
+from .models import Contact, Blog
+
 
 class ContactForm(forms.ModelForm):
     message = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                'rows':10,
-                'cols':30
+                'rows': 10,
+                'cols': 30
             })
     )
-    
+
     class Meta:
         model = Contact
         fields = '__all__'
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -44,7 +45,7 @@ class ContactForm(forms.ModelForm):
             ),
             Row(
                 Column(
-                    'message', 
+                    'message',
                     css_class='form-group col-12'
                 ),
                 css_class='form-row'
@@ -52,8 +53,8 @@ class ContactForm(forms.ModelForm):
             Row(
                 Column(
                     Submit(
-                        'submit', 
-                        'Send Message', 
+                        'submit',
+                        'Send Message',
                         css_class="btn btn-primary py-3 px-5"
                     ),
                     css_class='col-12'
@@ -61,24 +62,25 @@ class ContactForm(forms.ModelForm):
                 css_class='form-row'
             ),
         )
-        
+
+
 class BlogCreatorFrom(forms.ModelForm):
     body = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                'rows':10,
-                'cols':30
+                'rows': 10,
+                'cols': 30
             })
     )
     writer = forms.CharField(
-        widget = forms.HiddenInput(
-            )
+        widget=forms.HiddenInput(
         )
-    
+    )
+
     class Meta:
         model = Blog
         fields = '__all__'
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['body'].strip = False
@@ -93,14 +95,14 @@ class BlogCreatorFrom(forms.ModelForm):
             ),
             Row(
                 Column(
-                    'body', 
+                    'body',
                     css_class='form-group col-12'
                 ),
                 css_class='form-row'
             ),
             Row(
                 Column(
-                    'writer', 
+                    'writer',
                     css_class='form-group col-12'
                 ),
                 css_class='form-row'
@@ -108,8 +110,8 @@ class BlogCreatorFrom(forms.ModelForm):
             Row(
                 Column(
                     Submit(
-                        'submit', 
-                        'Submit Blog', 
+                        'submit',
+                        'Submit Blog',
                         css_class="btn btn-primary py-3 px-5"
                     ),
                     css_class='col-12'

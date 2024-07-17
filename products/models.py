@@ -3,13 +3,17 @@ from pyuploadcare.dj.models import ImageField
 import datetime
 # Create your models here.
 
-#Useful Utility Functions for year field
+# Useful Utility Functions for year field
+
+
 def year_choices():
-        return [(r,r) for r in range(1984, datetime.date.today().year)]
+    return [(r, r) for r in range(1984, datetime.date.today().year)]
+
 
 def current_year():
     return datetime.date.today().year
-        
+
+
 class Product(models.Model):
     FR = "FRANCE"
     IT = "ITALY"
@@ -24,7 +28,7 @@ class Product(models.Model):
     LB = "Light"
     MB = "Medium"
     FB = "Full"
-    
+
     FRUITS = "Fruits"
     HERBS = "Herbs"
     FLOWERS = "Flowers"
@@ -36,7 +40,7 @@ class Product(models.Model):
     VANILLA = "Vanilla"
     MOCHA = "Mocha"
     CHOCOLATE = "Chocolate"
-    
+
     REGION_CHOICES = [
         (FR, "France"),
         (IT, "Italy"),
@@ -56,17 +60,17 @@ class Product(models.Model):
     ]
 
     NODE_CHOICES = [
-        (FRUITS,"Fruits"),
-        (HERBS,"Herbs"),
-        (FLOWERS,"Flowers"),
-        (EARTH,"Earth"),
-        (GRASS,"Grass"),
-        (TOBACCO,"Tobacco"),
-        (BUTTERSCOTCH,"Butterscotch"),
-        (TOAST,"Toast"),
-        (VANILLA,"Vanilla"),
-        (MOCHA,"Mocha"),
-        (CHOCOLATE,"Chocolate")
+        (FRUITS, "Fruits"),
+        (HERBS, "Herbs"),
+        (FLOWERS, "Flowers"),
+        (EARTH, "Earth"),
+        (GRASS, "Grass"),
+        (TOBACCO, "Tobacco"),
+        (BUTTERSCOTCH, "Butterscotch"),
+        (TOAST, "Toast"),
+        (VANILLA, "Vanilla"),
+        (MOCHA, "Mocha"),
+        (CHOCOLATE, "Chocolate")
     ]
 
     name = models.CharField(
@@ -115,6 +119,6 @@ class Product(models.Model):
         blank=False,
         default=0
     )
+
     def __str__(self):
         return self.name
-        
