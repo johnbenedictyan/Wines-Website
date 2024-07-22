@@ -16,7 +16,7 @@ psycopg2==2.8.4
 pycodestyle==2.5.0
 python-dateutil==2.8.0
 pytz==2019.2
-pyuploadcare==2.6.0
+pyuploadcare==5.1.0
 requests==2.32.3
 s3transfer==0.2.1
 six==1.12.0
